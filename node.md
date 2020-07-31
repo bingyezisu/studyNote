@@ -137,4 +137,10 @@ parseFloat("12.5.5");//=>12.5
 //null和undefined可以转换为字符串，结果就是"null/undefined"，但是禁止直接toString的
 ({}).toString();//=>"[object Object]"
 //普通对象.toString()的结果是"[object Object]"=>?Object.prototype.toString方法不是转换为字符串，而是用来检测数据类型的
+
+//四则运算法则中，除加法之外，其余都是数学计算，只有加法可能存在字符串拼接（一旦遇到字符串，则不是数学运算，而是字符串拼接）
+console.log("10"+10);//=>"1010"
+console.log("10"-10);//=>0
+console.log("10px"-10);//=>NaN
+
 ```
