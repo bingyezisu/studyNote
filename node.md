@@ -107,8 +107,8 @@ Number(undefined);//=>NaN
 Number({name:"10"});//=>NaN
 Number({});//=>NaN
 //{}/{xxx:"xxx"} .toString()
-Number([]);//=>0
-Number([12]);//=>12
+Number([]);//=>"0"
+Number([12]);//=>"12"
 Number([12,23]);//=>NaN
 
 ```
@@ -143,4 +143,15 @@ console.log("10"+10);//=>"1010"
 console.log("10"-10);//=>0
 console.log("10px"-10);//=>NaN
 
+let a=10+null+true+[]+undefined+"candy"+null+[]+10+false;
+console.log(a);//=>"11undefinedcandynull10false"
+/***
+10+0->10+0->10
+10+true->10+11->11
+11+[]->11+""->"11" 空数组变为数字，先要经历变为空字符串，遇到字符串啥也别想了，直接变为字符串拼接
+***/
 ```
+## boolean布尔数据类型
+> 只有两个值 true/false
+### 把其他类型转换为布尔类型
+> 只有0、NaN、''、null、undefined 五个值转换为FALSE，其余都转换为TRUE（而且没有任何特殊情况）
