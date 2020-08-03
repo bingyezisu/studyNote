@@ -155,3 +155,211 @@ console.log(a);//=>"11undefinedcandynull10false"
 > 只有两个值 true/false
 ### 把其他类型转换为布尔类型
 > 只有0、NaN、''、null、undefined 五个值转换为FALSE，其余都转换为TRUE（而且没有任何特殊情况）
+- Boolean([val])
+- !/!!
+```javascript
+//!:取反(先转为布尔，然后取反)
+//!!:取反再取反，只相当于转换为布尔<=>Boolean
+console.log(!1);//=>false
+```
+- 条件判断
+```javascript
+//如果条件只是一个值，不是==/===/!=/>=等这些比较，是要把这个值先转换为布尔类型，然后在验证真假
+if(1){
+    console.log("haha")
+}
+if("2px"+2){
+    //=>"2px2"
+    console.log("hehe")
+}
+if("3px"-3){
+    //=>NaN
+    console.log("xixi")
+}
+```
+## null/undefined
+> null和undefined都代表的是没有 
+- null:意料之中（一般都是开始不知道值，我们手动设置为null，后期再给予赋值操作）
+```javascript
+let num=null;//=>let num=0;一般最好用null作为初始的空值，因为0不是空值，它在栈内存中有自己的存储空间（占了位置）
+...
+num=12;
+```
+- undefined：意料之外（不是我能决定的）
+```javascript
+let num;//=>创建一个变量没有赋值，默认值是undefined
+```
+## object对象数据类型-普通对象
+>{[key]:[val],...} 任何一个对象都是有零到多组键值对(属性名：属性值)组成的（并且属性名不能重复）
+```javascript
+let person={
+    name:"candy",
+    age:30,
+    height:"185CM",
+    weight:"52KG",
+    1:100}
+//删除属性
+//=>真删除：把属性彻底干掉
+delete person[1];
+//=>假删除：属性还在，值为空
+person.weight=null;
+//设置属性名属性值
+//属性名不能重复，如果属性名已经存在，不属于新增属于修改属性值
+person.sister="candices";
+console.log(person['sister']);
+person.name='daisy';
+console.log(person['name']);
+//获取属性名对应属性值
+//=>对象.属性名
+//=>对象[属性名] 属性名是数字或者字符串格式的
+//=>如果当前属性名不存在，默认的属性值是undefined
+//=>如果属性名是数字，则不能使用点的方式获取属性值
+console.log(person.name);//=>"candy"
+console.log(person['age']);//=>30
+console.log(person.sex);//=>undefined;
+console.log(person[1]);//=>100
+console.log(person.1);//=>SyntaxError：语法错误
+```
+> 数组时特殊的对象数据类型
+```javascript
+/*
+ * 数组是特殊的对象
+ *  1.我们中括号中设置的是属性值，它的属性名是默认生成的数字，从零开始递增，而且这个数字代表每一项的位置，我们把其成为“索引”=>从零开始，连续递增，代表每一项位置的数字属性名
+ *  2.天生默认一个属性名length,存储数组的长度
+ */
+let ary=[12,"haha",true,13];
+console.log(ary.length);//=>4
+console.log(ary['length']);//=>4
+console.log(ary[1]);//=>'haha'
+console.log(ary[0]);//第一项
+console.log(ary[ary.length-1]);//最后一项
+//向数组末尾追加内容
+ary[ary.length]=100;
+```
+
+```javascript
+let a=12;
+let b=a;
+b=13;
+console.log(a);//=>12;
+
+let n={name:"candy"};
+let m=n;
+m.name="daisy";
+console.log(n.name)//=>daisy
+
+let n=[10,20];
+let m=n;
+let x=m;
+m[0]=100;
+x=[30,40];
+x[0]=200;
+m=x;
+m[1]=300;
+n[2]=400;
+console.log(n,m,x);//=>[100,20,400],[200,300],[200,300]
+
+//阿里面试题
+let a={
+    n:1
+}
+let b=a;
+a.x=a={
+    n:2
+};
+//=>联等：a.x={n:2};a={n.2}
+console.log(a.x);//=>undefined
+console.log(b);;//=>{n:1,x:{n:2}}
+
+```
+### JS中的数据类型检测
+- typeof([val]):用来检测数据类型的运算符
+- instanceof:用来检测当前实例是否隶属于某个类
+- constructor:基于构造函数检测数据类型（也是基于类的方式）
+- Object.prototype.toString.call():检测数据类型最好的办法
+```javascript
+/*
+ * 基于typeof检测出来的结果
+ *  1.首先是一个字符串
+ *  2.字符串中包含对应的类型
+ * 局限性
+ *  1.typeof null=>"object" 但是null并不是对象
+ *  2.基于typeof无法细分出当前值是普通对象还是数组对象等，因为只要是对象数据类型，返回的结果都是“object”
+ */
+ 
+console.log(typeof 1);//=>"number"
+let a=NaN;
+console.log(typeof a);//=>"number"
+console.log(typeof undefined);//=>"undefined"
+console.log(typeof typeof typeof []);//=>string;
+```
+
+### JS中的操作语句：判断、循环
+> 条件成立做什么？不成立做什么？
+- if/else if/else
+```javascript
+if(条件){
+    条件成立执行
+}else if(条件2){
+    条件2成立执行
+}
+...
+else{
+    以上条件都不成立
+}
+```
+- 三元运算符
+
+> 简单IF/ELSE的特殊处理方式 `条件？条件成立处理的事情：条件不成立处理的事情`
+> + 如果处理的事情比较多，我们用括号包起来，每一件事情用逗号分隔
+> + 如果不需要处理事情，可以用null/undefined占位 
+```javascript
+let a=10;
+a>=10?console.log("hehe"):console.log("haha");
+a>0 &&a<20?(a++,console.log(a)):null;
+
+if(a>0){
+    if(a<10){
+        a++;
+    }else{
+        a--;
+    }
+}else{
+    if(a>-10){
+        a+=2
+    }
+}
+a>0 ?(a<10 ? a++ :a--):(a>-10 ? a+=2 : null)
+```
+- switch case
+> 一个变量在不通知情况下的不同操作
+```javascript
+//1.每一种CASE情况结束后最好都加上BREAK
+//2.default等价于else，以上都不成立干的事情
+//3.每一种case情况的比较用的是===“绝对相等”
+let a=10;
+switch(a){
+     case 1:
+        console.log("呵呵");
+        break;
+    case 5:
+        console.log("哈哈");
+        break;
+    case 10:
+        console.log("嘿嘿");
+        break;
+    default:
+        console.log("嘻嘻");
+}
+//不加break，当前条件成立执行完成后，后面条件不论是否成立都要执行，知道遇到break为止（不加break可以实现变量在某些值的情况下做相同的事情=>编程开发人员要具备探索尝试之心）
+switch(a){
+    case 1:
+        a++;
+    case 5:
+        a+=2;
+        break;
+    default:
+        a--;
+}
+console.log(a);//=>4
+```
