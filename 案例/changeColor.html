@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇偶行变色</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        ul{
+            list-style:none;
+        }
+        #newsBox{
+            box-sizing:border-box;
+            margin:20px auto;
+            padding:20px;
+            width:300px;
+            border:2px solid lightblue;
+        }
+        #newsBox li{
+            line-height:40px;
+            border-bottom:1px dashed lightcoral;
+        }
+        #newsBox li:nth-last-child(1){
+            border-bottom:none;
+        }
+        /* #newsBox li:nth-child(even){
+            background:lightgray;
+        }
+        #newsBox li:hover{
+            background:lightgreen;
+            cursor: pointer;
+        } */
+    </style>
+</head>
+<body>
+    <ul id="newsBox">
+        <li>我是第1个Li</li>
+        <li>我是第2个Li</li>
+        <li>我是第3个Li</li>
+        <li>我是第4个Li</li>
+        <li>我是第5个Li</li> 
+    </ul>
+    <script>
+        // [context].getElementsByTagName([tagName]):在指定的context范围之内，通过标签名获取一组元素（元素组合HTMLCollection）=>集合和数组很相似，也是以数字索引为属性名，有length属性存储长度，但是不是数组，属于“类数组”
+        var newsBox=document.getElementById("newsBox");
+        var newsList=newsBox.getElementsByTagName("li");
+        for(let i=0;i<newsList.length;i++){
+           let curLi=newsList[i];
+           i%2==0?null:curLi.style.backgroundColor="lightgray";
+           let curLiColor=curLi.style.backgroundColor;
+           curLi.onmouseover=function(){
+            this.style.cursor="pointer";
+            this.style.backgroundColor="lightgreen"
+           }
+           curLi.onmouseout=function(){
+            this.style.backgroundColor=curLiColor;
+           }
+        }
+    </script>
+</body>
+</html>

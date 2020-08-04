@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>求平均数</title></title>
+</head>
+<body>
+    <input type="text" id="num1"><br/>
+    <input type="text" id="num2"><br/>
+    <input type="submit" id="sub" value="求平均数">
+    <script>
+        let sub=document.getElementById("sub");
+        let numBox1=document.getElementById("num1");
+        let numBox2=document.getElementById("num2");
+        function average(n,m){
+            return (n+m)/2;
+        }
+        sub.onclick=function(){
+            let num1=Number(numBox1.value);
+            let num2=Number(numBox2.value);
+            console.log(average(num1,num2))
+        };
+    </script>
+</body>
+</html>
