@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        label{
+            display:block;
+        }
+    </style>
+</head>
+    <label for="yearBox">工龄：<input type="text" id="yearBox"></label>
+    <label for="payBox">月薪：<input type="text" id="payBox"></label>
+    <input type="submit" value="计算年终奖" id="sub">
+    <p>您的年终年是：￥<span id="priceBox"></span></p>
+    <script>
+        var yearBox=document.getElementById("yearBox");
+        var payBox=document.getElementById("payBox");
+        var sub=document.getElementById("sub");
+        var priceBox=document.getElementById("priceBox");
+        sub.onclick=function(){
+            var _year=Number(yearBox.value);
+            var _pay=Number(payBox.value);
+            console.log(_year,_pay)
+            var result=null;
+            if(isNaN(_year) || isNaN(_pay)){
+                alert("输入有误，非法字符");
+                return;
+            }else{
+                if(_year===0){
+                    result=_pay>8000?_pay*1.2:_pay
+                }else if(_year>=1 &&_year<2){
+                    result=_pay>10000?_pay*1.7:_pay*1.5
+                }else{
+                    result=_pay>10000?_pay*3.2:_pay*3
+                }
+            }
+            priceBox.innerHTML=result;
+        }
+        
+    </script>
+</body>
+</html>

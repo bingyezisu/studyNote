@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选项卡</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        ul{
+            list-style:none;
+        }
+        #tabBox{
+            box-sizing: border-box;
+            margin:20px auto;
+            width:500px;
+        }
+        #navBox{
+            /* 只要把容器设置为FLEX弹性盒子模型，那么容器中的子元素默认在容器主轴（X轴）水平靠左排列 */
+            display: flex;
+        }
+        #navBox li{
+            box-sizing:border-box;
+            line-height:35px;
+            padding:0 10px;
+            border:1px solid #999;
+            margin-right:10px;
+            cursor:pointer;
+        }
+        #navBox li.active{
+            border-bottom-color:#fff;
+        }
+        #tabBox>div{
+            display:none;
+            box-sizing:border-box;
+            padding:10px;
+            border:1px solid #999;
+            height:150px;
+            margin-top:-1px;
+        }
+        #tabBox>div.active{
+            display:block;
+        }
+    </style>
+</head>
+<body>
+    <div id="tabBox">
+        <ul id="navBox">
+            <li class="active">编程</li>
+            <li>读书</li>
+            <li>运动</li>
+        </ul>
+        <div class="active">编程使我快乐</div>
+        <div>读书使我幸福</div>
+        <div>运动使我健康</div>
+    </div>
+    <script>
+        let tabBox=document.getElementById("tabBox");
+        let tabList=tabBox.getElementsByTagName("div");
+        let navBox=document.getElementById("navBox");
+        let navList=navBox.getElementsByTagName("li");
+        /* for(let i=0;i<navList.length;i++){
+           let curLi=navList[i];
+           let curDiv=tabList[i];
+            curLi.onclick=function(){
+                for(let n=0;n<navList.length;n++){
+                    navList[n].className="";
+                    tabList[n].className="";
+                }
+                this.className="active";
+                curDiv.className="active";     
+            }
+        }
+         */
+        //自定义属性解决方法
+        /* for(var i=0;i<navList.length;i++){
+            navList[i].index=i;
+            navList[i].onclick=function(){
+                绑定事件的时候方法没有执行，点击的时候它才执行
+                changeTab(this.index);
+            }
+        }  */
+        //闭包解决方案
+        /* for(var i=0;i<navList.length;i++){
+            navList[i].onclick=(function(i){
+                return function(){
+                    changeTab(i);
+                }
+            })(i)
+        } */
+        //ES6中的let解决方案
+        for(let i=0;i<navList.length;i++){
+            navList[i].onclick=function(){
+                changeTab(i);
+            }
+        }
+        //封装一个函数实现选项卡的切换
+        //clickIndex:创建函数的时候还不知点的是谁，所以定义一个入口clickIndex（点击这一项的索引）
+        function changeTab(clickIndex){
+            //1.先让所有的LI和DIV都没有选中的样式
+            for(var i=0;i<navList.length;i++){
+                navList[i].className="";
+                tabList[i].className="";
+            }
+            //2.点击的是谁就给谁加
+            navList[clickIndex].className="active";
+            tabList[clickIndex].className="active";
+        }
+    </script>
+</body>
+</html>

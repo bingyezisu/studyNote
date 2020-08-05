@@ -75,6 +75,8 @@ info(信息)
         + ...
 
     + 函数数据类型function
+
+**基本数据类型按值操作，引用数据类型操作的是堆内存的空间地址**
 ## number数字类型
 > 包含：常规数字、NaN
 ### NaN
@@ -220,11 +222,11 @@ console.log(person.sex);//=>undefined;
 console.log(person[1]);//=>100
 console.log(person.1);//=>SyntaxError：语法错误
 ```
-> 数组时特殊的对象数据类型
+> 数组是特殊的对象数据类型
 ```javascript
 /*
  * 数组是特殊的对象
- *  1.我们中括号中设置的是属性值，它的属性名是默认生成的数字，从零开始递增，而且这个数字代表每一项的位置，我们把其成为“索引”=>从零开始，连续递增，代表每一项位置的数字属性名
+ *  1.中括号中设置的是属性值，它的属性名是默认生成的数字，从零开始递增，而且这个数字代表每一项的位置，我们把其成为“索引”=>从零开始，连续递增，代表每一项位置的数字属性名
  *  2.天生默认一个属性名length,存储数组的长度
  */
 let ary=[12,"haha",true,13];
@@ -460,9 +462,9 @@ function[函数名]([形参变量1],...){
 [函数名]([实参1],...)
 
 //创建函数的时候我们设置了形参变量，但如果执行的时候并没有给传递对应的实参值，那么形参变量默认值是undefined
-
+//函数执行的时候，函数体内不创建的变量我们是无法获取和操作的，如果要想获取内部的信息，我们需要基于RETURN返回值机制，把信息返回才可以
+//没有写RETURN，函数默认返回值是undefined
 function sum(n,m){
-    
     let result=n+m;
     result*=10;
     result/=2;
@@ -472,4 +474,67 @@ sum();//=>NaN
 sum(10);//=>NaN
 sum(10,20);//=>150
 sum(10,20,30)//=>150
+
+function sum(n,m){
+    if(n===undefined || m===undefined){
+        //函数体重遇到RETURN，后面代码则不再执行了
+        return;
+    }
+    let result=n+m;
+}
+
+//===================匿名函数
+//匿名函数值函数表达式：把一个匿名函数本身作为值赋值给其他东西，这种函数一般不是手动触发执行，而是靠其他程序驱动执行（例如:触发某个事件的时候把它执行了）
+document.body.onclick=function(){}
+setTimeout(function(){},1000);
+//匿名函数之自执行函数：创建完一个匿名函数，紧接着就把当前函数加小括号执行
+(function(n){
+    console.log(n);
+})(100)
+```
+浏览器常用的输出方式:
++ 控制台输出console.log/dir/table
++ 浏览器窗口弹窗 window.alert/confirm/prompt
+    - 三种方式输出的结果都必先经过toString转换为字符串
+    - 三种方式会阻断JS代码的执行，只有当窗口关掉，JS才会继续运行
++ document.write在页面中写入信息(和alert一样，输出的结果是字符串)
+
+*JS中的加减乘除本应是进行数学运算（如果遇到的值不是数字类型，也需要基于Number()方法把其转换为数字，再进行运算）：但是JS中加法有特殊情况：相加过程中遇到字符串直接变为字符串拼接*
+
+```javascript
+let i="10";
+console.log(i++);//=>10
+console.log(a);//=>11
+//console.log(i+=1);//=>"101"
+//console.log(i=i+1);//=>"101"
+//i++ 是纯粹的数学运算
+```
+*i++和++i都会是数学运算中的累加1，区别是计算的顺序*
+```javascript
+let i=1;
+5+(i++) //=>先算5+1=>6 i自己累加1 i=>2
+
+i=1;
+5+(++i)//=>先算++i=>2 然后5+2=>7 i=>2
+
+let i=3;
+console.log(5+(++i)+(i++)+3-2+(--i)+(i--)-2);//20
+//5+4=>9 +4 13+3-2=>14+4=>18+4-2=>20
+//i=4;i=5;i=4;i=3
+console.log(i);//3
+```
+
+```javascript
+//变态题
+!(!"Number(undefined)");
+isNaN(parseInt(new Date()))+Number([1])+typeof undefined;
+Boolean(Number(""))+!isNaN(Number(null))+Boolean("parseInt([])")+typeof !(null);
+parseFloat("1.6px")+parseInt("1.2px")+ typeof parseInt(null);
+isNaN(Number(!!Number(parseInt("0.8"))));
+console.log(1+"2"+"2");
+!typeof parseFloat("0");
+Number("");
+typeof "parseInt(null)"+12+!!Number(NaN)
+!typeof (isNaN(""))+paseInt(NaN)
+typeof !parseInt(null)+!isNaN(null);
 ```

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="button" value="白/红/绿/蓝/黑/白" id="btn">
+    <script>
+        let btn=document.getElementById("btn")
+        let bgColor=["#FFF","red","green","blue","black"];
+        let _body=document.body;
+        let i=0;
+        _body.style.backgroundColor=bgColor[i];
+        btn.onclick=function(){
+            i++;
+           (i>bgColor.length-1)?i=0:null
+            _body.style.backgroundColor=bgColor[i];
+           
+        }
+    </script>
+</body>
+</html>
