@@ -440,6 +440,82 @@ let BB=box.style.color;
 BB="red";
 //=>不能实现
 ```
+*for in循环 :用来循环遍历对象中的键值对（continue和break同样适用）*
+
+*for in在遍历的时候，优先循环数字属性名(从小到大)*
+
+```javascript
+var obj={
+    name:"Lucy",
+    age:30,
+    friends:"Yang,Json",
+    1:20,
+    2:149,
+    3:140
+}
+//for(var 变量(key) in 对象)
+//对象中有多少组键值对，循环就执行几次（除非break结束）
+for(var key in obj){
+    //每一次循环key变量存储的值：当前对象的属性名
+    //获取属性值：obj[key]=>obj[key] 
+    console.log(`属性名：${key},属性值：${obj[key]}`)
+}
+/* 
+    //=>
+    属性名：1,属性值：20
+    属性名：2,属性值：149
+    属性名：3,属性值：140
+    属性名：name,属性值：Lucy
+    属性名：age,属性值：30
+    属性名：friends,属性值：Yang,Json
+*/
+```
+浏览器常用的输出方式:
++ 控制台输出console.log/dir/table
++ 浏览器窗口弹窗 window.alert/confirm/prompt
+    - 三种方式输出的结果都必先经过toString转换为字符串
+    - 三种方式会阻断JS代码的执行，只有当窗口关掉，JS才会继续运行
++ document.write在页面中写入信息(和alert一样，输出的结果是字符串)
+
+*JS中的加减乘除本应是进行数学运算（如果遇到的值不是数字类型，也需要基于Number()方法把其转换为数字，再进行运算）：但是JS中加法有特殊情况：相加过程中遇到字符串直接变为字符串拼接*
+
+```javascript
+let i="10";
+console.log(i++);//=>10
+console.log(a);//=>11
+//console.log(i+=1);//=>"101"
+//console.log(i=i+1);//=>"101"
+//i++ 是纯粹的数学运算
+```
+*i++和++i都会是数学运算中的累加1，区别是计算的顺序*
+```javascript
+let i=1;
+5+(i++) //=>先算5+1=>6 i自己累加1 i=>2
+
+i=1;
+5+(++i)//=>先算++i=>2 然后5+2=>7 i=>2
+
+let i=3;
+console.log(5+(++i)+(i++)+3-2+(--i)+(i--)-2);//20
+//5+4=>9 +4 13+3-2=>14+4=>18+4-2=>20
+//i=4;i=5;i=4;i=3
+console.log(i);//3
+```
+
+```javascript
+//变态题
+!(!"Number(undefined)");
+isNaN(parseInt(new Date()))+Number([1])+typeof undefined;
+Boolean(Number(""))+!isNaN(Number(null))+Boolean("parseInt([])")+typeof !(null);
+parseFloat("1.6px")+parseInt("1.2px")+ typeof parseInt(null);
+isNaN(Number(!!Number(parseInt("0.8"))));
+console.log(1+"2"+"2");
+!typeof parseFloat("0");
+Number("");
+typeof "parseInt(null)"+12+!!Number(NaN)
+!typeof (isNaN(""))+paseInt(NaN)
+typeof !parseInt(null)+!isNaN(null);
+```
 ### 函数 function
 > 函数就是一个方法或者一个功能题，函数就是把实现某个功能的代码放到一起进行分装，以后想要操作实现这个功能，只需要把函数执行即可=>"封装":减少页面中的冗余代码，提高代码重复使用率（低耦合高内聚）
 
@@ -492,49 +568,269 @@ setTimeout(function(){},1000);
     console.log(n);
 })(100)
 ```
-浏览器常用的输出方式:
-+ 控制台输出console.log/dir/table
-+ 浏览器窗口弹窗 window.alert/confirm/prompt
-    - 三种方式输出的结果都必先经过toString转换为字符串
-    - 三种方式会阻断JS代码的执行，只有当窗口关掉，JS才会继续运行
-+ document.write在页面中写入信息(和alert一样，输出的结果是字符串)
+*自定义属性编程思想：前期把一些值存储到元素的自定义属性上，后期需要用到的时候直接从属性上获得这些值即可*
 
-*JS中的加减乘除本应是进行数学运算（如果遇到的值不是数字类型，也需要基于Number()方法把其转换为数字，再进行运算）：但是JS中加法有特殊情况：相加过程中遇到字符串直接变为字符串拼接*
+#### arguments 函数内置的实参集合
+任意数求和(执行函数的时候，传递N个值实现求和) 
++ 类数组集合，集合中存储着所有函数执行是，传递的实参信息
++ 无论是否设置形参，arguments都存在
++ 无论是否传递实参，arguments都存在
+arguments.callee:存储的是当前函数本身（一般不用的，JS严格模式下禁止使用这些属性）
 
-```javascript
-let i="10";
-console.log(i++);//=>10
-console.log(a);//=>11
-//console.log(i+=1);//=>"101"
-//console.log(i=i+1);//=>"101"
-//i++ 是纯粹的数学运算
-```
-*i++和++i都会是数学运算中的累加1，区别是计算的顺序*
-```javascript
-let i=1;
-5+(i++) //=>先算5+1=>6 i自己累加1 i=>2
+#### arrow function箭头函数
 
-i=1;
-5+(++i)//=>先算++i=>2 然后5+2=>7 i=>2
-
-let i=3;
-console.log(5+(++i)+(i++)+3-2+(--i)+(i--)-2);//20
-//5+4=>9 +4 13+3-2=>14+4=>18+4-2=>20
-//i=4;i=5;i=4;i=3
-console.log(i);//3
-```
+> 简单
 
 ```javascript
-//变态题
-!(!"Number(undefined)");
-isNaN(parseInt(new Date()))+Number([1])+typeof undefined;
-Boolean(Number(""))+!isNaN(Number(null))+Boolean("parseInt([])")+typeof !(null);
-parseFloat("1.6px")+parseInt("1.2px")+ typeof parseInt(null);
-isNaN(Number(!!Number(parseInt("0.8"))));
-console.log(1+"2"+"2");
-!typeof parseFloat("0");
-Number("");
-typeof "parseInt(null)"+12+!!Number(NaN)
-!typeof (isNaN(""))+paseInt(NaN)
-typeof !parseInt(null)+!isNaN(null);
+function sum(n,m){
+    return n+m;
+}
+//改写成箭头函数
+let sum=(n,m)=>{
+    return n+m;
+}
+//=>等价于
+let sum=(n+m)=>n+m;
+//如果函数体重只有一行RETURN，可以省略RETURN和大括号
+console.log(sum(10,20));
+
+function fn(n){
+    return function(m){
+        return n+m;
+    }
+}
+//=>等价于
+fn=n=>m=>n+m
+
 ```
+
+> 形参赋值默认值：当没有给形参传递实参的时候，执行默认值
+
+```javascript
+function sum(n,m){
+    if(typeof n==="undefied"){
+        n=0;
+    }
+     if(typeof m==="undefied"){
+        m=0;
+    }
+    return n+m;
+}
+//等价于
+let sum=(n=0,m=0)=>n+m;
+```
+
+> 箭头函数中没有arguments
+
+```javascript
+//我们可以使用剩余运算符获取到传递的实参集合（它是数组，比arguemnts操作更方便）
+let sum=(...arg)=>evel(arg.join('+'))
+sum(1,2,3,4);
+```
+
+### Math
+
+> 数学函数：但是它不是一个函数，它是一个对象，对象中存储了很多操作数字的属性方法，因此被称为数学函数
+
+```javascript
+console.log(typeof Math);//=>"object"
+console.dir(Math);
+/* 
+	Math={
+      PI:3.141592653589793,
+      abs:function(){[native code]},
+      ceil:function(){[native code]},
+     };
+    Math.abs();
+    Math.PI
+*/
+```
+
+#### Math常用的属性和方法
+
+1、Math.abs([numberValue]) 
+
+> 获取绝对值（绝对值是正数或者零）
+
+```javascript
+console.log(Math.abs(-12));//=>12
+console.log(Math.abs(10));//=>10;
+//传递的不是数字类型的值，先基于Number()进行转换
+console.log(Math.abs('-1'));//=>1
+console.log(Math.abs("-12px"));//=>NaN
+console.log(Math.abs(true));//=>1
+```
+
+2、Math.ceil/floor([numberValue])
+
+> 把一个数向上取整或向下取整
+
+```javascript
+console.log(Math.ceil(12));//12
+console.log(Math.ceil(12.1));//13
+console.log(Math.ceil(12.9));//13
+console.log(Math.ceil(-12.1));//-12
+console.log(Math.ceil(-12.1));//-12
+
+console.log(Math.floor(12));//12
+console.log(Math.floor(12.1));//12
+console.log(Math.floor(12.9));//12
+console.log(Math.floor(-12.1));//-13
+console.log(Math.floor(-12.1));//-13
+```
+
+3、Math.round([numberValue])
+
+> 四舍五入
+
+```javascript
+console.log(Math.round(12));//12
+console.log(Math.round(12.1));//12
+console.log(Math.round(12.5));//13 正数中，5属于如
+console.log(Math.round(12.9));//13
+console.log(Math.round(-12.1));//-12
+console.log(Math.round(-12.5));//-12 负数中，5属于舍
+console.log(Math.round(-12.6));//-13 
+```
+
+Math.max/min（[val1],[val2],...）
+
+> 获取一堆数中的最大值和最小值
+
+```javascript
+console.log(Math.max(12,5,68,23,45,3,27));//=>68
+console.log(Math.max(12,5,68,23,45,3,27));//=>3
+//思考题：如何基于Math.max/min获取数组中的最大值最小值
+Math.max([12,5,68,23,45,3,27])//=>NaN 
+//解析：传递了一个值，是个数组，和内置的语法要求不符
+```
+
+Math.sqrt/pow()
+
+> sqrt：给一个数开平方 
+>
+> pow：计算一个数的指数幂
+
+```javascript
+Math.sqrt(18);//=>4.242640687119285
+Math.sqrt(9);//=>3
+Math.sqrt(-9);//=>NaN 负数开不了平方
+Math.pow(2,10);//=>1024
+```
+
+Math.random()
+
+> 获取0~1之间的随机小数(没有n也没有m)
+
+扩展：
+
+```javascript
+//获取[n-m]之间的随机整数（包含n,m）
+Math.round(Math.random()*(m-n)+n)
+```
+
+###数组及数组中常用的方法
+
+实现数组增删改的方法
+
++ 这一部分方法都会修改原有的数据
+
+  `push`
+
+  ```javascript
+  /***
+  	push()
+  	向数组末尾追加内容
+  	@params  多个任意类型
+  	@return  新增后数组的长度
+  ***/
+  let ary=[10,20]
+  let res=ry.push(30,"AA");
+  //基于原生JS
+  ary[ary.length]=[10,20]
+  ```
+
+  `unshift`
+
+  ```javascript
+  /***
+  	unshift()
+  	向数组开始位置增加内容
+  	@params 多个任意值
+  	@return 新增后数组的长度
+  ***/
+  let ary=[10,20];
+  let res=ary.unshift(30,"AA");
+  //基于原生ES6展开运算符，把原有的ary克隆一份，在新的数组中创建第一项，其余的内容使用原始ary中的信息即可，也算实现了向开始追加的效果
+  ary=[100,...ary];
+  console.log(ary);
+  ```
+
+  `shift`
+
+  ```javascript
+  /***
+  	shift()
+  	删除数组中的第一项
+  	@params 无
+  	@return 删除的那一项
+  ***/
+  let ary=[10,20,30,40];
+  let res=ary.shift();
+  console.log(res,ary);//10,[20,30,40]
+  //基于原生JS中的delete，把数组当做普通的对象，确实可以删除掉某一项内容，但是不会影响数组本身的结构特点（length长度不会跟着修改），真实项目中杜绝这样的删除使用
+  delete ary[0];
+  console.log(ary);
+  ```
+
+  `pop`
+
+  ```javascript
+  /***
+  	pop()
+  	删除数组中的最后一项
+  	@params 无
+  	@return 删除的那一项
+  ***/
+  let ary=[10,20,30,40];
+  let res=ary.shift();
+  console.log(res,ary);//40,[10,20,30]
+  //基于原生JS，将数组长度减少一位，默认减少的就是最后一项
+  ary.length--;//=>ary.length=ary.length-1
+  ```
+
+  `splice`
+
+  ```javascript
+  /***
+  	splice
+  	实现数组的增加，删除，修改
+  	（删除）
+  	@params 
+  		n,m 都是数字 从索引n开始删除m个元素（m不写，是删除到末尾）
+  	@return 把删除的部分用新数组存储起来返回
+  	（增加，修改）
+  	@params 
+  		n,m,x 从索引n开始删除m个，用x占用删除的部分（修改）
+  		n,0,x 从索引n开始删除0个，把x放到n的前面（增加）
+  	@return 把删除的部分用新数组存储起来返回
+  ***/
+  let ary=[10,20,30,40];
+  let res=ary.splice(2,1);//=>
+  console.log(res,ary)//=>30,[10,20,40]
+  
+  //基于这种方法可以清空一个数组，把原始数组中的内容以新数组存储起来（有点类似数组的克隆：把原来数组克隆一份一模一样的给新数组）
+  ary.splice(0);
+  console.log(res，ary);//=>[10,20,40]，[]
+  
+  //删除最后一项和第一项
+  ary.splice(ary.length-1)
+  ary.splice(0,1);
+  //向数组末尾追加
+  ary.splice(ary.length,0,"abc");
+  //向数组开头新增
+  ary.splice(0,0,"abc");
+  ```
+
+  
+

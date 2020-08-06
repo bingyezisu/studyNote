@@ -47,7 +47,7 @@
         // [context].getElementsByTagName([tagName]):在指定的context范围之内，通过标签名获取一组元素（元素组合HTMLCollection）=>集合和数组很相似，也是以数字索引为属性名，有length属性存储长度，但是不是数组，属于“类数组”
         var newsBox=document.getElementById("newsBox");
         var newsList=newsBox.getElementsByTagName("li");
-        for(let i=0;i<newsList.length;i++){
+        /* for(let i=0;i<newsList.length;i++){
            let curLi=newsList[i];
            i%2==0?null:curLi.style.backgroundColor="lightgray";
            let curLiColor=curLi.style.backgroundColor;
@@ -58,6 +58,20 @@
            curLi.onmouseout=function(){
             this.style.backgroundColor=curLiColor;
            }
+        } */
+        /*自定义属性编程思想：前期把一些值存储到元素的自定义属性上，后期需要用到的时候直接从属性上获得这些值即可*/
+        for(var i=0;i<newsList.length;i++){
+            let curLi=newsList[i];
+            var bg=i%2==0?"white":"lightgray";
+            curLi.style.backgroundColor=bg;
+            curLi.bgColor=bg;
+            curLi.onmouseover=function(){
+                this.style.cursor="pointer";
+                this.style.backgroundColor="lightgreen"
+            }
+            curLi.onmouseout=function(){
+                this.style.backgroundColor=this.bgColor;
+            }
         }
     </script>
 </body>
