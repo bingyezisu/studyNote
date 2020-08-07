@@ -9,14 +9,48 @@
     <script>
         console.log(typeof Math);//=>"object"
         console.dir(Math);
-        /* 
-            Math={
-                PI:3.141592653589793,
-                abs:function(){[native code]},
-                ceil:function(){[native code]},
+        let ary=[1,2,3,1,2,1,2,3];
+        /* let newAry=[];
+        for(let i=0;i<ary.length;i++){
+            let curItem=ary[i];
+            if(newAry.indexOf(curItem)===-1){
+                newAry.push(curItem);
             }
-        
-         */
+        } */
+        /* for(var i=0;i<ary.length;i++){
+            for(var n=i+1;n<ary.length;n++){
+               if(ary[i]===ary[n]){
+                   ary.splice(i,1);
+                   i--;
+               }
+            }
+        } */
+        /* for(var i=0;i<ary.length;i++){
+            //item:每一次循环拿出来的当前项
+            //itemAfter:当前项后面所有的内容(新数组)
+            var item=ary[i];
+            var itemAfter=ary.slice(i+1);
+            for(var j=0;j<itemAfter.length;j++){
+                if(item===itemAfter[j]){
+                    ary.splice(j+1,1);
+                    i--;
+                }
+            }
+        } */
+        for(var i=0;i<ary.length;i++){
+            //item:每一次循环拿出来的当前项
+            //itemAfter:当前项后面所有的内容(新数组)
+            var item=ary[i];
+            var itemAfter=ary.slice(i+1);
+            for(var j=0;j<itemAfter.length;j++){
+                if(item===itemAfter[j]){
+                    ary.splice(i,1);
+                    i--;
+                    break;
+                }
+            }
+        }
+        console.log(ary);
     </script>
 </body>
 </html>

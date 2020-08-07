@@ -731,106 +731,369 @@ Math.round(Math.random()*(m-n)+n)
 
 ###数组及数组中常用的方法
 
-实现数组增删改的方法
+####实现数组增删改的方法
 
-+ 这一部分方法都会修改原有的数据
+> 这一部分方法都会修改原有的数据
 
-  `push`
+`push`
 
-  ```javascript
-  /***
-  	push()
-  	向数组末尾追加内容
-  	@params  多个任意类型
-  	@return  新增后数组的长度
-  ***/
-  let ary=[10,20]
-  let res=ry.push(30,"AA");
-  //基于原生JS
-  ary[ary.length]=[10,20]
-  ```
+```javascript
+/***
+	push()
+	向数组末尾追加内容
+	@params  多个任意类型
+	@return  新增后数组的长度
+***/
+let ary=[10,20]
+let res=ry.push(30,"AA");
+//基于原生JS
+ary[ary.length]=[10,20]
+```
 
-  `unshift`
+`unshift`
 
-  ```javascript
-  /***
-  	unshift()
-  	向数组开始位置增加内容
-  	@params 多个任意值
-  	@return 新增后数组的长度
-  ***/
-  let ary=[10,20];
-  let res=ary.unshift(30,"AA");
-  //基于原生ES6展开运算符，把原有的ary克隆一份，在新的数组中创建第一项，其余的内容使用原始ary中的信息即可，也算实现了向开始追加的效果
-  ary=[100,...ary];
-  console.log(ary);
-  ```
+```javascript
+/***
+	unshift()
+	向数组开始位置增加内容
+	@params 多个任意值
+	@return 新增后数组的长度
+***/
+let ary=[10,20];
+let res=ary.unshift(30,"AA");
+//基于原生ES6展开运算符，把原有的ary克隆一份，在新的数组中创建第一项，其余的内容使用原始ary中的信息即可，也算实现了向开始追加的效果
+ary=[100,...ary];
+console.log(ary);
+```
 
-  `shift`
+`shift`
 
-  ```javascript
-  /***
-  	shift()
-  	删除数组中的第一项
-  	@params 无
-  	@return 删除的那一项
-  ***/
-  let ary=[10,20,30,40];
-  let res=ary.shift();
-  console.log(res,ary);//10,[20,30,40]
-  //基于原生JS中的delete，把数组当做普通的对象，确实可以删除掉某一项内容，但是不会影响数组本身的结构特点（length长度不会跟着修改），真实项目中杜绝这样的删除使用
-  delete ary[0];
-  console.log(ary);
-  ```
+```javascript
+/***
+	shift()
+	删除数组中的第一项
+	@params 无
+	@return 删除的那一项
+***/
+let ary=[10,20,30,40];
+let res=ary.shift();
+console.log(res,ary);//10,[20,30,40]
+//基于原生JS中的delete，把数组当做普通的对象，确实可以删除掉某一项内容，但是不会影响数组本身的结构特点（length长度不会跟着修改），真实项目中杜绝这样的删除使用
+delete ary[0];
+console.log(ary);
+```
 
-  `pop`
+`pop`
 
-  ```javascript
-  /***
-  	pop()
-  	删除数组中的最后一项
-  	@params 无
-  	@return 删除的那一项
-  ***/
-  let ary=[10,20,30,40];
-  let res=ary.shift();
-  console.log(res,ary);//40,[10,20,30]
-  //基于原生JS，将数组长度减少一位，默认减少的就是最后一项
-  ary.length--;//=>ary.length=ary.length-1
-  ```
+```javascript
+/***
+	pop()
+	删除数组中的最后一项
+	@params 无
+	@return 删除的那一项
+***/
+let ary=[10,20,30,40];
+let res=ary.shift();
+console.log(res,ary);//40,[10,20,30]
+//基于原生JS，将数组长度减少一位，默认减少的就是最后一项
+ary.length--;//=>ary.length=ary.length-1
+```
 
-  `splice`
+`splice`
 
-  ```javascript
-  /***
-  	splice
-  	实现数组的增加，删除，修改
-  	（删除）
-  	@params 
-  		n,m 都是数字 从索引n开始删除m个元素（m不写，是删除到末尾）
-  	@return 把删除的部分用新数组存储起来返回
-  	（增加，修改）
-  	@params 
-  		n,m,x 从索引n开始删除m个，用x占用删除的部分（修改）
-  		n,0,x 从索引n开始删除0个，把x放到n的前面（增加）
-  	@return 把删除的部分用新数组存储起来返回
-  ***/
-  let ary=[10,20,30,40];
-  let res=ary.splice(2,1);//=>
-  console.log(res,ary)//=>30,[10,20,40]
-  
-  //基于这种方法可以清空一个数组，把原始数组中的内容以新数组存储起来（有点类似数组的克隆：把原来数组克隆一份一模一样的给新数组）
-  ary.splice(0);
-  console.log(res，ary);//=>[10,20,40]，[]
-  
-  //删除最后一项和第一项
-  ary.splice(ary.length-1)
-  ary.splice(0,1);
-  //向数组末尾追加
-  ary.splice(ary.length,0,"abc");
-  //向数组开头新增
-  ary.splice(0,0,"abc");
-  ```
+```javascript
+/***
+	splice
+	实现数组的增加，删除，修改
+	（删除）
+	@params 
+		n,m 都是数字 从索引n开始删除m个元素（m不写，是删除到末尾）
+	@return 把删除的部分用新数组存储起来返回
+	（增加，修改）
+	@params 
+		n,m,x 从索引n开始删除m个，用x占用删除的部分（修改）
+		n,0,x 从索引n开始删除0个，把x放到n的前面（增加）
+	@return 把删除的部分用新数组存储起来返回
+***/
+let ary=[10,20,30,40];
+let res=ary.splice(2,1);//=>
+console.log(res,ary)//=>30,[10,20,40]
 
-  
+//基于这种方法可以清空一个数组，把原始数组中的内容以新数组存储起来（有点类似数组的克隆：把原来数组克隆一份一模一样的给新数组）
+ary.splice(0);
+console.log(res，ary);//=>[10,20,40]，[]
+
+//删除最后一项和第一项
+ary.splice(ary.length-1)
+ary.splice(0,1);
+//向数组末尾追加
+ary.splice(ary.length,0,"abc");
+//向数组开头新增
+ary.splice(0,0,"abc");
+```
+
+#### 数组的查询和拼接
+
+> 此组学习的方法，原来数组不会改变
+
+`slice`
+
+```javascript
+/***
+	slice()
+	实现数组的查询
+	@params 
+		n,m 都是数字 从索引n开始，找到索引为m的地方（不包含m这一项）
+	@return 
+		把找到的内容以一个新数组的形式返回
+***/
+let ary=[10,20,30,40,50];
+let res=ary.slice(1,3);
+console.log(res)=>//[20,30]
+//m不写是找到末尾
+res=ary.slice(1);
+console.log(res)=>[20,30,40,50]
+//数组的克隆，参数0不写也可以
+res=ary.slice(0);
+console.log(res);//=>[10,20,30,40,50]
+//思考：1.如果n/m为负数会怎么样，如果n>m了会怎样，如果是小数会怎样，如果是非有效数字会怎样，如果n或者m的值比最大索引大会怎样？2.这种克隆方式叫做浅克隆，可以回去先看看深度克隆如何处理？
+ary.slice(5,1);//=>[];
+ary.slice(1.2,5);//=>[20,30,40,50]
+ary.slice(1.6,5);//=>[20,30,40,50]
+ary.slice(1.6,4.3)//=>[20,30,40]
+ary.slice(-1,2);//[]
+ary.slice(-1,5);//[50]
+ary.slice(1,-2)//=>[20,30]
+ary.slice(-1,-2);//[]
+ary.slice(1,"12px");//=>[]
+ary.slice("abc",4)//=>[10,20,30,40]
+```
+
+`concat`
+
+```javascript
+/***
+	concat()
+	实现数组的查询
+	@params 多个任意类型
+	@return 拼接后的新数组（原来的数组不变） 
+***/
+let ary1=[1,2,3];
+let ary2=[4,5,6];
+let res=ary1.concat(ary2,"candy","daisy")
+console.log(res);
+```
+
+#### 把数组转换成字符串
+
+> 原有数组不变
+
+`toString`
+
+```javascript
+/***
+	toString()
+	把数组转换为字符串
+	@params 无
+	@return 转换成字符串,每一项用逗号分隔（原数组不变）
+***/
+let ary=[10,20];
+let res=ary.toString();
+console.log(res);//=>"10,20"
+console.log([].toString);//=>""
+console.log([12],toString);//="12"
+```
+
+`join`
+
+```javascript
+/***
+	join()
+	把数组转换为字符串
+	@params 指定的分隔符，为字符串
+	@return 转换成字符串（原数组不变）
+***/
+let ary=[1,2,3]
+let res=ary.join();//=>"1,2,3";
+res=ary.join("");//=>"123";
+res=ary.join("|")//=>"1|2|3"
+res=ary.join("+")//=>"1+2+3";
+console.log(eval(res))//=>60 eval把字符串变为js表达式
+```
+
+#### 检测数组中是否包含某一项
+
+`indexOf/lastIndexOf`
+
+```javascript
+/***
+	indexOf/lastIndexOf()
+	检测当前想在数组中第一次或者最后一次出现位置的索引值（在IE6~8中不兼容）
+	@params 要检索的这一项内容
+	@return 这一项出现的位置索引值（数字），如果数组中没有这一项，返回的结果是-1
+***/
+let ary=[1,2,3,1,2,3];
+console.log(ary.indexOf(1));//=>0
+console.log(ary.lastIndexOf(1))//=>3
+
+//想验证ary中是否包含"candy"
+if(ary.indexOf("candy")===-1){
+    //不包含
+}else{
+    //包含
+}
+//也可以直接使用ES6新提供的includes方法判断
+if(ary.includes("candy")){
+    //包含:如果存在返回值是true
+}
+```
+
+#### 数组的排序或者排列
+
+`reverse`
+
+```javascript
+/***
+	reverse()
+	把数组倒过来排列
+	@params 
+	@return 排列后的新数组 原来数组改变
+***/
+let ary=[12,15,9,28,10,22]
+ary.reverse();
+console.log(ary);//=>[22, 10, 28, 9, 15, 12]
+```
+
+`sort`
+
+```javascript
+/***
+	sort()
+	实现数组的排序
+	@params 
+		可以没有，也可以是个函数
+	@return 排序后的新数组
+***/
+let ary=[8,7,3,4,6,5,9,2,1]
+ary.sort();
+console.log(ary);//=>[1, 2, 3, 4, 5, 6, 7, 8, 9]
+//sort方法中如果不传递参数，是无法处理10以上数字的
+ary=[12,15,9,28,10,22];
+ary.sort();
+console.log(ary);[10, 12, 15, 22, 28, 9]
+
+//ary.sort(function(a,b){return ...})
+
+ary.sort((a,b)=>{
+    //a和b是相邻的两项
+    return a-b
+});// [9, 10, 12, 15, 22, 28]
+ary.sort((a,b)=>{
+    return b-a;
+});// [28, 22, 15, 12, 10, 9]
+//想要实现多位数正常排序，需要给sort传递一个函数，函数做返回a-b实现升序，返回b-a实现降序（原因？需要先了解冒泡排序的机制）
+```
+
+#### 遍历数组中每一项的方法
+
+*forEach map filter find reduce some every....*
+
+`forEach`
+
+```javascript
+/***
+	forEach()
+	遍历数组中的每一项内容 原数组不改变
+	@params 
+		回调函数
+	@return undefined 
+***/
+let ary=[12,15,9,28,10,22]
+//基于原生JS中的循环可以实现
+for(let i=0;i<ary.length;i++){
+    console.log("索引："：+i+",内容："+ary[i] )
+}
+ary.forEach((item,index)=>{
+    //数组中有多少项，函数就会被默认执行多少次
+    //每一次执行函数：item是数组中当前要操作的这一项，index是当前项的索引
+     console.log("索引："：+index+",内容："+item )
+})
+//不兼容IE6~8
+```
+
+**数组去重**
+
+```javascript
+//方法1：建立空白新数组方法
+let ary=[1,2,3,1,2,1,2,3,1,1,2,3];
+let newAry=[];
+for(let i=0;i<ary.length;i++){
+   let curItem=ary[i];
+   /*if(newAry.indexOf(curItem)===-1){
+      newAry.push(curItem);//不存在就添加
+   }*/
+    if(newAry.includes(curItem)){
+        continue;//存在跳出当前循环
+    }
+    newAry.push(curItem);
+ }
+//=>等价于
+ary.forEach(item=>{
+    if(newAry.includes(item)) return;
+    newAry.push(item);
+})
+console.log(newAry);//=>[1, 2, 3]
+```
+
+```javascript
+//方法2:（兼容IE6~8）
+var ary=[1,2,3,1,2,1,2,3,1,1,2,3];
+//删后面的办法
+for(let i=0;i<ary.length;i++){
+    for(let n=i+1;n<ary.length;n++){
+        if(ary[i]===ary[n]){
+            ary.splice(j,1);//原来数组已经改变
+            j--;//防止数组塌陷
+         }
+     }
+}
+//删前面的办法
+for(let i=0;i<ary.length;i++){
+    for(let n=i+1;n<ary.length;n++){
+        if(ary[i]===ary[n]){
+            ary.splice(i,1);//原来数组已经改变
+            i--;//防止数组塌陷
+         }
+     }
+}
+//=>想了一个超级别扭的方法来写，好虐！
+//删后面的
+for(var i=0;i<ary.length;i++){
+    //item:每一次循环拿出来的当前项
+    //itemAfter:当前项后面所有的内容(新数组)
+    var item=ary[i];
+    var itemAfter=ary.slice(i+1);
+    for(var j=0;j<itemAfter.length;j++){
+       if(item===itemAfter[j]){
+          ary.splice(j+1,1);
+          i--;
+        }
+     }
+}
+//删前面的
+for(var i=0;i<ary.length;i++){
+    //item:每一次循环拿出来的当前项
+    //itemAfter:当前项后面所有的内容(新数组)
+    var item=ary[i];
+    var itemAfter=ary.slice(i+1);
+    for(var j=0;j<itemAfter.length;j++){
+       if(item===itemAfter[j]){
+           ary.splice(i,1);
+           i--;
+           break;
+        }
+    }
+}
+console.log(ary);
+```
 
