@@ -58,10 +58,13 @@ info(信息)
 ###JS中常用的数据类型
 - 基本数据类型 
     + 数字number
+        
         > 常规数字和NaN
     + 字符串string
+        
         > 所有用""、''、``包起来的都是字符串
     + 布尔boolean
+        
         > true/false
     + 空对象指针null
     + 未定义undefined
@@ -1097,3 +1100,4 @@ for(var i=0;i<ary.length;i++){
 console.log(ary);
 ```
 
+11111
