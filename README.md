@@ -1316,6 +1316,7 @@ console.log(str.toUpperCase());//=>"CANDYWANGDISAYWANGXIXIHAHAHEHE"
 ```javascript
 /***
 	split([分隔符])：把字符串按照指定的分隔符拆分成数组（和数组中的join对应）
+	split支持传递正则表达式
 ***/
 let str="candy!wang!disay!wang!xixi!haha!hehe";
 console.log(str.split("!"));//=> ["candy", "wang", "disay", "wang", "xixi", "haha", "hehe"]
