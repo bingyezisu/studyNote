@@ -37,7 +37,7 @@
                 }
             }
         } */
-        for(var i=0;i<ary.length;i++){
+       /*  for(var i=0;i<ary.length;i++){
             //item:每一次循环拿出来的当前项
             //itemAfter:当前项后面所有的内容(新数组)
             var item=ary[i];
@@ -49,7 +49,47 @@
                     break;
                 }
             }
+        } */
+        /* 方法3：设置对象属性方法
+        let obj={};
+        for(let i=0;i<ary.length;i++){
+            let item=ary[i];
+            if(obj[item]!==undefined){
+                ary.splice(i,1);
+                i--;
+                continue;
+            }
+            obj[item]=item;
         }
+        console.log(ary); */
+
+        /* function unique(ary){
+        let obj={};
+        for(let i=0;i<ary.length;i++){
+                let item=ary[i];
+                if(obj[item]!==undefined){
+                    ary[i]=ary[ary.length-1];
+                    ary.length--;
+                    i--;
+                    continue;
+                }
+                obj[item]=item;
+            }
+            return ary;
+        }
+        let res=unique([12,23,32,43,46,32,17,12,23,34,48]);
+        res.sort((a,b)=>a-b);
+        console.log(res); */
+        // ary.sort((a,b)=>a-b);
+        // let  str=ary.join('@')+'@';
+        // let reg=/(\d+@)\1*/g;
+        // ary=[];
+        // str.replace(reg,(n,m)=>{
+        //     m=Number(m.slice(0,m.length-1));
+        //     ary.push(m);
+        // })
+        // console.log(ary);
+        ary=[...new Set(ary)];
         console.log(ary);
     </script>
 </body>

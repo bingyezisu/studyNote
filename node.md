@@ -1,4 +1,7 @@
-##JS中的变量 variable
+# 初识JS
+
+## JS中的变量 variable
+
 >变量：可变的量，在编程语言中，变量其实就是一个名字，用来存储和代表不同值的东西。
 
 ```javascript
@@ -25,7 +28,8 @@ let n=Symbol(100);
 let m=Symbol(100);
 n==m;//=>false;
 ```
-###JS中的命名规范
+## JS中的命名规范
+
 - 严格区分大小写
 ```javascript
 let Test=100;
@@ -55,43 +59,47 @@ info(信息)
 //var let const function...
 //=>代码强迫症（代码洁癖）：良好的编程习惯，极客精神
 ```
-###JS中常用的数据类型
-- 基本数据类型 
-    + 数字number
-        
-        > 常规数字和NaN
-    + 字符串string
-        
-        > 所有用""、''、``包起来的都是字符串
-    + 布尔boolean
-        
-        > true/false
-    + 空对象指针null
-    + 未定义undefined
-- 引用数据类型
-    + 对象数据类型object
-        + {}普通对象
-        + []数组对象
-        + /^[+-]?(\d|([1-9]\d+))(\.\d+)?/正则对象
-        + Math数学函数对象
-        + 日期对象
-        + ...
+## JS中常用的数据类型
 
-    + 函数数据类型function
+
+
+- 基本数据类型 
+    + *数字number* ：常规数字和NaN
+    + *字符串string* ：所有用""、''、``包起来的都是字符串
+    + *布尔boolean* ：true/false
+    + *空对象指针null*
+    + *未定义undefined*
+- 引用数据类型
+    + *对象数据类型object*
+
+        ```txt
+        {}普通对象
+        []数组对象
+        /^[+-]?(\d|([1-9]\d+))(\.\d+)?/正则对象
+        Math数学函数对象
+        日期对象
+        ...
+        ```
+
+    + *函数数据类型function*
 
 **基本数据类型按值操作，引用数据类型操作的是堆内存的空间地址**
-## number数字类型
-> 包含：常规数字、NaN
-### NaN
-> not a number：不是一个数，但它隶属于数字类型
-NaN和任何值（包括自己）都不相等：NaN!=NaN,所以我们不能用相等的方式判断是否为有效数字
-### isNaN
-> 检测一个值是否为有效数字，如果不是有效数字返回TRUE，反之是有效数字返回FALSE
 
-在使用isNaN进行检测的时候，首先会验证检测的值是否为数字类型，如果不是，先基于Number()这个方法，把值转换为数字类型，然后再检测
+### Number
 
-### 把其它类型值转换为数字类型
-- Number([val])
+>  包含数字和NaN
+
+`NaN` （not a number）  不是一个数，但它隶属于数字类型
+**NaN和任何值（包括自己）都不相等：NaN!=NaN,所以我们不能用相等的方式判断是否为有效数字**
+
+`isNaN` 检测一个值是否为有效数字，如果不是有效数字返回TRUE，反之是有效数字返回FALSE
+
+**在使用isNaN进行检测的时候，首先会验证检测的值是否为数字类型，如果不是，先基于Number()这个方法，把值转换为数字类型，然后再检测**
+
+#### 把其它值转换为Number的方法
+
+`Number([val])`
+
 ```javascript
 //把字符串转换为数字，只要字符串中包含任意一个非有效数字（第一个点除外）结果都是NaN，空字符串会变成数字0
 Number("12");//=>12
@@ -117,22 +125,32 @@ Number([12]);//=>"12"
 Number([12,23]);//=>NaN
 
 ```
-- parseInt/parseFloat([val],[进制])
-> 转换为数字的方法，对于字符串来说，它是从左到右依次查找有效数字字符，直到遇到非有效数字字符,停止查找（不管后面是否还有数字，都不在找了），把找到的当做数字返回
+`parseInt/parseFloat([val],[进制])`
 
 ```javascript
+/***
+转换为数字的方法，对于字符串来说，它是从左到右依次查找有效数字字符，直到遇到非有效数字字符,停止查找（不管后面是否还有数字，都不在找了），把找到的当做数字返回
+***/
 parseInt("12.5px");//=>12;
 parseFloat("12.5px");//=>12.5
 parseFloat("width:12.5px");//=>NaN
 parseFloat("12.5.5");//=>12.5
 ```
-` Number和parseInt/parseFloat的运行机制不一样，Number是浏览器内置的方法，运行的是v8引擎的底层机制`
-- ==进行比较的时候，可能要出现把其他类型转换为数字
-## string字符串数据类型
+**Number和parseInt/parseFloat的运行机制不一样，Number是浏览器内置的方法，运行的是v8引擎的底层机制**
+
+`==` 
+
+```txt
+转换为数字的方法，对于字符串来说，它是从左到右依次查找有效数字字符，直到遇到非有效数字字符,停止查找（不管后面是否还有数字，都不在找了），把找到的当做数字返回
+```
+
+### String
+
 > 所有用'',"",``(ES6模板字符串)包起来的都是字符串
-### 把其它类型转换为字符串
-- [val].toString()
-- 字符串拼接
+#### 其它值转换成String的方法
+
+`[val].toString()`和`字符串拼接`
+
 ```javascript
 (12).toString();//=>'12'
 (NaN).toString();//=>'NaN'
@@ -156,18 +174,20 @@ console.log(a);//=>"11undefinedcandynull10false"
 11+[]->11+""->"11" 空数组变为数字，先要经历变为空字符串，遇到字符串啥也别想了，直接变为字符串拼接
 ***/
 ```
-## boolean布尔数据类型
+### Boolean
+
 > 只有两个值 true/false
-### 把其他类型转换为布尔类型
-> 只有0、NaN、''、null、undefined 五个值转换为FALSE，其余都转换为TRUE（而且没有任何特殊情况）
-- Boolean([val])
-- !/!!
+#### 其他类型转换为布尔类型
+
+**只有0、NaN、''、null、undefined 五个值转换为FALSE，其余都转换为TRUE（而且没有任何特殊情况）**
+
+`Boolean([val])` `!/!!` `条件判断`
+
 ```javascript
 //!:取反(先转为布尔，然后取反)
 //!!:取反再取反，只相当于转换为布尔<=>Boolean
 console.log(!1);//=>false
 ```
-- 条件判断
 ```javascript
 //如果条件只是一个值，不是==/===/!=/>=等这些比较，是要把这个值先转换为布尔类型，然后在验证真假
 if(1){
@@ -182,19 +202,23 @@ if("3px"-3){
     console.log("xixi")
 }
 ```
-## null/undefined
+### null/undefined
+
 > null和undefined都代表的是没有 
-- null:意料之中（一般都是开始不知道值，我们手动设置为null，后期再给予赋值操作）
+`null` 意料之中（一般都是开始不知道值，我们手动设置为null，后期再给予赋值操作）
+
 ```javascript
 let num=null;//=>let num=0;一般最好用null作为初始的空值，因为0不是空值，它在栈内存中有自己的存储空间（占了位置）
 ...
 num=12;
 ```
-- undefined：意料之外（不是我能决定的）
+`undefined `意料之外（不是我能决定的）
+
 ```javascript
 let num;//=>创建一个变量没有赋值，默认值是undefined
 ```
-## object对象数据类型-普通对象
+### Object
+
 >{[key]:[val],...} 任何一个对象都是有零到多组键值对(属性名：属性值)组成的（并且属性名不能重复）
 ```javascript
 let person={
@@ -277,11 +301,135 @@ console.log(a.x);//=>undefined
 console.log(b);;//=>{n:1,x:{n:2}}
 
 ```
-### JS中的数据类型检测
-- typeof([val]):用来检测数据类型的运算符
-- instanceof:用来检测当前实例是否隶属于某个类
-- constructor:基于构造函数检测数据类型（也是基于类的方式）
-- Object.prototype.toString.call():检测数据类型最好的办法
+### Function
+
+> 函数就是一个方法或者一个功能题，函数就是把实现某个功能的代码放到一起进行分装，以后想要操作实现这个功能，只需要把函数执行即可=>"封装":减少页面中的冗余代码，提高代码重复使用率（`低耦合高内聚`）
+
+```txt
+类比：洗衣机就是一个函数，生产洗衣机就是封装一个函数（把实现某些功能的代码封装进来），生产的时候，不知道用户洗衣服的时候放什么水，衣服，洗衣液，我们需要提供出入口（提供的入口在函数中叫做形参，执行的时候放的具体东西函数中叫做实参）,洗完衣服需要能拿出来，洗衣机提供一个出口（在函数中叫做返回值:把函数处理后的结果能够返回给外面用）
+```
+
+```txt
+学习函数的四个维度：
+    创建函数：形参 实参
+    执行函数：实参
+    arguments
+    函数底层运行机制
+```
+
+#### 创建函数
+
+```javascript
+function[函数名]([形参变量1],...){
+    //函数体：基于JS完成需要实现的功能
+    return [处理后的结果]
+}
+[函数名]([实参1],...)
+
+//创建函数的时候我们设置了形参变量，但如果执行的时候并没有给传递对应的实参值，那么形参变量默认值是undefined
+//函数执行的时候，函数体内不创建的变量我们是无法获取和操作的，如果要想获取内部的信息，我们需要基于RETURN返回值机制，把信息返回才可以
+//没有写RETURN，函数默认返回值是undefined
+function sum(n,m){
+    let result=n+m;
+    result*=10;
+    result/=2;
+    console.log(result);
+}
+sum();//=>NaN
+sum(10);//=>NaN
+sum(10,20);//=>150
+sum(10,20,30)//=>150
+
+function sum(n,m){
+    if(n===undefined || m===undefined){
+        //函数体重遇到RETURN，后面代码则不再执行了
+        return;
+    }
+    let result=n+m;
+}
+
+//===================匿名函数
+//匿名函数值函数表达式：把一个匿名函数本身作为值赋值给其他东西，这种函数一般不是手动触发执行，而是靠其他程序驱动执行（例如:触发某个事件的时候把它执行了）
+document.body.onclick=function(){}
+setTimeout(function(){},1000);
+//匿名函数之自执行函数：创建完一个匿名函数，紧接着就把当前函数加小括号执行
+(function(n){
+    console.log(n);
+})(100)
+```
+
+*自定义属性编程思想：前期把一些值存储到元素的自定义属性上，后期需要用到的时候直接从属性上获得这些值即可*
+
+#### arguments 
+
+>函数内置的实参集合
+
++ 类数组集合，集合中存储着所有函数执行是，传递的实参信息
++ 无论是否设置形参，arguments都存在
++ 无论是否传递实参，arguments都存在
+  arguments.callee:存储的是当前函数本身（一般不用的，JS严格模式下禁止使用这些属性）
+
+#### arrow function箭头函数
+
+> 简单
+
+```javascript
+function sum(n,m){
+    return n+m;
+}
+//改写成箭头函数
+let sum=(n,m)=>{
+    return n+m;
+}
+//=>等价于
+let sum=(n+m)=>n+m;
+//如果函数体重只有一行RETURN，可以省略RETURN和大括号
+console.log(sum(10,20));
+
+function fn(n){
+    return function(m){
+        return n+m;
+    }
+}
+//=>等价于
+fn=n=>m=>n+m
+
+```
+
+> 形参赋值默认值：当没有给形参传递实参的时候，执行默认值
+
+```javascript
+function sum(n,m){
+    if(typeof n==="undefied"){
+        n=0;
+    }
+     if(typeof m==="undefied"){
+        m=0;
+    }
+    return n+m;
+}
+//等价于
+let sum=(n=0,m=0)=>n+m;
+```
+
+> 箭头函数中没有arguments
+
+```javascript
+//我们可以使用剩余运算符获取到传递的实参集合（它是数组，比arguemnts操作更方便）
+let sum=(...arg)=>evel(arg.join('+'))
+sum(1,2,3,4);
+```
+
+## JS中的数据类型检测
+
+`typeof([val])`用来检测数据类型的运算符
+
+`instanceof`用来检测当前实例是否隶属于某个类
+
+`constructor`基于构造函数检测数据类型（也是基于类的方式）
+
+`Object.prototype.toString.call()`检测数据类型最好的办法
+
 ```javascript
 /*
  * 基于typeof检测出来的结果
@@ -299,10 +447,17 @@ console.log(typeof undefined);//=>"undefined"
 console.log(typeof typeof typeof []);//=>string;
 ```
 
-### JS中的操作语句：判断、循环
-> 条件成立做什么？不成立做什么？
-- if/else if/else
-```javascript
+
+
+## JS中的操作语句
+
+### 条件判断
+
+	>条件成立做什么？不成立做什么？
+
+`if/else if/else`
+
+```javasc
 if(条件){
     条件成立执行
 }else if(条件2){
@@ -313,11 +468,14 @@ else{
     以上条件都不成立
 }
 ```
-- 三元运算符
 
-> 简单IF/ELSE的特殊处理方式 `条件？条件成立处理的事情：条件不成立处理的事情`
-> + 如果处理的事情比较多，我们用括号包起来，每一件事情用逗号分隔
-> + 如果不需要处理事情，可以用null/undefined占位 
+`三元运算符`
+
+*简单IF/ELSE的特殊处理方式 `条件？条件成立处理的事情：条件不成立处理的事情*
+
++ 如果处理的事情比较多，我们用括号包起来，每一件事情用逗号分隔
++ 如果不需要处理事情，可以用null/undefined占位
+
 ```javascript
 let a=10;
 a>=10?console.log("hehe"):console.log("haha");
@@ -336,8 +494,11 @@ if(a>0){
 }
 a>0 ?(a<10 ? a++ :a--):(a>-10 ? a+=2 : null)
 ```
-- switch case
-> 一个变量在不通知情况下的不同操作
+
+`switch case`
+
+*一个变量在不通知情况下的不同操作*
+
 ```javascript
 //1.每一种CASE情况结束后最好都加上BREAK
 //2.default等价于else，以上都不成立干的事情
@@ -368,13 +529,12 @@ switch(a){
 }
 console.log(a);//=>4
 ```
+
 ### 循环
+
 > 重复做某些事情就是循环 
-- for循环
-- for in循环
-- for of循环(ES6循环)
-- while循环
-- do While循环
+
+`for循环` `for in循环` `for of循环(ES6)` `while循环` `do While循环`
 
 ```javascript
 /* 
@@ -398,11 +558,12 @@ console.log(a);//=>4
  console.log(i);//=>3
 
 ```
-循环体中的两个关键词:
+**循环体中的两个关键词**:
 
 `continue`：结束当前这轮循环（continue后面的代码不在执行，继续执行下一轮循环）
 
 `break`：强制结束整个循环（break后面代码也不在执行），而且整个循环啥也不干直接结束
+
 ```javascript
 for(var i=0;i<10;i++){
     if(i>=2){
@@ -443,9 +604,11 @@ let BB=box.style.color;
 BB="red";
 //=>不能实现
 ```
-*for in循环 :用来循环遍历对象中的键值对（continue和break同样适用）*
+**for in循环 **
 
-*for in在遍历的时候，优先循环数字属性名(从小到大)*
++ 用来循环遍历对象中的键值对（continue和break同样适用）
+
++ for in在遍历的时候，优先循环数字属性名(从小到大)
 
 ```javascript
 var obj={
@@ -519,139 +682,13 @@ typeof "parseInt(null)"+12+!!Number(NaN)
 !typeof (isNaN(""))+paseInt(NaN)
 typeof !parseInt(null)+!isNaN(null);
 ```
-### 函数 function
-> 函数就是一个方法或者一个功能题，函数就是把实现某个功能的代码放到一起进行分装，以后想要操作实现这个功能，只需要把函数执行即可=>"封装":减少页面中的冗余代码，提高代码重复使用率（低耦合高内聚）
+# JS中常用的属性和方法
 
-`洗衣机就是一个函数，生产洗衣机就是封装一个函数（把实现某些功能的代码封装进来），生产的时候，不知道用户洗衣服的时候放什么水，衣服，洗衣液，我们需要提供出入口（提供的入口在函数中叫做形参，执行的时候放的具体东西函数中叫做实参）,洗完衣服需要能拿出来，洗衣机提供一个出口（在函数中叫做返回值:把函数处理后的结果能够返回给外面用）`
+## Math
 
-- 创建函数
-    + 形参
-    + 实参
-- 执行函数
-    + 实参
-- arguments
-- 函数底层运行机制
+### Math常用的属性和方法
 
-### 创建函数
-```javascript
-function[函数名]([形参变量1],...){
-    //函数体：基于JS完成需要实现的功能
-    return [处理后的结果]
-}
-[函数名]([实参1],...)
-
-//创建函数的时候我们设置了形参变量，但如果执行的时候并没有给传递对应的实参值，那么形参变量默认值是undefined
-//函数执行的时候，函数体内不创建的变量我们是无法获取和操作的，如果要想获取内部的信息，我们需要基于RETURN返回值机制，把信息返回才可以
-//没有写RETURN，函数默认返回值是undefined
-function sum(n,m){
-    let result=n+m;
-    result*=10;
-    result/=2;
-    console.log(result);
-}
-sum();//=>NaN
-sum(10);//=>NaN
-sum(10,20);//=>150
-sum(10,20,30)//=>150
-
-function sum(n,m){
-    if(n===undefined || m===undefined){
-        //函数体重遇到RETURN，后面代码则不再执行了
-        return;
-    }
-    let result=n+m;
-}
-
-//===================匿名函数
-//匿名函数值函数表达式：把一个匿名函数本身作为值赋值给其他东西，这种函数一般不是手动触发执行，而是靠其他程序驱动执行（例如:触发某个事件的时候把它执行了）
-document.body.onclick=function(){}
-setTimeout(function(){},1000);
-//匿名函数之自执行函数：创建完一个匿名函数，紧接着就把当前函数加小括号执行
-(function(n){
-    console.log(n);
-})(100)
-```
-*自定义属性编程思想：前期把一些值存储到元素的自定义属性上，后期需要用到的时候直接从属性上获得这些值即可*
-
-#### arguments 函数内置的实参集合
-任意数求和(执行函数的时候，传递N个值实现求和) 
-+ 类数组集合，集合中存储着所有函数执行是，传递的实参信息
-+ 无论是否设置形参，arguments都存在
-+ 无论是否传递实参，arguments都存在
-arguments.callee:存储的是当前函数本身（一般不用的，JS严格模式下禁止使用这些属性）
-
-#### arrow function箭头函数
-
-> 简单
-
-```javascript
-function sum(n,m){
-    return n+m;
-}
-//改写成箭头函数
-let sum=(n,m)=>{
-    return n+m;
-}
-//=>等价于
-let sum=(n+m)=>n+m;
-//如果函数体重只有一行RETURN，可以省略RETURN和大括号
-console.log(sum(10,20));
-
-function fn(n){
-    return function(m){
-        return n+m;
-    }
-}
-//=>等价于
-fn=n=>m=>n+m
-
-```
-
-> 形参赋值默认值：当没有给形参传递实参的时候，执行默认值
-
-```javascript
-function sum(n,m){
-    if(typeof n==="undefied"){
-        n=0;
-    }
-     if(typeof m==="undefied"){
-        m=0;
-    }
-    return n+m;
-}
-//等价于
-let sum=(n=0,m=0)=>n+m;
-```
-
-> 箭头函数中没有arguments
-
-```javascript
-//我们可以使用剩余运算符获取到传递的实参集合（它是数组，比arguemnts操作更方便）
-let sum=(...arg)=>evel(arg.join('+'))
-sum(1,2,3,4);
-```
-
-### Math
-
-> 数学函数：但是它不是一个函数，它是一个对象，对象中存储了很多操作数字的属性方法，因此被称为数学函数
-
-```javascript
-console.log(typeof Math);//=>"object"
-console.dir(Math);
-/* 
-	Math={
-      PI:3.141592653589793,
-      abs:function(){[native code]},
-      ceil:function(){[native code]},
-     };
-    Math.abs();
-    Math.PI
-*/
-```
-
-#### Math常用的属性和方法
-
-1、Math.abs([numberValue]) 
+`Math.abs([numberValue]) `
 
 > 获取绝对值（绝对值是正数或者零）
 
@@ -664,7 +701,7 @@ console.log(Math.abs("-12px"));//=>NaN
 console.log(Math.abs(true));//=>1
 ```
 
-2、Math.ceil/floor([numberValue])
+`Math.ceil/floor([numberValue])`
 
 > 把一个数向上取整或向下取整
 
@@ -682,7 +719,7 @@ console.log(Math.floor(-12.1));//-13
 console.log(Math.floor(-12.1));//-13
 ```
 
-3、Math.round([numberValue])
+`Math.round([numberValue])`
 
 > 四舍五入
 
@@ -696,7 +733,7 @@ console.log(Math.round(-12.5));//-12 负数中，5属于舍
 console.log(Math.round(-12.6));//-13 
 ```
 
-Math.max/min（[val1],[val2],...）
+`Math.max/min（[val1],[val2],...）`
 
 > 获取一堆数中的最大值和最小值
 
@@ -708,7 +745,7 @@ Math.max([12,5,68,23,45,3,27])//=>NaN
 //解析：传递了一个值，是个数组，和内置的语法要求不符
 ```
 
-Math.sqrt/pow()
+`Math.sqrt/pow()`
 
 > sqrt：给一个数开平方 
 >
@@ -721,7 +758,7 @@ Math.sqrt(-9);//=>NaN 负数开不了平方
 Math.pow(2,10);//=>1024
 ```
 
-Math.random()
+`Math.random()`
 
 > 获取0~1之间的随机小数(没有n也没有m)
 
@@ -732,9 +769,11 @@ Math.random()
 Math.round(Math.random()*(m-n)+n)
 ```
 
-###数组及数组中常用的方法
+## Array
 
-####实现数组增删改的方法
+### 数组及数组中常用的方法
+
+#### 实现数组增删改的方法
 
 > 这一部分方法都会修改原有的数据
 
@@ -1100,4 +1139,186 @@ for(var i=0;i<ary.length;i++){
 console.log(ary);
 ```
 
-11111
+```javascript
+//方法3：设置对象属性方法,兼容所有浏览器！
+var ary=[1,2,3,1,2,1,2,3,1,1,2,3];
+let obj={};
+for(let i=0;i<ary.length;i++){
+    let item=ary[i];
+    if(obj[item]!==undefined){
+        ary.splice(i,1);
+        i--;
+        //=>根据i--的赋值原理，可以改写成:
+        //ary.splice(i--,1);
+        continue;
+
+    }
+    obj[item]=item;
+}
+console.log(ary);
+//基于splice实现删除性能不好，当前项被删后，后面每一项的索引都要向前提一位，如果后面内容过多，一定会影响性能
+for(let i=0;i<ary.length;i++){
+    let itme=ary[i];
+    if(obj[item]!==undefined){
+        ary[i]=ary[ary.length-1];
+        ary.length--;
+        i--;
+        continue;
+    }
+     obj[item]=item;
+}
+//用最后一项替换当前项，把最后一项删除，然后再比较替换后的当前项
+```
+
+```javascript
+/***
+	unique:实现数组去重的方法
+	@params：
+		ary [Array] 要去重的数组
+	@return：
+		ary [Array] 去重后的数组
+	by candy on 20200811
+***/
+function unique(ary){
+    let obj={};
+    for(let i=0;i<ary.length;i++){
+        let item=ary[i];
+        if(obj[item]!==undefined){
+            ary[i]=ary[ary.length-1];
+            ary.length--;
+            i--;
+            continue;
+        }
+        obj[item]=item;
+    }
+    return ary;
+}
+let res=unique([12,23,32,43,46,32,17,12,23,34,48]);
+ console.log(res);
+```
+
+```javascript
+//方法4：基于正则匹配方法实现的数组去重
+let ary=[1,2,3,1,2,1,2,3,1,1,2,3];
+ary.sort((a,b)=>a-b);
+let  str=ary.join('@')+'@';
+let reg=/(\d+@)\1*/g;
+ary=[];
+str.replace(reg,(n,m)=>{
+   m=Number(m.slice(0,m.length-1));
+   ary.push(m);
+})
+console.log(ary);
+```
+
+```javascript
+//基于ES6的Set(对应的Map)实现去重
+let ary=[1,2,3,1,2,1,2,3,1,1,2,3];
+ary=[...new Set(ary)];
+console.log(ary);
+```
+
+## String
+
+	#### 字符串中常用的方法
+
+> 所有用单引号，双引号，反引号 包起来的都是字符串
+
+```javascript
+let str="candywangdisaywangxixihahahehe";
+//每一个字符串都是由0到多个字符组成的
+str.length//=>字符串长度
+str[0]//=>获取索引为0（第一个字符）
+str[str.length-1]//=>获取最后一个字符 str.length-1最后一项索引
+str[10000]//=>undefined 不存在这个索引
+
+//循环输出字符串中的每一个字符
+for(let i=0;i<str.length;i++){
+    let char=str[i];
+    console.log(char);
+}
+```
+
+`charAt/charCodeAt`
+
+```javascript
+/***
+	charAt:根据索引获取指定位置的字符
+	charCodeAt:获取指定字符的ASCII码值（Unicode编码值）
+	@params
+		n [number] 获取字符串指定的索引
+	@return
+		返回查找到的字符
+		找不到返回的是空字符串不是undefined,或者对应的编码值
+***/
+let str="candywangdisaywangxixihahahehe";
+console.log(str.charAt(0));//=>c
+console.log(str.charAt(10000));//=>""
+console.log(str.[10000]);//=>undefined
+
+console.log(str.charCodeAt(0));//=>99
+console.log(String.fromCharCode(99));//=>"c"
+```
+
+`substr/substring/slice` 
+
+```javascript
+/***
+	都是为了实现字符串的截取（在原来字符串中查找到自己想要的）
+		substr(n,m):从索引n开始截取m个字符，m如果不写截取到末尾（后面方法也是）
+		substring(n,m):从索引n开始找到索引m处（不含m）
+		slice(n,m):和substring一样，都是找到索引为m处，但是slice可以支持负数作为索引，其余两个方法不可以的
+***/
+let str="candywangdisaywangxixihahahehe";
+str.substr(0,5);//=>"candy"
+str.substring(0,5);//=>"candy"
+str.substring(3,1000);//=>"dywangdisaywangxixihahahehe"
+
+console.log(str.substring(5,9));//=>"wang"
+console.log(str.slice(5,9));//=>"wang"
+console.log(str.substring(-9,-5));//=>"" substring不支持负数索引
+console.log(str.slice(-9,-5));//=>"ihah" sublice支持负数索引 快捷查找：负数索引，我们可以按照STR.LENGTH+负数索引 的方式查找
+
+```
+
+`indexOf/lastIndexOf/includes`
+
+```javascript
+/***
+	验证字符是否存在
+	 indexOf(x,y):获取x第一次出现位置的索引，y是控制查找的起始位置索引
+	 lastIndexOf(x):最后一次出现位置的索引
+	 =>没有这个字符，返回的结果是-1
+***/
+
+console.log(str.indexof("n"));//=>2
+console.log(str.indexOf("n",3));//=>7
+
+console.log(str.lastIndexOf("h"));//=>28
+console.log(str.indexOf('@'));//=>-1 不存在
+console.log(str.indexOf("xi"));//=>18 验证整体第一次出现的位置，返回的索引是第一个字符所在位置的索引值
+console.log(str.includes("z"));
+```
+
+`toUpperCase/toLowerCase`
+
+```javascript
+/***
+	toUpperCase():转大写
+	topLowerCase():转小写
+***/
+let str="candywangdisaywangxixihahahehe";
+console.log(str.toUpperCase());//=>"CANDYWANGDISAYWANGXIXIHAHAHEHE"
+```
+
+`split`
+
+```javascript
+/***
+	split([分隔符])：把字符串按照指定的分隔符拆分成数组（和数组中的join对应）
+***/
+let str="candy!wang!disay!wang!xixi!haha!hehe";
+console.log(str.split("!"));//=> ["candy", "wang", "disay", "wang", "xixi", "haha", "hehe"]
+console.log(str.split("!").join(","));//=>"candy,wang,disay,wang,xixi,haha,hehe"
+```
+

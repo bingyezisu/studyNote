@@ -7,28 +7,29 @@
 </head>
 <body>
     <script>
-    var obj={
-        name:"Lucy",
-        age:30,
-        friends:"Yang,Json",
-        1:20,
-        2:149,
-        3:140
-    }
-    for(var key in obj){
-        //每一次循环key变量存储的值：当前对象的属性名
-        //获取属性值：obj[key]=>obj[key] 
-        console.log(`属性名：${key},属性值：${obj[key]}`)
-    }
-    //创建函数
-    function fn(n,m){
-        var res=null;
-        res=n+m;
-        return res;
-    }
-    //执行函数
-    var AA=fn(10,20);
-    console.log(AA);
+       /* let str="candywangdisaywangxixihahahehe";
+       console.dir(String.prototype);
+        console.log(str.charAt(0));
+        console.log(str.charCodeAt(0));
+        console.log(str.substr(0,5));//=>"candy";
+        console.log(str.substring(0,5));//=>"candy";
+        console.log(str.substring(3,1000));
+        
+        console.log(str.substring(5,9));//=>"wang"
+        console.log(str.slice(5,9));//=>"wang"  
+        console.log(str.substring(-9,-5));//=>""
+        console.log(str.slice(-9,-5));//=>"ihah"
+
+        console.log(str.indexOf("n"));//=>2
+        console.log(str.indexOf("n",3));//=>7
+        console.log(str.length)
+        console.log(str.lastIndexOf("h"));
+        console.log(str.indexOf("xi"));//=>18 验证整体第一次出现的位置，返回的索引是第一个字符所在位置的索引值
+    
+        console.log(str.includes("z"));//false */
+        let str="candy!wang!disay!wang!xixi!haha!hehe";
+        console.log(str.split("!"));
+        console.log(str.split("!").join(","));
     </script>
 </body>
 </html>
