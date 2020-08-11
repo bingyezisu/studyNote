@@ -1323,3 +1323,15 @@ console.log(str.split("!"));//=> ["candy", "wang", "disay", "wang", "xixi", "ha
 console.log(str.split("!").join(","));//=>"candy,wang,disay,wang,xixi,haha,hehe"
 ```
 
+`replace`
+
+```javascript
+/***
+	replace(老字符,新字符)：实现字符串的替换（经常伴随着正则而应用）
+***/
+let str="candy@daisy@lucy";     console.log(str.replace("@","|"));//=>"candy|daisy@lucy" 在不使用正则表达式的情况下，执行一次replace只能替换一次字符
+console.log(str.replace(/@/g,"|"));//=>"candy|daisy|lucy"
+```
+
+`match`
+

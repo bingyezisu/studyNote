@@ -7,8 +7,8 @@
 </head>
 <body>
     <script>
+        console.dir(String.prototype);
        /* let str="candywangdisaywangxixihahahehe";
-       console.dir(String.prototype);
         console.log(str.charAt(0));
         console.log(str.charCodeAt(0));
         console.log(str.substr(0,5));//=>"candy";
@@ -27,9 +27,12 @@
         console.log(str.indexOf("xi"));//=>18 验证整体第一次出现的位置，返回的索引是第一个字符所在位置的索引值
     
         console.log(str.includes("z"));//false */
-        let str="candy!wang!disay!wang!xixi!haha!hehe";
+        /* let str="candy!wang!disay!wang!xixi!haha!hehe";
         console.log(str.split("!"));
-        console.log(str.split("!").join(","));
+        console.log(str.split("!").join(",")); */
+        let str="candy@daisy@lucy";
+        console.log(str.replace("@","|"));//candy|daisy@lucy
+        console.log(str.replace(/@/g,"|"));
     </script>
 </body>
 </html>
