@@ -1335,3 +1335,4 @@ console.log(str.replace(/@/g,"|"));//=>"candy|daisy|lucy"
 
 `match`
 
+11111
