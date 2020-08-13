@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let time="2019-7-24 12:6:23";
+        /***
+            字符串处理解决办法
+        ***/
+        /* function formatTime(time){
+            time=new Date(time.replace(/-/g,"/")),
+            year=time.getFullYear(),
+            month=time.getMonth()+1,
+            day=time.getDate(),
+            week=time.getDay(),
+            hours=time.getHours(),
+            minutes=time.getMinutes(),
+            seconds=time.getSeconds();
+            //拼凑成我们想要的字符串
+            weekAry=["日","一","二","三","四","五","六"];
+            let result=year+"年"+addZero(month)+"月"+addZero(day)+"日";
+            result+=" 星期"+weekAry[week]+" ";
+        result+=addZero(hours)+"时"+addZero(minutes)+"分"+addZero(seconds)+"秒";
+            return result;
+        }
+        let addZero=val=>{
+            val=Number(val);
+            return val<10?"0"+val:val;
+        } */
+        String.prototype.formatTime=function formatTime(template){
+            typeof template==="undefined"?template="{0}年{1}月{2}日 {3}:{4}:{5}":null
+            //this：我们要处理的字符串
+            //获取日期字符串中的数字信息
+            let matchAry=this.match(/\d+/g);
+            //模板和数据的渲染（引擎机制）
+            template=template.replace(/\{(\d+)}/g,(x,y)=>{
+                let val=matchAry[y]||"00";
+                val.length<2?val="0"+val:null;
+                return val;
+            })
+            return template;
+        }
+        console.log(time.formatTime("{0}年{1}月{2}日 {3}时{4}分{5}秒"));
+    </script>
+</body>
+</html>

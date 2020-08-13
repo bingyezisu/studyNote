@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let time="2019-7-24 12:6:23"
+        //=>变为自己需要呈现的格式,例如：
+        // "2019年07月24日 12时06分23秒"console.log(time);
+        // "2019年07月24日"
+        // "07/24 12:26"
+        
+        //方案1：一路replace
+        time=time.replace("-","年").replace("-","月").replace(" ","日")
+        .replace(":","时").replace(":","分")+"秒";
+        console.log(time);
+        //方案2：获取到年月日小时分钟秒这几个值后，最后项拼成什么效果就拼成什么
+
+        //获取值的方法：基于indexOf获取指定符号索引，基于substring一点点截取
+        time="2019-7-24 12:6:23";
+        let m=time.indexOf("-");
+        let n=time.lastIndexOf("-");
+        let x=time.indexOf(" ");
+        let y=time.indexOf(":");
+        let z=time.lastIndexOf(":");
+        time=time.substring(0,m)+"年"+time.substring(m+1,n)+"月"+time.substring(n+1,x)+"日"
+        +time.substring(x+1,y)+"时"+time.substring(y+1,z)+"分"+time.substring(z+1)+"秒"
+        console.log(time);
+
+        //获取值的方法：基于split一项项的拆分
+        time="2019-7-24 12:6:23";
+        m=time.split(" ");//["2019-7-24",'12:6:23']
+        n=m[0].split("-");//["2019","7","24"];
+        x=m[1].split(":");//["12","6","23"];
+        time=n[0]+"年"+n[1]+"月"+n[2]+"日"+x[0]+"时"+x[1]+"分"+x[2]+"秒";
+        console.log(time);
+
+        //不足十位不灵
+        let addZero=val=>val=val.length<2?"0"+val:val;
+
+        //获取值的方法：基于正则表达式的拆分
+        time="2019-7-24 12:6:23";
+        let ary=time.split(/(?: |-|:)/g);//=>["2019", "7", "24", "12", "6", "23"]
+        time=ary[0]+"年"+addZero(ary[1])+"月"+ary[2]+"日"+ary[3]+"时"+addZero(ary[4])+"分"+ary[5]+"秒";
+        console.log(time);
+        
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>史上最LOW的验证码</title>
+</head>
+<body>
+    <input type="text" id="codeInp">
+    <br><br>
+    <span id="codeBox">AAAA</span>
+    <button id="changeCode">看不清换一张</button>
+
+    <!--IMPORT JS-->
+    <script>
+        let codeInp=document.getElementById("codeInp");
+        let codeBox=document.getElementById("codeBox");
+        let changeCode=document.getElementById("changeCode")
+        
+        /* 
+            queryCode:获取到四位随机的养殖吗，然后放到指定的盒子中
+                @parmas  无
+                @return
+            by candy on 2020/08/13
+        */
+        function queryCode(){
+            let area="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let result="";
+            for(let i=0;i<4;i++){
+                let ran=Math.round(Math.random()*61);
+                result+=area.charAt(ran);
+            }
+            codeBox.innerHTML=result;
+        }
+        //第一次加载页面需要执行方法，让其显示在页面中
+        queryCode();
+        //点击看不清楚按钮，需要重新执行方法生成新的验证码
+        changeCode.onclick=queryCode;
+
+        codeInp.onblur=function(){
+            let val=this.value,code=codeBox.innerHTML
+            if(val.toLowerCase()===code.toLowerCase()){
+                alert("温馨提示：验证码输入成功")
+            }else{
+                alert("温馨提示：验证码输入有误，请重试");
+                codeInp.value="";
+                queryCode();
+
+            }
+           
+        }
+    </script>
+</body>
+</html>

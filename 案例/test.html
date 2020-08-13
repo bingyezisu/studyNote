@@ -33,6 +33,20 @@
         let str="candy@daisy@lucy";
         console.log(str.replace("@","|"));//candy|daisy@lucy
         console.log(str.replace(/@/g,"|"));
+
+        console.log(!(!"Number(undefined)"));//=>true
+        console.log(isNaN(parseInt(new Date()))+Number([1])+typeof undefined);//=>"2undefined"
+        console.log(Boolean(Number(""))+!isNaN(Number(null))+Boolean("parseInt([])")+typeof !(null));//=>"2boolean"
+        console.log(parseFloat("1.6px")+parseInt("1.2px")+ typeof parseInt(null));//=>"2.6number"
+        console.log(isNaN(Number(!!Number(parseInt("0.8")))));//=>false
+        console.log(1+"2"+"2");//=>"122"
+        console.log(!typeof parseFloat("0"));//false 取反 
+        console.log(Number(""));//=>0
+        console.log(typeof "parseInt(null)"+12+!!Number(NaN));//=>"string12fasle"
+        console.log(!typeof (isNaN(""))+parseInt(NaN));//=>NaN
+        console.log(typeof !parseInt(null)+!isNaN(null));//=>"booleantrue"
+        var ary=[12,5,68,23,45,3,27]
+        console.dir(Math.max.apply(null,ary));
     </script>
 </body>
 </html>

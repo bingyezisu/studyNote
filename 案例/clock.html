@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小时钟</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        #clockBox{
+            position:absolute;
+            top:0;
+            right:0;
+            padding:0 15px;
+            line-height:70px;
+            font-size:24px;
+            color:#000;
+            background:lightskyblue;
+            background:-webkit-linear-gradient(top left,lightskyblue,lightcoral,lightcyan)
+
+        }
+    </style>
+</head>
+<body>
+    <div id="clockBox">
+        2020年08月13日 星期五 17:41:34
+    </div>
+    <script>
+        var clockBox=document.getElementById("clockBox");
+        /* 
+            addZero():不足十位补0
+                @params
+                    val [string/number] 需要处理的值
+                @return
+                    处理后的结果（不足十为的补0）
+                    
+        */
+        function addZero(val){
+            val=Number(val);
+            return val<10?"0"+val:val;
+        }
+        /* 
+            queryDate():获取当前日期，把其转换为想要的格式
+                @parmas
+                @return
+            by candy on 2020/08/13
+        */
+        function queryDate(){
+            let time=new Date(),
+                year=time.getFullYear(),
+                month=time.getMonth()+1,
+                day=time.getDate(),
+                week=time.getDay(),
+                hours=time.getHours(),
+                minutes=time.getMinutes(),
+                seconds=time.getSeconds();
+            //拼凑成我们想要的字符串
+            weekAry=["日","一","二","三","四","五","六"]
+            let result=year+"年"+addZero(month)+"月"+addZero(day)+"日";
+            result+=" 星期"+weekAry[week]+" ";
+            result+=addZero(hours)+":"+addZero(minutes)+":"+addZero(seconds);
+            //把处理好的值放入盒子中
+            clockBox.innerHTML=result;
+        }
+        //加载页面执行方法
+        queryDate()
+        //定时器控制运动
+        setInterval(queryDate,1000);
+    </script>
+</body>
+</html>

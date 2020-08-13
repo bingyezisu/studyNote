@@ -743,6 +743,11 @@ console.log(Math.max(12,5,68,23,45,3,27));//=>3
 //思考题：如何基于Math.max/min获取数组中的最大值最小值
 Math.max([12,5,68,23,45,3,27])//=>NaN 
 //解析：传递了一个值，是个数组，和内置的语法要求不符
+//方法1：基于ES6扩展运算符
+var ary=[12,5,68,23,45,3,27]
+console.log(Math.max(...ary))
+//方法2：使用apply方法
+console.log(Math.max.apply(null,ary));
 ```
 
 `Math.sqrt/pow()`
@@ -1220,7 +1225,7 @@ console.log(ary);
 
 ## String
 
-	#### 字符串中常用的方法
+#### 字符串中常用的方法
 
 > 所有用单引号，双引号，反引号 包起来的都是字符串
 
@@ -1335,4 +1340,229 @@ console.log(str.replace(/@/g,"|"));//=>"candy|daisy|lucy"
 
 `match`
 
-11111
+#### 实现一些常用的需求
+
+> 时间字符串的处理
+
+```javascript
+let time="2019-7-24 12:6:23"
+//=>变为自己需要呈现的格式,例如：
+// "2019年07月24日 12时06分23秒"
+
+//方案1：一路replace
+time=time.replace("-","年").replace("-","月").replace(" ","日")
+   		.replace(":","时").replace(":","分")+"秒";
+console.log(time);
+//方案2：获取到年月日小时分钟秒这几个值后，最后项拼成什么效果就拼成什么
+//获取值的方法：基于indexOf获取指定符号索引，基于substring一点点截取
+time="2019-7-24 12:6:23";
+let m=time.indexOf("-");
+let n=time.lastIndexOf("-");
+let x=time.indexOf(" ");
+let y=time.indexOf(":");
+let z=time.lastIndexOf(":");
+time=time.substring(0,m)+"年"+time.substring(m+1,n)+"月"+time.substring(n+1,x)+"日"+time.substring(x+1,y)+"时"+time.substring(y+1,z)+"分"+time.substring(z+1)+"秒";
+console.log(time);
+
+//获取值的方法：基于split一项项的拆分
+time="2019-7-24 12:6:23";
+m=time.split(" ");//["2019-7-24",'12:6:23']
+n=m[0].split("-");//["2019","7","24"];
+x=m[1].split(":");//["12","6","23"];
+time=n[0]+"年"+n[1]+"月"+n[2]+"日"+x[0]+"时"+x[1]+"分"+x[2]+"秒";
+console.log(time);
+
+//不足十位不灵
+let addZero=val=>val=val.length<2?"0"+val:val;
+
+//获取值的方法：基于正则表达式的拆分
+time="2019-7-24 12:6:23";
+let ary=time.split(/(?: |-|:)/g);
+//=>["2019", "7", "24", "12", "6", "23"]
+time=ary[0]+"年"+addZero(ary[1])+"月"+ary[2]+"日"+ary[3]+"时"+addZero(ary[4])+"分"+ary[5]+"秒";
+console.log(time);
+```
+
+> 实现一个方法queryURLParameter 获取一个URL地址问好后面传递的参数信息
+
+```javascript
+/* 
+    res:{
+        lx:1,
+        name:"candy",
+        friend:"lucy",
+        HASH:"box"
+    }
+*/
+let url="http://www.gome.com.cn/index.html?lx=1&name=candy&friend=lucy#box";
+//1.获取问好或者井号后面的值
+let askIndex=url.indexOf("?");
+let wellIndex=url.indexOf("#");
+let askText=url.substring(askIndex+1,wellIndex);
+let wellText=url.substring(wellIndex+1);
+//2.问号后面值的详细处理
+let askAry=askText.split("&");//=>["lx=1","name=candy","friend=lucy"];
+let res={}
+askAry.forEach((item,index)=>{
+    let itemAry=item.split("=");
+    res[itemAry[0]]=itemAry[1];
+})
+res["HASH"]=wellText;
+console.log(res);
+```
+
+```javascript
+/* 
+    queryURLParams: 获取URL地址中问好传参的信息和哈希值
+        @params
+            url [string] 要解析的url字符串
+        @return
+            [object] 包含参数和哈希值信息的对象
+    by candy on 2020/08/13 15:35:00
+*/
+function queryURLParams(url){
+    // 1.获取?和#后面的信息
+    let askIn=url.indexOf("?"),
+        wellIn=url.indexOf("#"),
+        askText="",
+        wellText="";
+    wellIn===-1?wellIn=url.length:null; 
+    askIn>=0?askText=url.substring(askIn+1,wellIn):null;
+    wellText=url.substring(wellIn+1);
+
+    //2.获取每一部分的信息
+    let result={};
+    wellText!==""?result["HASH"]=wellText:null;
+    if(askText!==""){
+        let ary=askText.split("&");
+        ary.forEach(item=>{
+            let itemAry=item.split("=");
+            result[itemAry[0]]=itemAry[1];
+        })
+    }
+    return result;
+}
+```
+
+```javascript
+//基于正则封装的才是最完美的
+function queryURLParams(url){
+    let result={},
+        reg1=/([^?=&#]+)=([^?=&#]+)/g,
+        reg2=/#([^?=&#]+)/g;
+    url.replace(reg1,(n,x,y)=> result[x]=y);
+    url.replace(reg2,(n,x)=> result['HASH']=x);
+    return result;
+}
+```
+
+> 实现一个最LOW的验证码 ：数字+字母共四位
+>
+> 验证码的目的：防止外挂程序恶意批量注入的
+
+```javascript
+/* 
+  queryCode:获取到四位随机的养殖吗，然后放到指定的盒子中
+    @parmas  无
+    @return
+  by candy on 2020/08/13
+*/
+function queryCode(){
+	let area="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result="";
+    for(let i=0;i<4;i++){
+        let ran=Math.round(Math.random()*61);
+        result+=area.charAt(ran);
+    }
+     codeBox.innerHTML=result;
+}
+```
+
+### Date
+
+#### 日期对象的基本操作
+
+```javascript
+let time = new Date();
+/***
+	获取当前客户端（本机电脑）本地的时间
+		这个时间用户是可以自己修改的，所以不能作为重要的参考依据
+	Thu Aug 13 2020 16:59:28 GMT+0800 (中国标准时间)
+		获取的结果不是字符串是对象数据类型的，属于日期对象（或者说是Date这个类的实例对象）
+***/
+typeOf time //=>"object"
+```
+
+标准日期对象中提供了一些属性和方法，共我们操作日期信息
+
++ getFullYear()：获取年
+
++ getMouth()：获取月 结果是0~11代表第一个月到第十二个月
+
++ getDate()：获取日
+
++ getDay()：获取星期 结果是0~6代表周日到周六
+
++ getHours()：获取时
+
++ getMinutes()：获取分
+
++ getSeconds()：获取秒
+
++ getMillseconds()：获取毫秒
+
++ getTime()：获取当前日期距离1970/1/1 00:00:00 这个日期之间的毫秒差`
++ toLocaleDateString() 
++ toLocaleString() 
+
+```javascript
+time.toLocaleDateString()//=>"2020/8/13"
+time.toLocaleString()//=>"2020/8/13 下午5:35:00"
+```
+
+>new Date() 除了获取本机时间，还可以把一个时间格式字符串转换为标注的时间格式
+
+```javascript
+new Date("2019/7/26");
+//=>Fri Jul 26 2019 00:00:00 GMT+0800 (中国标准时间)
+new Date("2019-7-26");
+//=>Fri Jul 26 2019 00:00:00 GMT+0800 (中国标准时间)
+new Date("2019-7-26 15:20:00");
+//=>Fri Jul 26 2019 15:20:00 GMT+0800 (中国标准时间)
+/***
+	支持的格式
+		yyyy/mm/dd 
+		yyyy/mm/dd hh:mm:ss
+		yyyy-mm-dd 这种格式在IE下不支持
+***/
+```
+
+**时间字符串格式化的案例**
+
+```javascript
+let time="2019-7-24 12:6:23";
+/***
+	字符串处理解决办法
+***/
+function formatTime(time){
+    time=new Date(time.replace(/-/g,"/")),
+    year=time.getFullYear(),
+    month=time.getMonth()+1,
+    day=time.getDate(),
+    week=time.getDay(),
+    hours=time.getHours(),
+    minutes=time.getMinutes(),
+    seconds=time.getSeconds();
+	//拼凑成我们想要的字符串
+    weekAry=["日","一","二","三","四","五","六"];
+    let result=year+"年"+addZero(month)+"月"+addZero(day)+"日";
+    result+=" 星期"+weekAry[week]+" ";
+ result+=addZero(hours)+"时"+addZero(minutes)+"分"+addZero(seconds)+"秒";
+      return result;
+}
+let addZero=val=>{
+    val=Number(val);
+    return val<10?"0"+val:val;
+}
+```
+

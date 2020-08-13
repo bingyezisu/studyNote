@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    //let url="http://www.gome.com.cn/index.html?lx=1&name=candy&friend=lucy#box";
+/* 
+    res:{
+        lx:1,
+        name:"candy",
+        friend:"lucy",
+        HASH:"box"
+    }
+*/
+/* //1.获取问好或者井号后面的值
+let askIndex=url.indexOf("?");
+let wellIndex=url.indexOf("#");
+let askText=url.substring(askIndex+1,wellIndex);
+let wellText=url.substring(wellIndex+1);
+//2.问号后面值的详细处理
+let askAry=askText.split("&");//=>["lx=1","name=candy","friend=lucy"];
+let res={}
+askAry.forEach((item,index)=>{
+    let itemAry=item.split("=");
+    res[itemAry[0]]=itemAry[1];
+})
+res["HASH"]=wellText;
+console.log(res); */
+
+
+/* 
+    queryURLParams: 获取URL地址中问好传参的信息和哈希值
+        @params
+            url [string] 要解析的url字符串
+        @return
+            [object] 包含参数和哈希值信息的对象
+    by candy on 2020/08/13 15:35:00
+*/
+/* function queryURLParams(url){
+    // 1.获取?和#后面的信息
+    let askIn=url.indexOf("?"),
+        wellIn=url.indexOf("#"),
+        askText="",
+        wellText="";
+    wellIn===-1?wellIn=url.length:null; 
+    askIn>=0?askText=url.substring(askIn+1,wellIn):null;
+    wellText=url.substring(wellIn+1);
+
+    //2.获取每一部分的信息
+    let result={};
+    wellText!==""?result["HASH"]=wellText:null;
+    if(askText!==""){
+        let ary=askText.split("&");
+        ary.forEach(item=>{
+            let itemAry=item.split("=");
+            result[itemAry[0]]=itemAry[1];
+        })
+    }
+    return result;
+} */
+function queryURLParams(url){
+    let result={},
+        reg1=/([^?=&#]+)=([^?=&#]+)/g,
+        reg2=/#([^?=&#]+)/g;
+    url.replace(reg1,(n,x,y)=> result[x]=y);
+    url.replace(reg2,(n,x)=> result['HASH']=x);
+    return result;
+}
+    </script>
+</body>
+</html>
