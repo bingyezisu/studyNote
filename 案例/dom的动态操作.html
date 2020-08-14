@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            color:red;
+            background:lightblue;
+            width:200px;
+            height:200px;
+            margin-top:10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"><span>candy</span></div>
+    <script>
+        let box1=document.getElementsByClassName("box")[0];
+        let box2=box1.cloneNode(true);//深克隆 包含内存元素
+        let box3=box1.cloneNode(false);//浅克隆 只是当前元素
+        document.body.appendChild(box2);
+        document.body.appendChild(box3);
+
+    </script>
+</body>
+</html>

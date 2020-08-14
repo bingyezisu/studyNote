@@ -1566,3 +1566,137 @@ let addZero=val=>{
 }
 ```
 
+# DOM及其基础操作
+
+> DOM:document.object.model文档对象模型，提供一些属性和方法，共我们操作页面中的元素
+
+## 获取DOM元素的方法
+
++ document.getElementById(); 指定在文档中，基于元素的ID获取这个元素
++ [context].getElementsByTagName() 在指定上下文（容器）中，通过标签名获取一组元素集合
++ [context].getElementsByClassName() 在指定上下文中，通过样式类名获取一组元素集合（不兼容IE6~8）
++ document.getElementsByName() 在整个文档中，通过标签的Name属性值获取一组元素结合（在IE中只有表单元素的NAME才能识别，所以我们一般应用于表单元素的处理）
++ document.head/document.body/document.documentElement 获取页面中的HEAD/BODY/HTML三个元素
++ [context].querySeletor([selecotr])在指定上下文中，通过选择器获取到指定的元素对象
++ [context].querySeletorAll([selecotr])在指定上下文中，通过选择器获取到指定的元素集合
+
+```javascript
+//=>querySelector /querySelectorAll 不兼容IE6~8
+let box=document.querySelector("#box")
+let links=document.querySelectorAll(".box")
+```
+
+## JS中的节点和描述节点之间关系的属性
+
+>节点 ：Node
+>
+>节点结合：NodeList（getElementsByName/querySelectorAll 获取的都是节点集合）
+
+|          | nodeType |   nodeName   | nodeValue |
+| :------: | :------: | :----------: | :-------: |
+| 元素节点 |    1     | 大写的标签名 |   null    |
+| 文本节点 |    3     |   “#text”    | 文本内容  |
+| 注释节点 |    8     |  “#commen”   | 注释内容  |
+| 文档节点 |    9     | “#document“  |   null    |
+|   ...    |          |              |           |
+
+### 描述节点之间关系的属性
+
++ childNodes:获取所有的子节点
+
+  *标准浏览器（非IE6~8）中会把空格和换行当作文本节点处理（childNodes包含所有节点）*
+
++ children：获取所有的元素子节点（子元素标签标签）
+
+  *IE6~8下，使用children会把注释也当做元素节点*
+
+  ```javascript
+  /***
+      children: 获取指定上下文中，所有的元素子节点
+          @params
+              context [element object]指定的上下文元素信息
+          @return
+              [array] 返回所有的元素子节点结合
+      by candy on 2020/08/14
+  ***/
+  function children(context){
+      var res=[],
+          nodeList=context.childNodes;
+      for(var i=0;i<nodeList.length;i++){
+          var item=nodeList[i];
+          item.nodeType===1?res.push(item):null;
+      }
+      return res;
+  }
+  
+  ```
+
++ parent：获取父亲节点
+
++ firstChild: 获取第一个子节点
+
++ lastChild: 获取最后一个子节点
+
++ firstElementChild/lastElementChild:获取第一个和最后一个元素子节点（不兼容IE6~8）
+
++ previousSibling:获取上一个哥哥节点
+
++ nextSibling：获取下一个弟弟节点
+
++ previousElementSibling/nextElementSibling:获取哥哥和弟弟元素节点（不兼容IE6~8）
+
+```javascript
+/***
+    prev: 获取指定元素的哥哥节点
+        @params
+            context [element object]指定的元素信息
+        @return
+            [element object] 返回找到的哥哥节点
+    by candy on 2020/08/14
+***/
+function prev(context){
+    var pre=context.previousSibling;
+    while(pre.nodeType!==1){
+        pre=pre.previousSibling;
+    }
+    return pre;
+}
+//jquery中提供一些方法共我们获取元素：children/prev/next/prevAll/nextAll/sibling/siblings/index...
+```
+
+## 在JS中动态增删改元素
+
+`createElement`  创建元素
+
+`createTextNode` 创建文本对象
+
+`appendChild` 把元素添加到容器的末尾
+
+```javascript
+容器.appendChild([新增元素])
+```
+
+`insertBefore` 把元素添加到指定容器中指定元素的前面
+
+```javascript
+容器.insertBefore([新增元素],[指定元素])
+```
+
+`cloneNode(true/false) `  克隆元素或者节点（深/浅）
+
+```javascript
+let box1=document.getElementsByClassName("box")[0];
+let box2=box1.cloneNode(true);//深克隆 包含内存元素
+let box3=box1.cloneNode(false);//浅克隆 只是当前元素
+```
+
+`removeChild`  移除元素
+
+```javascript
+容器.removeChild(元素)
+```
+
+
+
+
+
