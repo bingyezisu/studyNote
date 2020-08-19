@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>垂直水平居中</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        html,body{
+            height:100%;
+        }
+        .box{
+            padding:15px;
+            width:300px;
+            height:300px;
+            border:10px solid lightblue;
+            background:lightcyan;
+            font-size:16px;
+            line-height:30px;
+            box-sizing: border-box;
+        }
+        /* .box{
+            position:absolute;
+            top:50%;
+            left:50%;
+            margin-top:-150px;
+            margin-left:-150px;
+        } */
+
+        /* .box{
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+        }*/
+
+        /* ie7及以下不兼容 */
+        /* .box{
+            position:absolute;
+            top:0;
+            left:0;
+            bottom:0;
+            right:0;
+            margin:auto;
+        } */
+
+        /* FLEX */
+        /* body{
+            display: flex;
+            justify-content:center;
+            align-items:center;
+        } */
+
+    </style>
+</head>
+<body>
+    <div id="box" class="box">
+        夫君子之行，静以修身，俭以养德。非淡泊无以明志，非宁静无以致远。夫学须静也，才须学也，非学无以广才，非志无以成学。淫慢则不能励精，险躁则不能治性。年与时驰，意与日去，遂成枯落，多不接世，悲守穷庐，将复何及！
+    </div>
+    <script>
+        //JS实现居中，（一屏幕的宽度-盒子的宽度）/2===left
+        let winW=document.documentElement.clientWidth,
+            winH=document.documentElement.clientHeight,
+            box=document.getElementById("box");
+        box.style.position="absolute";
+        box.style.left=(winW-300)/2+"px";
+        box.style.top=(winH-300)/2+"px";
+    </script>
+</body>
+</html>

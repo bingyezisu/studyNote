@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>回到顶部</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        html,
+        body{
+            height:500%;
+            background:-webkit-linear-gradient(top left,lightblue,lightpink,lightgreen)
+        }
+        .link{
+            position:fixed;
+            right:30px;
+            bottom:230px;
+            box-sizing:border-box;
+            background:lightsalmon;
+            font-size:16px;
+            text-decoration:none;
+            padding:10px;
+            display:none;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <a herf="javascript:;" id="link" class="link">回到<br/>顶部</a>
+    <script>
+        let Html=document.documentElement,
+            Link=document.getElementById("link");
+        //当浏览器滚动条滚动的时候，我们进行验证，卷去的高度超过两屏，我们让#link显示
+        function check(){
+            let winH=Html.clientHeight,
+                scrollT=Html.scrollTop;
+                Link.style.display=scrollT>=winH?"block":"none";
+        }
+        window.onscroll=check;
+        Link.onclick=function(){
+            // 让按钮隐藏
+            Link.style.display="none";
+            //先禁止滚动事件的触发
+            window.onscroll=null;
+            let step=100;
+            let timer=setInterval(()=>{
+                if(Html.scrollTop===0){
+                    clearInterval(timer);
+                    window.onscroll=check;
+                    return;
+                }
+                Html.scrollTop-=step;
+            },17);      
+        }
+       /*  let timer=setInterval([function],[interval]);
+        clearInterval(timer); */
+    </script>
+</body>
+</html>

@@ -303,7 +303,7 @@ console.log(b);;//=>{n:1,x:{n:2}}
 ```
 ### Function
 
-> 函数就是一个方法或者一个功能题，函数就是把实现某个功能的代码放到一起进行分装，以后想要操作实现这个功能，只需要把函数执行即可=>"封装":减少页面中的冗余代码，提高代码重复使用率（`低耦合高内聚`）
+> 函数就是一个方法或者一个功能体，函数就是把实现某个功能的代码放到一起进行封装，以后想要操作实现这个功能，只需要把函数执行即可=>"封装":减少页面中的冗余代码，提高代码重复使用率（`低耦合高内聚`）
 
 ```txt
 类比：洗衣机就是一个函数，生产洗衣机就是封装一个函数（把实现某些功能的代码封装进来），生产的时候，不知道用户洗衣服的时候放什么水，衣服，洗衣液，我们需要提供出入口（提供的入口在函数中叫做形参，执行的时候放的具体东西函数中叫做实参）,洗完衣服需要能拿出来，洗衣机提供一个出口（在函数中叫做返回值:把函数处理后的结果能够返回给外面用）
@@ -1511,7 +1511,7 @@ typeOf time //=>"object"
 
 + getMillseconds()：获取毫秒
 
-+ getTime()：获取当前日期距离1970/1/1 00:00:00 这个日期之间的毫秒差`
++ getTime()：获取当前日期距离1970/1/1 00:00:00 这个日期之间的毫秒差
 + toLocaleDateString() 
 + toLocaleString() 
 
@@ -1696,7 +1696,89 @@ let box3=box1.cloneNode(false);//浅克隆 只是当前元素
 容器.removeChild(元素)
 ```
 
+`setAttribute` 设置属性
 
+*这种方式是把自定义属性放到元素结构上，并没有放到元素对象的堆内存中*
 
+`getAttribute` 获取属性
 
+`removeAttribute` 移除属性
+
+## 获取元素样式和操作样式
+
+```javascript
+//=>修改元素样式
+[element].style.xxx=xxx; //=>修改和设置他的行内样式
+[element].className=xxx; //=>设置样式类
+
+//=>获取元素的样式
+console.log([element].style.xxx);//=>获取的是当前元素写在行内上的样式，如果有这个样式，但是没有写在行内上，则获取不到
+```
+
+### JS盒子模型属性
+
+> 基于一些属性和方法，让我们能够获取到当前元素的样式和信息，例如：clientWidth，offsetWidth等
+>
+> 属性：
+>
+> + client
+>   + width/height
+>   + top/left
+> + offset
+>   + width/height
+>   + top/left
+>   + parent
+> + scoll
+>   	+ width/height
+>   	+ top/left
+>
+> 方法： 
+>
+> ​	widnow.getComputerStyle([element],(伪类))/[element].currentStyle
+
+```javascript
+let box=document.getElementById("box");
+
+//=>获取盒子可视区域的宽高（宽：内容宽度+左右padding/高：内容高度+上下padding）
+//1.内容溢出对它没影响
+//2.获取的结果是没有单位的（其余的盒子模型属性也是）
+//3.获取的结果是整数，它会自己进行四舍五入（其余的盒模型属性也是）
+box.clientWidth
+box.clientHeight
+
+//=>获取当前页面一屏幕（可视化）区域的高度
+let winW=document.documentElement.clientWidth||
+    document.body.clientWidth;
+let winH=document.documentElement.clientHeight||
+    document.body.clientHeight;
+
+//=>获取盒子左边框和上边框的大小
+box.clientLeft
+box.clientTop
+
+//=>在client的基础上加上border==盒子本身的宽高
+box.offsetWidth
+box.offsetHeight
+
+//=>在没有内容一溢出的情况下，获取的而结果和client是一样的
+//=>在有内容溢出的情况下，获取的结果约等于真实内容的宽高（上/左padding+真实内容的高度/宽度）
+//1.不同浏览器获取的结果不尽相同
+//2.设置overflow属性值对最后的结果也会产生一定的影响
+box.scrollWidth
+box.scrollHeight
+
+//=>获取整个页面真实的高度
+document.documentElement.scrollheight||
+    document.body.scrollHeight
+
+//=>竖向滚动条卷去的高度
+//1.边界值
+//min=0;
+//max=整个的高度（scrollHeight-一屏幕高度clientHeight）
+box.scrollTop
+//=>横向滚动条卷去的宽度
+box.scrollLeft
+
+//=>13个盒子模型，只有这两个是“可读写的”（既可以获取也可以设置对应的值），其余的都是“只读”属性（不能设置值，只能获取）
+```
 
