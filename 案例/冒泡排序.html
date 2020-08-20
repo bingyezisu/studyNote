@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>冒泡排序</title>
+</head>
+<body>
+    <script>
+        /* 
+            冒泡排序的思想：
+                让数组中的当前项和后一项比较，如果当前项比当前项比后一项大，则两项交换位置(让大的靠后)即可
+         */
+        let ary=[12,8,24,16,1];
+        /* for(let j=0;j<ary.length-1;j++){
+            for(let i=0;i<ary.length-j;i++){
+                let cur=ary[i];
+                if(cur>ary[i+1]){
+                    ary[i]=ary[i+1];
+                    ary[i+1]=cur;
+                }
+            }
+        } 
+        console.log(ary);
+        */
+        /* 
+            bubble：实现冒泡排序
+                @params
+                    ary [Array] 需要排序的数据
+                @return
+                    [Array] 排序后的新数组
+            by candy on 2020/08/20
+         */
+        function bubble(ary){
+            let temp=null;
+            //外层循环控制要比较的轮数
+            for(let i=0;i<ary.length-1;i++){
+                //里层循环控制每一轮比较的次数
+                for(let j=0;j<ary.length-1-i;j++){
+                    if(ary[j]>ary[j+1]){
+                        //当前项大于后一项
+                        temp=ary[j];
+                        ary[j]=ary[j+1];
+                        ary[j+1]=temp;
+                    }
+                }
+            }
+            return ary;
+        }
+        ary=bubble(ary);
+        console.log(ary);
+    </script>
+</body>
+</html>

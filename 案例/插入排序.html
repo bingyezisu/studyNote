@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>插入排序</title>
+</head>
+<body>
+    <script>
+
+        let ary=[12,8,24,16,1];
+        
+        function insert(ary){
+            let newAry=ary.splice(0,1);
+            for(var i=0;i<ary.length;i++){
+                let a=ary[i];
+                for(var j=0;j<newAry.length;j++){
+                    let b=newAry[j];
+                    //如果当前值小于新数组每项的值，就把它放到这个值的前面,并结束循环
+                    if(a<b){
+                        newAry.splice(j,0,a);
+                        break;
+                    }
+                    //如果当前值比数组的每一项都大，就把它放到数组的最后面并结束循环
+                    if(j==newAry.length-1){
+                        newAry.push(a);
+                        break;
+                    }
+                }
+            }
+            return newAry;
+        }
+        /* 
+            insert：实现插入排序
+                @params
+                    ary [Array] 需要排序的数据
+                @return
+                    [Array] 排序后的新数组
+            by candy on 2020/08/20
+         */
+        /* function insert(ary){
+            //1.准备一个新数组，用来存储抓到手里的牌，开始先抓一张牌进来
+            let newAry=[];
+            newAry.push(ary[0]);
+
+            //2.从第二项开始一次抓牌，一直到把台面上的牌抓光
+            for(let i=1;i<ary.length;i++){
+                //A:新抓的牌
+                let A=ary[i];
+                //和手里的每张牌以此比较
+                for(let j=newAry.length-1;j>=0;j--){
+                    let B=newAry[j]
+                    //如果新牌比手里的牌大了，就把新牌放在手里牌的后面
+                    if(A>B){
+                        newAry.splice(j+1,0,A);
+                        break;
+                    }
+                    //已经逼到第一项，我们把新牌放到手中最前面
+                    if(j===0){
+                        newAry.unshift(A);
+                    }
+                }
+            }
+            return newAry;
+        } */
+        newAry=insert(ary);
+        console.log(newAry);
+    </script>
+</body>
+</html>
