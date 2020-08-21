@@ -1782,3 +1782,111 @@ box.scrollLeft
 //=>13个盒子模型，只有这两个是“可读写的”（既可以获取也可以设置对应的值），其余的都是“只读”属性（不能设置值，只能获取）
 ```
 
+# 基础算法
+
+## 冒泡排序
+
+```javascript
+/***
+	bubble:实现冒泡排序
+		@params
+			ary [ARRAY] 需要实现排序的数组
+		@return
+			[ARRAY] 排序后的数组
+	by candy  on 2020/08/20
+	实现思想：将数组前面的项后后面的项作比较，后面的项大于前面的项时两项交换位置
+***/
+function bubble(ary){
+    let cur=null;
+    for(let i=0;i<ary.length-1;i++){
+        for(let j=0;j<ary.length-1-i;j++){
+            if(ary[j]>ary[j+1]){
+                cur=ary[j];
+                ary[j]=ary[j+1];
+                ary[j+1]=cur;
+            }
+        }
+    }
+    return ary;
+}
+```
+
+## 插入排序
+
+```javascript
+/***
+	insert:实现插入排序
+		@params
+			ary [ARRAY] 需要实现排序的数组
+		@return
+			[ARRAY] 排序后的数组
+	by candy  on 2020/08/20
+	实现思想：先准备一个新数组，然后将每一项放到新数组中，将新放入的项值和新数组中的每一项作比较，比它小就放在它前面，比他们都大就放到后面去
+***/
+function insert(ary){
+    let newAry=ary.splice(0,1);
+	for(var i=0;i<ary.length;i++){
+        for(var j=newAry.length-1;j>=0;j--){
+            if(ary[i]>newAry[j]){
+                newAry.splice(j+1,0,ary[i]);
+                break;
+            }
+            if(j===0){
+                newAry.unshift(ary[i]);
+            }
+        }
+    }
+    return newAry;
+}
+```
+
+## 快速排序
+
+```javascript
+/***
+	递归：函数执行的时候自己调用自己
+***/
+function fn(){
+    //这种死递归会形成栈溢出的错误
+    fn();
+    //这种看似死递归但是不会形成栈溢出
+    setTimeout(fn,0);
+}
+fn();
+//求1~10相加的和
+function sum(n){
+    if(n>10){
+        return 0;
+    }
+    return n+sum(n+1);
+}
+sum(1);
+```
+
+```javascript
+/***
+	quick:实现快速排序
+		@params
+			ary [ARRAY] 需要实现排序的数组
+		@return
+			[ARRAY] 排序后的数组
+	by candy  on 2020/08/20
+	实现思想：封装一个方法，选取数组的中间项，并创建新数组，将剩余数组项与中间项作比较，
+		 	如果大于当前项放到右边，小于当前项就放到前面，对新建的数组循环执行这个方法，
+		 	直到数组两边都排好，最后进行拼接。
+***/
+function quick(ary){
+    if(ary.length<=1){
+        return ary;
+    }
+    let mIn=Math.floor(ary.length/2),
+        mVal=ary.splice(mIn,1)[0],
+        leftAry=[],
+        rightAry=[];
+   for(let i=0;i<ary.length;i++){
+       mVal>ary[i]?leftAry.push(ary[i]):rightAry.push(ary[i]);
+   }  
+   return quick(leftAry).concat(mVal,quick(rightAry));
+}
+```
+
