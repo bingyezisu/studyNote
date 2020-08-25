@@ -7,7 +7,95 @@
 </head>
 <body>
     <script>
-        console.dir(String.prototype);
+        /* 
+            number   普通数字 NaN  isNaN(0)=>false 
+            Number([])=>0;
+            Number(["12"])=>12;
+            Number([12,13])=>NaN;
+            parseInt
+            parseFloat
+            Number(null)=>0;
+            Number(undefined)=>NaN
+            String   toString() []=>"" 
+            Boolean 0,"",NaN,null,undefined=>false;
+            null    typeof(null)=>object;
+            undefined 
+
+            object  =>Date Array /\d/ Math
+            function 
+
+            typeof instanceof constructor Object.prototype.toString.call()
+            break continue
+            switch=>===;
+            Math.abs min/max ceil/floor sqrt/pow PI round random (Math.round(Math.random()*(m-n)+n))
+            Array push unshift shift pop splice
+                  slice concat
+                  join(",") toString
+                  lastIndexOf indexOf includes
+                  reverse sort=>a-b 升序 b-a 降序
+                  forEach
+            String  charAt charCodeAt 
+                    substr =>索引 个数
+                    substring=>索引开始，索引结束（不包括）
+                    slice=>索引开始，索引结束（不包括）
+                    indexOf lastIndexOf includes
+                    toUpperCase toLowerCase
+                    split("")=>和数组的join("")对应
+                    replace() 新字符，老字符 只能换一次
+            Date
+                new Date()
+                .getFullYear getMouth getDay getDate
+                 getHours getMinutes getSeconds
+                 getMillseconds getTime  toLocaleDateString
+                 toLocaleString
+
+            DOM
+                document object model
+                document.getElementById
+                document.getElementsByName
+                document.head
+                document.body
+                document.documentElement
+
+                context.getElementsByTagName
+                context.getElementsByClassName
+                context.querySelecotr()
+                context.querySelectorAll()
+            Node 
+                NodeType 元素1 文本3 注释8 文档节点9
+                         document.documentElement.nodeType=>1
+                         document.nodeType=>9
+                childNodes child(不兼容)
+                fristChild fristElementChild
+                lastChild lastElementChild
+                parent
+                previousSibling  previousElementSibling
+                nextSibling    nextElemnetSibling
+            creatElemnt
+            creatTextNode
+            appendChild  容器.appendChild([新元素])
+            insertBefore  容器.insertBefor([新元素],[指定元素])
+            cloneNode(true/false)  深克隆 浅克隆
+            removeChild 
+            setAttribute
+            getAttribute 
+            removeAttribute 
+
+            clientWidth clientHeight =>padding+宽高
+            clientTop clientleft=>边框的宽高
+            offsetWidth offset Height=>padding+宽高+border
+            offsetTop offsetLeft =>距离浏览器顶部/左边的距离
+            offsetParent =>距离元素最近的有position定位的父元素=>没定位=>body
+            scrollWidth scollheight 内容没溢出=client 内容溢出 padding+实际内容的宽高
+            scrollTop scrollLeft 内容卷去的高/宽
+
+            document.documentElement.clientWidth || document.body.clientWidth
+            document.documentElement.scrollTop ||document.body.scrollTop
+
+            window.getComputerStyle([元素],伪类)/[element].currentStyle
+        */
+
+        // console.dir(String.prototype);
        /* let str="candywangdisaywangxixihahahehe";
         console.log(str.charAt(0));
         console.log(str.charCodeAt(0));
@@ -30,7 +118,7 @@
         /* let str="candy!wang!disay!wang!xixi!haha!hehe";
         console.log(str.split("!"));
         console.log(str.split("!").join(",")); */
-        let str="candy@daisy@lucy";
+/*         let str="candy@daisy@lucy";
         console.log(str.replace("@","|"));//candy|daisy@lucy
         console.log(str.replace(/@/g,"|"));
 
@@ -44,9 +132,134 @@
         console.log(Number(""));//=>0
         console.log(typeof "parseInt(null)"+12+!!Number(NaN));//=>"string12fasle"
         console.log(!typeof (isNaN(""))+parseInt(NaN));//=>NaN
-        console.log(typeof !parseInt(null)+!isNaN(null));//=>"booleantrue"
-        var ary=[12,5,68,23,45,3,27]
-        console.dir(Math.max.apply(null,ary));
+        console.log(typeof !parseInt(null)+!isNaN(null));//=>"booleantrue" */
+       /*  var ary=[12,5,68,23,45,3,27]
+        console.dir(Math.max.apply(null,ary)); */
+
+        /* let ary=[21,34,5,31,17,11,2,10];
+        // 冒泡排序
+        function bubble(ary){
+            let temp=null;
+            for(var i=0;i<ary.length;i++){
+                for(var j=0;j<ary.length-1-i;j++){
+                    if(ary[j]>ary[j+1]){
+                        temp=ary[j];
+                        ary[j]=ary[j+1];
+                        ary[j+1]=temp;
+                    }
+                }
+            }
+            return ary;
+        }
+        //插入排序
+        function insert(ary){
+            let newAry=ary.splice(0,1);
+            for(var i=0;i<ary.length;i++){
+                for(var j=newAry.length-1;j>=0;j--){
+                    if(ary[i]>newAry[j]){
+                        newAry.splice(j+1,0,ary[i]);
+                        break;
+                    }
+                    if(j===0){
+                        newAry.unshift(ary[i]);
+                    }
+                }
+            }
+            return newAry;
+        }
+        //快速排序
+        function quick(ary){
+            if(ary.length<=1){
+                return ary;
+            }
+            let mIn=Math.floor(ary.length/2);
+            let mVal=ary.splice(mIn,1)[0];
+            let leftAry=[],
+                rightAry=[];
+            for(var i=0;i<ary.length;i++){
+                ary[i]>mVal?rightAry.push(ary[i]):leftAry.push(ary[i]);
+            }
+            return quick(leftAry).concat(mVal,quick(rightAry));
+        }
+        ary=quick(ary);
+        console.log(ary); */
+        /* let obj={};
+        let fn=(context=window,...args)=>{
+            //console.log(arguments);//Uncaught ReferenceError: arguments is not defined 箭头函数没有argument
+            console.log(args);
+        }
+        fn(obj,10,20,30);//=>context：obj arg:[10,20,30]
+        fn()//=>context:window  ary:[] */
+
+        /* window.name="win";
+        let obj={
+            name:'obj'
+        }
+        let fn=n=>{
+            console.log(this.name);
+        }
+        fn(10);//=>this:window
+        fn.call(obj,10);//=>this:window
+        fn.apply(obj,[10]);//=>this:window */
+
+        /* let obj={
+            name:"obj",
+            fn:function(){
+                /* setTimeout(function(){
+                    console.log(this);
+                    this.name="candy";//this=>window;
+                },1000) */
+                /* let _this=this;
+                setTimeout(function(){
+                    _this.name="candy";
+                }) */
+                  /*setTimeout(()=>{
+                    console.log(this);
+                    this.name="candy"
+                },1000)
+            }
+        } 
+       obj.fn(); */
+       /* let ary=[10,20,30,40,50];
+       let [a,b,...x]=ary;
+       console.log(a,b,x); */
+
+       let ary=[10,[20,30,[40,50]]];
+       let [n,[,,[,m]]]=ary;
+       console.log(n,m);//n=>10 m=>50
+       let obj={
+            name:"candy",
+            age:30,
+            sex:"female",
+            friends:["candice","lily","tom","judy"]
+        }
+        //=>创建的变量要和对象的属性名一致（默认）
+        /* let {name,years,sex}=obj;
+        console.log(name,years,sex);//=>"candy" undefined "female" */
+
+        //=>冒号相当于给获取的结果设置一个别名（变量名），创建一个叫做years的变量存储了obj.age的值
+        /* let {age:years}=obj;
+        console.log(years);
+
+        let{height="154cm"}=obj;
+        console.log(height);//=>"154cm" */
+
+/*         let {
+            name,
+            friends:[fristFriend]
+        }=obj;
+        console.log(`my name is ${name},my best friend is ${fristFriend}`)
+
+        let {
+            code,
+            data:{today,data:calendar}
+        }=data; */
+        let year="2020",
+            month="08",
+            day="25";
+        //=>"你好，今天是2020年08月25日，一年一度的七夕节，愿天下有情人都是兄妹，哈哈！"
+        let res=`你好，今天是${year}年${month}月${day}日，今天是一年一度的七夕节，愿天下有情人都是兄妹，哈哈！`
+        console.log(res);
     </script>
 </body>
 </html>

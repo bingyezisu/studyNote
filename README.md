@@ -1704,6 +1704,8 @@ let box3=box1.cloneNode(false);//浅克隆 只是当前元素
 
 `removeAttribute` 移除属性
 
+
+
 ## 获取元素样式和操作样式
 
 ```javascript
@@ -1927,5 +1929,208 @@ console.log(b);
 const fn=([形参])=>{
     //函数体
 }
+fn([实参])
+
+//=>形参只有一个，小括号可以不加
+const fn=n=>{};
+//=>函数体中只有一句话，并且是return xxx的，可以省略大括号和return
+const fn=n=>n*10;
+
+/***
+    function fn(n){
+        return function(m){
+            return m+(++n);
+        }
+    }
+***/
+const fn=n=>m=>m+(++n);
+```
+
+箭头函数中没有arguments，但是可以基于剩余运算符获取实参集合，而且ES6中支持给形参设置默认值的
+
+```javascript
+let obj={};
+let fn=(context=window,...args)=>{
+    //console.log(arguments);
+    //=>Uncaught ReferenceError: arguments is not defined 箭头函数没有argument
+    console.log(args);
+    //=>...args:剩余运算符（把除第一项外的，其他传递的实参信息都存储到args这个数组集合中）
+}
+fn(obj,10,20,30);//=>context：obj arg:[10,20,30]
+fn()//=>context:window  ary:[]
+```
+
+箭头函数中没有自己的this，它里面用到的this都是自己所处的执行上下文中的this（真实项目中，一但涉及this问题，箭头函数慎用）
+
+```javascript
+window.name="win";
+let fn=n=>{
+    console.log(this.name);
+}
+let obj={
+	name:'obj'
+    fn:fn
+}
+fn(10);//=>this:window
+fn.call(obj,10);//=>this:window
+fn.apply(obj,[10]);//=>this:window
+document.body.onclick=fn;//=>this:window 不是我们预期的BODY
+obj.fn(10);//=>this:window
+
+let obj={
+    name:"obj",
+    fn:function(){
+        //=>this:obj 普通函数是有自己的this的
+        let f=()=>{
+            console.log(this);
+        }
+        f();//=>this:obj
+        return f;
+    }
+}
+
+let obj={
+	name:"obj",
+	fn:function(){
+	/* setTimeout(function(){
+			console.log(this);
+        	this.name="candy";//this=>window;
+       },1000) */
+     /* let _this=this;
+		setTimeout(function(){
+			_this.name="candy";
+        }) */
+		setTimeout(()=>{
+			console.log(this);
+            this.name="candy"
+         },1000)
+    }
+} 
+obj.fn();
+```
+
+## 解构赋值
+
+> 让左侧出现和右侧值相同的结构，以此快速获取到我们需要的内容
+>
+> 真实项目中最常用的就是对数组和对象的解构赋值
+
+```javascript
+//数组的解构赋值
+let ary=[10,20,30,40,50];
+let [a,b,...x]=ary;
+/***
+	...x拓展运算符:把剩下的内容存储在x中（x是个数组）
+	但是它只能出现在最后
+***/
+console.log(a,b,x);//a=>10 b=>20 x=>[30,40,50]
+let[n,,m]=ary;
+console.log(n,m);//=>n=>10 m=>30
+
+let ary=[10,[20,30,[40,50]]];
+let [n,[,,[,m]]]=ary;
+console.log(n,m);//n=>10 m=>50
+```
+
+```javascript
+//对象的解构赋值
+let obj={
+    name:"candy",
+    age:30,
+    sex:"female",
+    friends:["candice","lily","tom","judy"]
+}
+//=>创建的变量要和对象的属性名一致（默认）
+/* let {name,years,sex}=obj;
+console.log(name,years,sex);//=>"candy" undefined "female" */
+
+//=>冒号相当于给获取的结果设置一个别名（变量名），创建一个叫做years的变量存储了obj.age的值
+let {age:years}=obj;
+console.log(years);
+
+let{height="154cm"}=obj;
+console.log(height);//=>"154cm" 
+
+let {name,friends:[fristFriend]}=obj;
+console.log(`my name is ${name},my best friend is ${fristFriend}`)
+```
+
+## “...”的作用
+
++ 拓展运算符（多用在解构赋值中）
++ 展开运算符（多用在传递实参中）
++ 剩余运算符 （多用在接收实参中）
+
+```javascript
+//=>解构赋值
+let ary=[12,23,34]
+let [n,...m]=ary; //=>n:[12] m:[23,34]
+
+//=>传递实参
+let ary=[12,23,13,24,10,25]
+let min=Math.min(...ary);//=>10;
+//=>实现数组克隆（浅克隆）
+let cloneAry=[...ary];
+//对象克隆
+let obj={name:"candy",age:30};
+let cloneObj={...obj,sex:"female"}
+
+//=>接收实参
+let fn=(...arg)=>{
+    //ary=>[10,20,30]
+}
+fn(10,20,30);
+```
+
+## class创建类
+
+```javascript
+//=>传统ES3/ES5中创建类的方法
+function Fn(){
+    this.x=100;
+}
+Fn.prototype.getX=function(){
+    console.log(this.x);
+}
+var f1=new Fn();
+f1.getX();
+//也可以把它当作普通函数的执行
+Fn();
+//还可以把Fn当作普通的对象设置键值对
+Fn.queryX=function(){}
+Fn.queryX();
+```
+
+```javascript
+//=>ES6中类的创建
+class Fn{
+    //等价与之前的构造函数体
+    constructor(n.m){
+        this.x=100;
+    }
+    //直接写的方法就是加在原型上的 ===Fn.prototype.getX...
+    getX(){
+        console.log(this.x)
+    }
+    //前面设置static的，把当前Fn当作普通对象设置的键值对
+    static queryX(){}
+    static y=100;
+}
+let f=new Fn(10,20)
+f.getX();
+Fn.queryX();
+Fn();//=>报错：class创建的类只能new执行，不能当作普通函数执行
+```
+
+## 模板字符串
+
+```javascript
+let year="2020",
+    month="08",
+    day="25";
+//=>"你好，今天是2020年08月25日，今天是一年一度的七夕节，愿天下有情人都是兄妹，哈哈！"
+let res=`你好，今天是${year}年${month}月${day}日，今天是一年一度的七夕节，愿天下有情人都是兄妹，哈哈！`
+console.log(res);
+
 ```
 
