@@ -2134,3 +2134,87 @@ console.log(res);
 
 ```
 
+# call,apply及bind
+
+```javascript
+/***
+	1）可以改变我们档期那函数的this指向
+	2）还会让当前函数执行
+***/
+Function.prototype.call=function(context){
+    context=context?Object(context)||window;
+    context.fn=this;
+    let args=[];
+    for(let i=1;i<arguments.length;i++){
+        args.push('arguments['+i+']')
+    }
+    let r=eval('context.fn('+args+')');
+    delete context.fn;
+    return r;
+}
+fn.call("hello","1","2");
+//改变this的指向=>"hello"=>让fn1执行
+```
+
+```javascript
+Function.prototype.myApply=function(context,args){
+     context=context?Object(context):window;
+     context.fn=this;
+     if(!agrs){
+        return context.fn();
+     }
+     //利用数组的toString的特性
+     let r=eval('context.fn('+args+')');
+     delete context.fn;
+     return r;
+}
+```
+
+```javascript
+/***
+	1)bind方法可以绑定this指向 绑定参数
+	2）bind方法返回一个绑定后的函数（高阶函数）
+	3）如果绑定的函数被new了 当前函数的this就是当前的实例
+	4）new出来的结果可以找到原有类的原型
+***/
+Function.prototype.myBind=function(context){
+    let that=this;
+    let bindArgs=Array.prototype.slice.call(arguments,1);
+    function fn(){
+        
+    }
+    function fBound(){
+        let args=Array.prototype.slice.call(arguments)
+        return that.apply(context,bindArgs.concat(args));
+    }
+    fn.prototype=this.prototype;
+    fBound.prototype=new Fn();
+    return fBound
+}
+let bindFn=fn.bind(obj,"cat");
+let bindFn1=fn.myBind(obj,"cat");
+let instance=new bindFn1(9)
+```
+
+
+
+# 模拟new
+
+```javascript
+function Animal(type){
+	this.type=type;
+}
+Animal.prototype.say=function(){
+    console.log("say");
+}
+function mockNew(){
+	let Constructor=[].shift.call(arguments);
+    let obj={};
+    obj.__proto__=Constructor.prototype;
+    let r=Constructor.apply(obj,arguments);
+    return r instanceof Object ? r:obj
+}
+//let animal=new Animal("哺乳类");
+let animal=mockNew(Animal,"哺乳类")
+console.log(animal);
+```

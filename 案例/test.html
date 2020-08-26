@@ -224,7 +224,7 @@
        let [a,b,...x]=ary;
        console.log(a,b,x); */
 
-       let ary=[10,[20,30,[40,50]]];
+       /* let ary=[10,[20,30,[40,50]]];
        let [n,[,,[,m]]]=ary;
        console.log(n,m);//n=>10 m=>50
        let obj={
@@ -232,7 +232,7 @@
             age:30,
             sex:"female",
             friends:["candice","lily","tom","judy"]
-        }
+        } */
         //=>创建的变量要和对象的属性名一致（默认）
         /* let {name,years,sex}=obj;
         console.log(name,years,sex);//=>"candy" undefined "female" */
@@ -254,12 +254,79 @@
             code,
             data:{today,data:calendar}
         }=data; */
-        let year="2020",
+        /* let year="2020",
             month="08",
             day="25";
         //=>"你好，今天是2020年08月25日，一年一度的七夕节，愿天下有情人都是兄妹，哈哈！"
         let res=`你好，今天是${year}年${month}月${day}日，今天是一年一度的七夕节，愿天下有情人都是兄妹，哈哈！`
-        console.log(res);
+        console.log(res); */
+
+        /* var name="candy",age=30;
+        var obj={
+            name:'candice',
+            objAge:this.age,
+            myFun:function(){
+                console.log(this.name+this.age);
+            }
+        }
+        obj.objAge;//30;
+        obj.myFun();//obj
+
+        var fav="candy";
+        function shows(){
+            console.log(this.fav)
+        }
+        shows(); */
+
+        /* function fn(a,b){
+            console.log(this);
+            console.log(a,b)
+        }
+        fn.call("hello",1,2);
+        Function.prototype.Mycall=function(context){
+            context=context?Object(context):window;
+            context.fn=this;
+            let args=[];
+            //利用数组的toString的特性
+            for(let i=1;i<arguments.length;i++){
+                args.push('arguments['+i+']');
+            }
+            let r=eval('context.fn('+args+')');
+            delete context.fn;
+            return r;
+        }
+        Function.prototype.myApply=function(context,args){
+            context=context?Object(context):window;
+            context.fn=this;
+            if(!agrs){
+                return context.fn();
+            }
+            //利用数组的toString的特性
+            let r=eval('context.fn('+args+')');
+            delete context.fn;
+            return r;
+        } 
+        fn.call("hello",1,2);
+        fn.call("hello",[1,2]);*/
+
+        function Animal(type){
+            this.type=type;
+        }
+        Animal.prototype.say=function(){
+            console.log("say");
+        }
+        function mockNew(){
+            let Constructor=[].shift.call(arguments);
+            let obj={};
+            obj.__proto__=Constructor.prototype;
+            let r=Constructor.apply(obj,arguments);
+            return r instanceof Object ? r:obj
+        }
+        //let animal=new Animal("哺乳类");
+        let animal=mockNew(Animal,"哺乳类")
+        console.log(animal);
+
+
     </script>
 </body>
-</html>
+</html>c
