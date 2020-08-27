@@ -447,6 +447,13 @@ console.log(typeof undefined);//=>"undefined"
 console.log(typeof typeof typeof []);//=>string;
 ```
 
+## JS中的类型转换
+
++ null和undefined和其他类型惊醒比较返回的都是false
++ 对象和对象比较都是false，因为对象指向的是引用空间
++ NaN和任何类型比较都不相等
++ 对象和字符串 数字 symbol比较的时候，会把对象转换成原始数据类型
+
 
 
 ## JS中的操作语句
@@ -2134,7 +2141,79 @@ console.log(res);
 
 ```
 
-# call,apply及bind
+# 深入JS
+
+## 构造函数
+
+> 构造函数也是一个普通函数，创建方式和普通函数一样，用来新建实列对象。
+>
+> 习惯上构造函数中函数名首字母大写
+>
+> 普通函数直接调用即可，构造函数用new [函数名] ()调用
+
+```javascript
+//普通函数
+function funName(a,b){
+    console.log(a+b)
+};
+var a=funName();//普通函数的调用方法
+console.log(a);//undefined 普通函数没有return
+//构造函数
+function Human(name,job,age){
+    this.name=name;
+    this.job=job;
+    this.age=age;
+    this.sayHi=function(){
+        alert("hi");
+    } 
+}
+//新建实例对象
+var person=new Human("candy","programmer",30);
+console.log(person instanceof Human)//true;
+/***
+	person=>{
+		name:"candy",
+		job:"programmer",
+		age:30,
+		sayHi:function(){
+			alert("hi")
+		}
+	}
+***/
+```
+
+## 原型和原型链
+
+>所有引用类型都可以自由扩展属性
+>
+>所有的引用类型都一个\__proto__属性（隐式原型）
+>
+>所有的函数都有一个prototype属性（显示原型）
+
+```javascript
+function Human(name,job,age){
+    this.name=name;
+    this.job=job;
+    this.age=age;
+}
+Human.prototype.sayHi=function(){
+    console.log("hello,my name is"+this.name);
+}
+//新建实例对象
+var person=new Human("candy","programmer",30);
+console.log(person.__proto__=== Human.prototype);//=>true;
+
+```
+
+
+
+## 作用域
+
+> JS中的函数作用域被称为词法作用域，又叫静态作用域 ，是在函数定义的时候就产生了
+
+
+
+## call,apply及bind
 
 ```javascript
 /***
@@ -2198,7 +2277,7 @@ let instance=new bindFn1(9)
 
 
 
-# 模拟new
+## 模拟new
 
 ```javascript
 function Animal(type){
