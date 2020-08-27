@@ -2202,10 +2202,10 @@ Human.prototype.sayHi=function(){
 //新建实例对象
 var person=new Human("candy","programmer",30);
 console.log(person.__proto__=== Human.prototype);//=>true;
-
+console.log(person.__proto__.__proto__=== Object.prototype);//=>true;
 ```
 
-
+![]('github.com:bingyezisu/studyNote.git/studyNote/img/图解原型链.png)
 
 ## 作用域
 
