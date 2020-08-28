@@ -431,21 +431,135 @@ sum(1,2,3,4);
 `Object.prototype.toString.call()`检测数据类型最好的办法
 
 ```javascript
-/*
- * 基于typeof检测出来的结果
- *  1.首先是一个字符串
- *  2.字符串中包含对应的类型
- * 局限性
- *  1.typeof null=>"object" 但是null并不是对象
- *  2.基于typeof无法细分出当前值是普通对象还是数组对象等，因为只要是对象数据类型，返回的结果都是“object”
- */
- 
-console.log(typeof 1);//=>"number"
-let a=NaN;
-console.log(typeof a);//=>"number"
-console.log(typeof undefined);//=>"undefined"
-console.log(typeof typeof typeof []);//=>string;
+/***
+	typeof:用来检测数据类型的运算符
+		typeof [value]
+	@return 
+		首先是一个字符串
+		字符串包含对应的数据类型，例如："number","object","undefined","function","boolean","symbol"...
+	@局限性
+		typeof null=>"object"
+		//不能具体区分对象数据类型的值
+		typeof []=>"object"
+		typeof {}=>"object"
+		typeof /^$/=>"object"
+	@优势
+	 	使用方便，所以在真实项目中，我们也会大量应用它来检测，尤其是在检测基本类型值（除null之外）和函数类型值的时候，他还是很方便的
+***/
+function func(n,m,callback){
+    //ES6（形参赋值默认值）: function(n=0,m=0)
+    //=>检测形参的值是否为undefined
+    //n===undefined?n=0:null
+    //typeof m==="undefined"?m=0:null
+    //=>基于逻辑或和逻辑与处理(瑕疵：不仅仅是不传赋值默认值，如果传递的值是假也会处理称为默认真)
+    n=n||0;
+    m=m||0;
+    //回调函数执行
+    typeof callback==="function"?callback():null
+    //callback && callback();//=>瑕疵：传递的为真即可执行，不一定是一个函数，这样些事开发者心理已经知道，要不然不传，要传就是一个函数
+}
+func(10,20,function(){
+    
+})
 ```
+
+```javascript
+/***
+	instanceof:本意是用来检测实例是否隶属于某个类的运算符，也可以用来做某些数据类型的检测，例如：数组、正则等
+	@局限性
+		不能处理基本数据类型值
+		只要在当前实例的原型链(__proto__)中出先的类，检测结果都是true（用户可能会手动修改原型链的指向example.__proto__或者在类的继承中 等情况）
+		
+		
+***/
+let arr=[];
+let reg=/^$/;
+console.log(arr instanceof Array);//=>true
+console.log(reg instanceof Array);//=>false
+console.log(reg instanceof RegExp);//=>true
+console.log(reg instanceof Object);//=>true
+//=>创建值的两种方式
+//字面量：let n=12;
+//构造函数：let m=new Number("12");
+function func(){
+    //arguments类数组
+    arguments.__proto__=Array.prototype;
+    console.log(arguments instanceof Array);//=>true  }
+func();
+```
+
+```javascript
+/***
+	constructor:构造函数
+		@原理：在类的原型上一般都会带哦哟constructor属性，我们也是利用这一点，获取某实例constructior属性值，验证是否为所属的类，从而进行数据类型检测
+		@局限性：constructor属性值太容易被修改了
+***/
+let n=12,
+    arr=[];
+console.log(n.constructor===Number);//=>true
+console.log(arr.constructor===Array);//=>true
+console.log(arr.constructor===Object);//=>false
+arr.constructor=111;
+console.log(arr.constructor===Array);//false
+Func.prototype={};//=>这样原型上没有constructor属性（重构了）
+```
+
+```javascript
+/***
+	Object.prototype.toString.call([value])
+		@原理：调用Object原型上的toString方法，让方法执行的时候，方法中的this是要检测的数据类型，从而获取到数据类型所属类的信息
+		@信息的模板 "[object 所属类]",例："[object Array]"
+	在所有的数据类型中，他们的原型上都有toString方法，除Object.prototype.toString不是把数据值转换为字符串，其余的都是转换为字符串，而Object原型上的toString是检测当前实例例属类的详细信息的（检测数据类型）...	
+	obj.toString()
+        1.首先基于原型链查找机制，找到Object.prototype.toString
+        2.把找到的方法执行，方法中的this->obj
+        3.方法内部把this（obj）的所属类信息输出
+        =>方法执行，方法中的this是谁，就是检测谁的谁的所属类信息
+	这个方法很强大，所有数据类型隶属的类信息检测的一清二楚
+***/
+function func(n,m){
+    return n+m;
+}
+let obj1={},obj2={name:"candy"};
+console.log([12,23].toString());//=>"12,23"
+console.log(/^$/.toString());//=>"/^$/"
+console.log(func.toString());//=>"function func..."
+console.log(obj1.toString());//=>"[object Object]"
+
+let _obj={};
+_obj.toString.call(100);//=>"[object Number]"
+```
+
+```javascript
+var _obj={
+            isNumberic:"Number",
+            isBoolean:"Boolean",
+            isString:"String",
+            isNull:"Null",
+            isUndefined:"Undefined",
+            isSymbol:"Symbol",
+            isPlainObject:"Object",
+            isArray:"Array",
+            isRegExp:"RegExp",
+            isDate:"Date",
+            isFunction:"Function",
+            isWindow:"Window",
+        },
+  _toString=_obj.toString,
+  _type={};
+  for(var key in _obj){
+    if(!_obj.hasOwnProperty(key)) break;
+      	_type[key]=(function(){
+            let reg=new RegExp("\\[object "+_obj[key]+"\\]");
+            return function anonymous(val){
+            	return reg.test(_toString.call(val));
+            }
+            })()
+   }
+console.log(_type.isNumberic(1));
+```
+
+
 
 ## JS中的类型转换
 
@@ -2186,9 +2300,9 @@ console.log(person instanceof Human)//true;
 
 >所有引用类型都可以自由扩展属性
 >
->所有的引用类型都一个\__proto__属性（隐式原型）
+>没有一个对象都一个\__proto__属性（隐式原型）
 >
->所有的函数都有一个prototype属性（显示原型）
+>每一个函数都有一个prototype属性（显示原型）
 
 ```javascript
 function Human(name,job,age){
@@ -2205,7 +2319,24 @@ console.log(person.__proto__=== Human.prototype);//=>true;
 console.log(person.__proto__.__proto__=== Object.prototype);//=>true;
 ```
 
-![]('github.com:bingyezisu/studyNote.git/studyNote/img/图解原型链.png)
+**hasOwnProperty 及 in**
+
+`hasOwnProperty([属性名])`判断实例内是否存在这个属性，返回true，如果没有这个属性，返回false
+
+`[属性名] in 实例` 判断能否通过对象访问到指定属性，无论属性实在实例中还是再原型中
+
+```javascript
+console.log(person.hasOwnproperty(name));//=>true
+console.log(person.hasOwnProperty(height));//=>false
+console.log(height in person);//=>true
+```
+
+```javascript
+//判断指定属性存在于实例内还是原型内
+function hasPrototypeProperty(object,name){
+    return !object.hasOwnProperty(name) && (name in obj);
+}
+```
 
 ## 作用域
 
@@ -2297,3 +2428,53 @@ function mockNew(){
 let animal=mockNew(Animal,"哺乳类")
 console.log(animal);
 ```
+
+## 深拷贝及浅拷贝
+
+> 深拷贝 拷贝后的结果更改是不会影响拷贝前的 拷贝前后没有关系的
+>
+> 浅拷贝 改变拷贝前的内容，会对拷贝之后的有影响，拷贝前和拷贝后是有关系的
+
+```javascript
+//...运算符只能拷贝一层（浅拷贝）
+let obj={name:"candy",address:{x:100,y:100}}
+let o={...obj};
+obj.address.x=200;
+console.log(obj,o);
+
+let a=[1,2,3];
+let arr=[a];
+let newArr=arr.slice();
+newArr[0][0]=100;
+console.log(arr);
+
+//深拷贝 (不完整 不能实现复杂的拷贝)
+let obj={name:"candy",address:{x:100,y:100}}
+let o=JSON.parse(JSON.stringify(obj));
+obj.address.x=200;
+console.log(obj,o)
+
+//实现一个递归拷贝
+function deepClone(obj,hase=new weakMap()){
+    if(obj==null) return obj;//如果是null或者是undefined就不进行拷贝操作
+    if(obj instanceof Date) return new Date(obj);
+    if(obj instanceof RegExp) return new RegExp(obj);
+    //可能是对象或者普通的值 (函数不考虑深拷贝)
+    if(typoof obj !=="object") return obj;
+    if(hash.get(obj)) return hash.get(obj);
+    let cloneObj=new obj.constructior;
+    hash.set(obj,cloneObj)
+    for(let key in obj){
+        if(obj.hasOwnProperty(key)){
+            //实现一个递归拷贝
+            clonObj[key]=deepClone(obj[key],hash);
+        }
+    }
+    return cloneObj;
+}
+let obj=undefined
+deepClone(obj)
+```
+
+
+

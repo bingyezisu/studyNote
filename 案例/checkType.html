@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* let arr=[],
+            obj={},
+            num=1;
+        function checkType(value){
+            let type=typeof value,
+                toString={}.toString;
+            if(type ==="object"){
+                let str=toString.call(value);
+               return str.slice(8,str.length-1).toLowerCase();
+            }
+            return type;
+        } */
+        /* let _obj={
+            isNumberic:"Number",
+            isBoolean:"Boolean",
+            isString:"String",
+            isNull:"Null",
+            isUndefined:"Undefined",
+            isSymbol:"Symbol",
+            isPlainObject:"Object",
+            isArray:"Array",
+            isRegExp:"RegExp",
+            isDate:"Date",
+            isFunction:"Function",
+            isWindow:"Window",
+        },
+        _toString=_obj.toString,
+        _type={};
+        for(let key in _obj){
+            if(!_obj.hasOwnProperty(key)) break;
+            let reg=new RegExp("\\[object "+_obj[key]+"\\]");
+            _type[key]=function anonymous(val){
+                return reg.test(_toString.call(val));
+            }
+        } */
+        var _obj={
+            isNumberic:"Number",
+            isBoolean:"Boolean",
+            isString:"String",
+            isNull:"Null",
+            isUndefined:"Undefined",
+            isSymbol:"Symbol",
+            isPlainObject:"Object",
+            isArray:"Array",
+            isRegExp:"RegExp",
+            isDate:"Date",
+            isFunction:"Function",
+            isWindow:"Window",
+        },
+        _toString=_obj.toString,
+        _type={};
+        for(var key in _obj){
+            if(!_obj.hasOwnProperty(key)) break;
+            _type[key]=(function(){
+                let reg=new RegExp("\\[object "+_obj[key]+"\\]");
+                return function anonymous(val){
+                    return reg.test(_toString.call(val));
+                }
+            })()
+        }
+        console.log(_type.isNumberic(1));
+    </script>
+</body>
+</html>

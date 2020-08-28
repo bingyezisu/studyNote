@@ -334,7 +334,40 @@
             foo();
         }
         bar();//=>1
+        function Human(name,job,age){
+            this.name=name;
+            this.job=job;
+            this.age=age;
+        }
+        Human.prototype.sayHi=function(){
+            console.log("hello,my name is"+this.name);
+        }
+        //新建实例对象
+        var person=new Human("candy","programmer",30);
+        console.log(person.__proto__=== Human.prototype);
+        console.log(person.__proto__.__proto__=== Object.prototype);
+        console.log(person.hasOwnProperty("name"));//=>true
+        console.log(person.hasOwnProperty("sayHi"));//=>false
+        console.log('sayHi' in person);//=>true
 
+      /*   let arr=[];
+        let reg=/^$/;
+        console.log(arr instanceof Array);//=>true
+        console.log(reg instanceof Array);//=>false
+        console.log(reg instanceof RegExp);
+        console.log(reg instanceof Object); */
+        let n=12,
+            arr=[];
+        console.log(n.constructor===Number);
+        console.log(arr.constructor===Array);//=>true
+        console.log(arr.constructor===Object);//=>false
+        arr.constructor=111;
+        console.log(arr.constructor===Array);//false
+        let _obj={};
+        console.log(_obj.toString.call(100))//=>"[object Number]"
+
+        console.log(typeof 1);
+        
     </script>
 </body>
 </html>
