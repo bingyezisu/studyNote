@@ -325,7 +325,7 @@
         //let animal=new Animal("哺乳类");
         let animal=mockNew(Animal,"哺乳类")
         console.log(animal); */
-        var value=1;
+        /* var value=1;
         function foo(){
             console.log(value);
         }
@@ -341,14 +341,14 @@
         }
         Human.prototype.sayHi=function(){
             console.log("hello,my name is"+this.name);
-        }
+        } */
         //新建实例对象
-        var person=new Human("candy","programmer",30);
+        /* var person=new Human("candy","programmer",30);
         console.log(person.__proto__=== Human.prototype);
         console.log(person.__proto__.__proto__=== Object.prototype);
         console.log(person.hasOwnProperty("name"));//=>true
         console.log(person.hasOwnProperty("sayHi"));//=>false
-        console.log('sayHi' in person);//=>true
+        console.log('sayHi' in person);//=>true */
 
       /*   let arr=[];
         let reg=/^$/;
@@ -356,7 +356,7 @@
         console.log(reg instanceof Array);//=>false
         console.log(reg instanceof RegExp);
         console.log(reg instanceof Object); */
-        let n=12,
+        /* let n=12,
             arr=[];
         console.log(n.constructor===Number);
         console.log(arr.constructor===Array);//=>true
@@ -366,8 +366,87 @@
         let _obj={};
         console.log(_obj.toString.call(100))//=>"[object Number]"
 
-        console.log(typeof 1);
+        console.log(typeof 1); */
+        /* var obj={
+            isNumber:"Number",
+            isString:"String",
+            isBoolean:"Boolean",
+            isFunction:"Function",
+            isPlainObject:"Object",
+            isNull:"Null",
+            isUndefined:"undefined",
+            isArray:"Array",
+            isWindow:"Window",
+            isDate:"isDate",
+            isRegExp:"RegExp"
+        }
+        var _toString=obj.toString;
+        var type={};
+        for(var key in obj){
+            if(!obj.hasOwnProperty(key)) break;
+            type[key]=(function(){
+                let reg=new RegExp("\\[object "+obj[key]+"\\]");
+                return function(val){
+                    return reg.test(_toString.call(val))
+                }
+            })()
+        }
+        console.log(type.isNumber("hehe")); */
+
+        /* function Fn(){
+            var n=10;
+            this.m=20;
+            this.aa=function(){
+                console.log(this.m);
+            }
+        }
+        Fn.prototype.bb=function(){
+            console.log(this.n);
+        }
+        var f1=new Fn;
+        Fn.prototype={
+            aa:function(){
+                console.log(this.m+10);
+            }
+        }
+        var f2=new Fn;
+        console.log(f1.constructor);
+        console.log(f2.constructor);
+        f1.bb();
+        f1.aa();
+        f2.bb();
+        f2.aa();
+        f2.__proto__.aa();*/
+        //原型链继承
+       /*  function Animal(){
+            this.eat=function(){
+                console.log("animal eat");
+            }
+        }
+        function Dog(){
+            this.bark=function(){
+                console.log('dog bark')
+            }
+        }
+        Dog.prototype=new Animal();
+        var hashiqi=new Dog(); */
+        /* const o1={a:1};
+        const o2={b:2};
+        const o3={c:3};
+
+        const obj=Object.assign(o1,o2,o3);
+        console.log(obj);
+        console.log(o1);
+        console.log(o2);
+        console.log(o3); */
+        const o1 = { a: 1, b: 1, c: 1 };
+        const o2 = { b: 2, c: 2 };
+        const o3 = { c: 3 };
+
+        const obj = Object.assign({}, o1, o2, o3);
+        console.log(obj)
+        console.log(o1)
         
-    </script>
+    </script> 
 </body>
 </html>
