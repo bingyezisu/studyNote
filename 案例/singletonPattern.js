@@ -22,7 +22,7 @@
         1.在给命名空间赋值的时候，不是直接赋值一个对象，而是先执行匿名函数，形成一个私有作用域AA（不销毁的栈内存），在AA中创建一个堆内存，把堆内存地址赋值给命名空间
         2.这种模式的好处：我们完全可以在AA中创建很多内容（变量or函数），哪些需要供外面调取使用的，我们暴露到返回的对象中（模块化实现的一种思想）
 */
-var nameSpace=(function(){
+/* var nameSpace=(function(){
     var n=12;
     function fn(){
         //...
@@ -31,3 +31,33 @@ var nameSpace=(function(){
         fn:fn
     }
 })()
+
+
+var nameSpace=(function(){
+    var n=12;
+    function fn(){
+
+    }
+    return {
+        fn:fn,
+    }
+})() */
+
+var n=2;
+var obj={
+    n:3,
+    fn:(function(n){
+        n*=2;
+        this.n+=2;
+        var n=5;
+        return function(m){
+            console.log(this);
+            this.n*=2;
+           console.log(m+(++n));
+        }
+    })(n)
+};
+var fn=obj.fn;
+fn(3);
+//obj.fn(3);
+//console.log(n,obj.n);

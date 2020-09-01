@@ -219,7 +219,7 @@ let num;//=>创建一个变量没有赋值，默认值是undefined
 ```
 ### Object
 
->{[key]:[val],...} 任何一个对象都是有零到多组键值对(属性名：属性值)组成的（并且属性名不能重复）
+>{[key]:[val],...} 任何一个对象都是由零到多组键值对(属性名：属性值)组成的（并且属性名不能重复）
 ```javascript
 let person={
     name:"candy",
@@ -468,9 +468,7 @@ func(10,20,function(){
 	instanceof:本意是用来检测实例是否隶属于某个类的运算符，也可以用来做某些数据类型的检测，例如：数组、正则等
 	@局限性
 		不能处理基本数据类型值
-		只要在当前实例的原型链(__proto__)中出先的类，检测结果都是true（用户可能会手动修改原型链的指向example.__proto__或者在类的继承中 等情况）
-		
-		
+		只要在当前实例的原型链(__proto__)中出现的类，检测结果都是true（用户可能会手动修改原型链的指向example.__proto__或者在类的继承中 等情况		
 ***/
 let arr=[];
 let reg=/^$/;
@@ -491,7 +489,7 @@ func();
 ```javascript
 /***
 	constructor:构造函数
-		@原理：在类的原型上一般都会带哦哟constructor属性，我们也是利用这一点，获取某实例constructior属性值，验证是否为所属的类，从而进行数据类型检测
+		@原理：在类的原型上一般都会带有constructor属性，我们也是利用这一点，获取某实例constructor属性值，验证是否为所属的类，从而进行数据类型检测
 		@局限性：constructor属性值太容易被修改了
 ***/
 let n=12,
@@ -509,7 +507,7 @@ Func.prototype={};//=>这样原型上没有constructor属性（重构了）
 	Object.prototype.toString.call([value])
 		@原理：调用Object原型上的toString方法，让方法执行的时候，方法中的this是要检测的数据类型，从而获取到数据类型所属类的信息
 		@信息的模板 "[object 所属类]",例："[object Array]"
-	在所有的数据类型中，他们的原型上都有toString方法，除Object.prototype.toString不是把数据值转换为字符串，其余的都是转换为字符串，而Object原型上的toString是检测当前实例例属类的详细信息的（检测数据类型）...	
+	在所有的数据类型中，他们的原型上都有toString方法，除Object.prototype.toString不是把数据值转换为字符串，其余的都是转换为字符串，而Object原型上的toString是检测当前实例隶属类的详细信息的（检测数据类型）...	
 	obj.toString()
         1.首先基于原型链查找机制，找到Object.prototype.toString
         2.把找到的方法执行，方法中的this->obj
@@ -554,7 +552,7 @@ var _obj={
             return function anonymous(val){
             	return reg.test(_toString.call(val));
             }
-            })()
+       })()
    }
 console.log(_type.isNumberic(1));
 ```
@@ -2476,5 +2474,95 @@ let obj=undefined
 deepClone(obj)
 ```
 
+## 单例设计模式
 
+**单例设计模式 singleton pattern**
+
++ 表现形式
+
+  ```javascript
+  var obj={
+             xxx:xxx,
+             ...
+    }
+  //在单列设计模型中，obj不仅仅是对象名，它被称为“命名空间[NameSpace]”,把描述事物的属性存放到命名空间中，多个命名空间是独立分开的互不冲突
+  ```
+
++ 作用
+
+  ```javascript
+  //把描述同一件事物的属性和特征进行“分组、归类”（存储再同一个堆内存空间中），因此避免了全局变量之间的冲突和污染
+  var pattern1={name:"xxx"}
+  var pattern2={name:"xxx"}
+  
+  ```
+
++ 单例设计模式命名的由来
+
+  ```text
+  每一个命名空间都是JS中Object这个内置基类的实例，而实例之间是相互独立互不干扰的，所以我们称它为：“单例：单独的实例”
+  ```
+
+```javascript
+/* 
+    高级单例模式
+        1.在给命名空间赋值的时候，不是直接赋值一个对象，而是先执行匿名函数，形成一个私有作用域AA（不销毁的栈内存），在AA中创建一个堆内存，把堆内存地址赋值给命名空间
+        2.这种模式的好处：我们完全可以在AA中创建很多内容（变量or函数），哪些需要供外面调取使用的，我们暴露到返回的对象中（模块化实现的一种思想）
+*/
+var nameSpace=(function(){
+    var n=12;
+    function fn(){
+        //...
+    }
+    function sum(){
+        //...
+    }
+    return {
+        fn:fn,
+        sum:sum
+    }
+})()
+```
+
+```javascript
+/***
+	This
+		1.给当前元素的某个事件绑定方法，当事件触发执行的时候，方法中的this是当前操作的元素对象
+		oBox.onclick=function(){
+			//=>this:box
+		}
+		2.普通函数执行，函数中的this取决于执行的主体，谁执行的，this就是谁（执行主体：方法执行，看方法名卡面是否有“点”，有的话，点前面是谁this就是谁，没有this是window）
+		function fn(){
+			console.log(this);
+		}
+		var obj={fn:fn};
+		//执行的是相同的方法（不同的是函数执行方法中的this是不一样的）
+		obj.fn();//=>this:obj
+		fn()//=>this:window
+		
+		~function(){
+			//=>this:window
+		}();
+***/
+var n=2;
+var obj={
+    n:3,
+    fn:(function(n){
+        n*=2;
+        this.n+=2;
+        var n=5;
+        return function(m){
+            this.n*=2;
+           console.log(m+(++n));
+        }
+    })(n)
+};
+var fn=obj.fn;
+fn(3);
+obj.fn(3);
+console.log(n,obj.n);
+
+```
+
+**模块化开发**
 
