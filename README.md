@@ -1,3 +1,5 @@
+
+
 # 初识JS
 
 ## JS中的变量 variable
@@ -476,13 +478,12 @@ console.log(arr instanceof Array);//=>true
 console.log(reg instanceof Array);//=>false
 console.log(reg instanceof RegExp);//=>true
 console.log(reg instanceof Object);//=>true
-//=>创建值的两种方式
-//字面量：let n=12;
-//构造函数：let m=new Number("12");
+
 function func(){
     //arguments类数组
     arguments.__proto__=Array.prototype;
-    console.log(arguments instanceof Array);//=>true  }
+    console.log(arguments instanceof Array);//=>true  
+}
 func();
 ```
 
@@ -2255,6 +2256,51 @@ console.log(res);
 
 # 深入JS
 
+## 面向对象（OOP）
+
+```txt
+JS是一门编程语言（具备编程思想）
+	【面向对象】
+		JS\JAVA\PHP\C#\Ruby\Python\C++...
+	【面向过程】
+		C
+整个JS是基于面向对象设计和开发出来的语言，我们学习和实战的时候，也要按照面向对象的思想去体会和理解
+```
+
+面向对象编程，需要我们掌握：“对象，类，实例” 的概念
+
+`对象`：万物皆对象
+
+`类`：对象的具体细分（按照功能特点进行分类：大类，小类）
+
+`实例`：类中具体的一个事物 （拿出类别中的具体一个实例进行研究，那么当前类别下的其他实例也具备这些特点和特征）
+
+### 函数封装重载
+
+**封装**  ：低耦合高内聚
+
+**多态** ：重载和重写
+
+> `重载`：方法名相同，形参个数或者类型不一样（js中不存在真正意义上的重载，js中的重载指的是同一个方法，根据传参不同实现不同的效果）
+>
+> ``
+
+```javascript
+function sum(x){
+    //arguments
+    if(typeof z==="undefined"){
+        //...
+        return ;
+    }
+}
+```
+
+
+
+## 作用域
+
+> JS中的函数作用域被称为词法作用域，又叫静态作用域 ，是在函数定义的时候就产生了
+
 ## 构造函数
 
 > 构造函数也是一个普通函数，创建方式和普通函数一样，用来新建实列对象。
@@ -2270,7 +2316,12 @@ function funName(a,b){
 };
 var a=funName();//普通函数的调用方法
 console.log(a);//undefined 普通函数没有return
-//构造函数
+/***
+	基于构造函数创建自定义类
+		1.在普通函数执行的基础上“new xxx()”,这样就不是普通函数执行，而是构造函数执行，当前的函数名称之为“类名”，接受的返回结果是当前类的一个实例
+		2.自己创建的类名，最好第一个单词字母大写
+		3.这种构造函数设计模式执行，主要用于组件、类库、插件、框架等的封装，平时编写业务逻辑一般不这样处理
+***/
 function Human(name,job,age){
     this.name=name;
     this.job=job;
@@ -2294,13 +2345,79 @@ console.log(person instanceof Human)//true;
 ***/
 ```
 
+**创建值的两种方式**
+
+> 字面量：let n=12;
+> 构造函数：let m=new Number("12");
+> 不管是哪一种方式创造出来的都是Object类的实例，而实例之间是独立分开的，所以var xxx={} 这种模式就是JS中的单例模式
+>
+> 基本数据类型基于两种不同的模式创建出来的值是不一样的
+>
+> + 基于字面量方式创建出来的值是基本数据类型
+> + 基于构造函数创建出来的值时引用类型
+
+**普通函数及构造函数的运行机制**
+
+>普通函数执行 【fn()】
+>
+>+ 形成一个私有作用域
+>+ 形参赋值
+>+ 变量提升
+>+ 代码执行
+>+ 栈内存释放问题
+>
+>构造函数执行 【new Fn()】
+>
+>+ 像普通函数执行一样，形成一个私有的作用域（栈内存）
+>  + 形参赋值
+>  + 变量提升
+>+ 【构造函数执行独有】在JS代码自上而下执行之前，首先在当前形成的私用域中创建一个对象（创建一个堆内存：暂时不存储任何的东西），并且让函数中的执行主题（THIS）指向这个新的堆内存（THIS===创建的对象）
+>+ 代码自上而下执行
+>+ 【构造函数执行独有】代码执行完成，把之前创建的堆内存地址返回（浏览器默认返回）
+
+```javascript
+/***
+	构造函数执行，不些return，浏览器会默认返回创建的实例，但是如果写了return？
+		1.return的是一个基本值，返回的结果依然是类的实例，没有影响
+		2.如果返回的是引用值，则会把默认返回的实例覆盖，此时接受到的结果就不再是当前类的实例了
+		=>构造函数执行的时候，尽量减少return的使用，防止覆盖实例
+***/
+function Fn(){
+    var n=10;
+    this.m=n;
+    return "哈哈";
+}
+var f=new Fn();
+```
+
+
+
+### 模拟new
+
+```javascript
+function Animal(type){
+	this.type=type;
+}
+Animal.prototype.say=function(){
+    console.log("say");
+}
+function mockNew(){
+	let Constructor=[].shift.call(arguments);
+    let obj={};
+    obj.__proto__=Constructor.prototype;
+    let r=Constructor.apply(obj,arguments);
+    return r instanceof Object ? r:obj
+}
+//let animal=new Animal("哺乳类");
+let animal=mockNew(Animal,"哺乳类")
+console.log(animal);
+```
+
 ## 原型和原型链
 
->所有引用类型都可以自由扩展属性
->
->没有一个对象都一个\__proto__属性（隐式原型）
->
->每一个函数都有一个prototype属性（显示原型）
++ 所有的函数数据类型都天生自带一个属性：prototype（原型），这个属性的值是一个对象，浏览器会默认给它开辟一个堆内存。
++ 在浏览器给prototype开辟的堆内存中有一个天生自带的属性：constructor，这个属性存储的值是当前函数本身
++ 每一个对象都有一个\__proto__属性，这个属性指向当前实例所属类的prototype（如果不能确定它是谁的实例，都是Object的实例）
 
 ```javascript
 function Human(name,job,age){
@@ -2317,11 +2434,18 @@ console.log(person.__proto__=== Human.prototype);//=>true;
 console.log(person.__proto__.__proto__=== Object.prototype);//=>true;
 ```
 
+**原型链**
+
+它是一种基于__proto__向上查找的机制，当我们操作实例的某个属性或者方法的时候，首先找自己空间中私有的属性或者方法。
+
++ 找到了，则结束查找，使用私有的即可
++ 没有找到，则基于__proto__找所属类的prototype，如果找到就用这个公有的，如果没有找到，基于原型上的__proto__继续向上查找，一直找到Object.prototype的原型为止，如果没有，操作的属性或方法不存在。
+
 **hasOwnProperty 及 in**
 
 `hasOwnProperty([属性名])`判断实例内是否存在这个属性，返回true，如果没有这个属性，返回false
 
-`[属性名] in 实例` 判断能否通过对象访问到指定属性，无论属性实在实例中还是再原型中
+`[属性名] in 实例` 判断能否通过对象访问到指定属性，无论属性是在实例中还是在原型中（不管是是对象的私有属性还是公有属性）
 
 ```javascript
 console.log(person.hasOwnproperty(name));//=>true
@@ -2330,15 +2454,11 @@ console.log(height in person);//=>true
 ```
 
 ```javascript
-//判断指定属性存在于实例内还是原型内
-function hasPrototypeProperty(object,name){
+//判断指定属性存在于原型内
+function hasPubeProperty(object,attr){
     return !object.hasOwnProperty(name) && (name in obj);
 }
 ```
-
-## 作用域
-
-> JS中的函数作用域被称为词法作用域，又叫静态作用域 ，是在函数定义的时候就产生了
 
 
 
@@ -2404,29 +2524,6 @@ let bindFn1=fn.myBind(obj,"cat");
 let instance=new bindFn1(9)
 ```
 
-
-
-## 模拟new
-
-```javascript
-function Animal(type){
-	this.type=type;
-}
-Animal.prototype.say=function(){
-    console.log("say");
-}
-function mockNew(){
-	let Constructor=[].shift.call(arguments);
-    let obj={};
-    obj.__proto__=Constructor.prototype;
-    let r=Constructor.apply(obj,arguments);
-    return r instanceof Object ? r:obj
-}
-//let animal=new Animal("哺乳类");
-let animal=mockNew(Animal,"哺乳类")
-console.log(animal);
-```
-
 ## 深拷贝及浅拷贝
 
 > 深拷贝 拷贝后的结果更改是不会影响拷贝前的 拷贝前后没有关系的
@@ -2474,34 +2571,35 @@ let obj=undefined
 deepClone(obj)
 ```
 
-## 单例设计模式
 
-**单例设计模式 singleton pattern**
 
-+ 表现形式
+## 设计模式
 
-  ```javascript
-  var obj={
-             xxx:xxx,
-             ...
-    }
-  //在单列设计模型中，obj不仅仅是对象名，它被称为“命名空间[NameSpace]”,把描述事物的属性存放到命名空间中，多个命名空间是独立分开的互不冲突
-  ```
+### 单例设计模 （Singleton Pattern）
 
-+ 作用
-
-  ```javascript
-  //把描述同一件事物的属性和特征进行“分组、归类”（存储再同一个堆内存空间中），因此避免了全局变量之间的冲突和污染
-  var pattern1={name:"xxx"}
-  var pattern2={name:"xxx"}
-  
-  ```
-
-+ 单例设计模式命名的由来
-
-  ```text
-  每一个命名空间都是JS中Object这个内置基类的实例，而实例之间是相互独立互不干扰的，所以我们称它为：“单例：单独的实例”
-  ```
+>+ 表现形式
+>
+>  ```javascript
+>  var obj={
+>             xxx:xxx,
+>             ...
+>    }
+>  //在单列设计模型中，obj不仅仅是对象名，它被称为“命名空间[NameSpace]”,把描述事物的属性存放到命名空间中，多个命名空间是独立分开的互不冲突
+>  ```
+>
+>+ 作用
+>
+>  ```jav
+>  //把描述同一件事物的属性和特征进行“分组、归类”（存储再同一个堆内存空间中），因此避免了全局变量之间的冲突和污染
+>  var pattern1={name:"xxx"}
+>  var pattern2={name:"xxx"}
+>  ```
+>
+>+ 单例设计模式命名的由来
+>
+>  ```javascript
+>  每一个命名空间都是JS中Object这个内置基类的实例，而实例之间是相互独立互不干扰的，所以我们称它为：“单例：单独的实例”
+>  ```
 
 ```javascript
 /* 
@@ -2565,4 +2663,59 @@ console.log(n,obj.n);
 ```
 
 **模块化开发**
+
+> + 团队协作开发的时候，会把产品按照功能板块进行划分，每一个功能板块由专人负责开发
+>
+> + 把各个板块之间公用的部门进行提去封装，后期在想实现这些功能的时候,直接的调取引用即可（模块封装）
+
+```javascript
+//项目例子
+var utils=(function(){
+    return {
+        aa:function(){
+            
+        }
+    }
+})()
+//=>candy
+var skinRender=(function(){
+    var fn=function(){
+        
+    }
+    return {
+        init:function(){
+        },
+        fn:fn
+    }
+})()
+//tom
+var weaterRender=(function(){
+    var fn=function(){
+        
+    }
+    return {
+        init:function(){
+            fn();
+            skipRender.fn();
+        }
+    }
+})()
+weaterRender.init();
+```
+
+### 工厂模式（Factory Pattern）
+
+> + 把实现相同功能的代码进行“封装”，以此来实现“批量生产”（后期想要实现这个功能，我们只需要执行函数几口）
+> + "低耦合高内聚"：减少页面中的冗余代码，提高代码的重复使用率
+
+```javascript
+function createPerson(name,age){
+    var obj={};
+    obj.name=name;
+    obj.age=age;
+    return obj;
+}
+var p1=createPerson("xxx",25);
+var p2=createPerson("cccc",30);
+```
 

@@ -51,7 +51,6 @@ var obj={
         this.n+=2;
         var n=5;
         return function(m){
-            console.log(this);
             this.n*=2;
            console.log(m+(++n));
         }
@@ -59,5 +58,5 @@ var obj={
 };
 var fn=obj.fn;
 fn(3);
-//obj.fn(3);
-//console.log(n,obj.n);
+obj.fn(3);
+console.log(n,obj.n); 
