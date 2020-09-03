@@ -2283,23 +2283,143 @@ JS是一门编程语言（具备编程思想）
 
 > `重载`：方法名相同，形参个数或者类型不一样（js中不存在真正意义上的重载，js中的重载指的是同一个方法，根据传参不同实现不同的效果）
 >
-> ``
+> `重写`：在类的继承中，子类可以重写父类中的方法
 
 ```javascript
 function sum(x){
     //arguments
     if(typeof z==="undefined"){
         //...
-        return ;
+        return;
     }
 }
 ```
 
+### 继承
 
+> 子类继承父类中的属性和方法（目的是让子类中的实例能够调取父类中的属性和方法）
 
-## 作用域
+```javascript
+/***
+	方案一：原型继承
+		让父类的的属性和方法在子类实例的原型链上
+		Child.prototype=new Parent();
+		Child.prototype.constructor=Child;
+	特点：
+		1.不像其他语言中的继承一样（其他语言的继承一般是拷贝继承，也就是子类继承父类，会把父类中的属性和方法拷贝到一份到子类中，共子类的实例调取使用），它是把父类的原型放到子类实例的原型上，实例想调取这些方法，是基于__proto__原型链查找机制完成的。
+		2.子类可以重写父类上的方法（这样会导致父类其他的实例受到影响）
+		3.父类中私有或者公有的属性方法，最后都会变为子类中公有的属性和方法
+		
+***/
+function A(x){
+    this.x=x;
+}
+A.prototype.getX=function(){
+    console.log(this.x);
+}
+function B(y){
+    this.y=y;
+}
+B.prototype=new A(200);
+B.prototype.constructor=B;
+B.prototype.getY=function(){
+    console.log(this.y);
+}
+let b1=new B(100);
+b1.y;
+b1.getX()
 
-> JS中的函数作用域被称为词法作用域，又叫静态作用域 ，是在函数定义的时候就产生了
+```
+
+```javascript
+/***
+	方案二：Call继承
+		Child方法中把Parent当作普通函数执行，让Parent中的this指向Child的实例，相当于给Child的实例设置了很多私有的属性或者方法
+		Child(){
+			Parent.call(this,...args)
+		}
+	特点：
+		1.只能继承父类私有的属性和方法（因为是把Parent当普通函数执行，和其原型上的属性和方法没有关系）
+		2.父类私有的变为子类私有的
+***/
+function A(x){
+    this.x=x;
+}
+A.prototype.getX=function(){
+    console.log(this.x);
+}
+function B(y){
+    //this:B的实例b1
+    A.call(this,200);//=>b1.x=200;
+    this.y=y;
+}
+B.prototype.getY=function(){
+    console.log(this.y);
+}
+let b1=new B(100);
+b1.x;
+b1.getX()
+
+```
+
+```javascript
+/***
+	方案三：寄生组合继承
+		Call继承+类似于原型继承
+	特点：父类私有和公有的分别是子类实例的私有和公有属性方法（推荐）
+***/
+function A(x){
+    this.x=x;
+}
+A.prototype.getX=function(){
+    console.log(this.x);
+}
+function B(y){
+    A.call(this,200);
+    this.y=y;
+}
+//Object.create(OBJ):创建一个空对象，让空对象__proto__指向OBJ
+B.prototype=Object.create(A.prototype);
+B.prototye.constructor=B;
+B.prototype.getY=function(){
+    console.log(this.y);
+}
+let b1=new B(100);
+b1.x;
+b1.getX()
+
+//模拟Object.create
+Object.create=function(obj){
+    function Fn(){}
+    Fn.prototype=obj;
+    return new Fn();
+}
+```
+
+```javascript
+//ES6中基于CLASS创造出来的类不能当作普通函数执行
+class A{
+    constructor(x){
+        this.x=x;
+    }
+    getX(){
+        console.log(this.x);
+    }
+}
+//ES6中的继承 class Child extends Parent{}=>B.prototype.__proto__=A.prototype
+class B extends A{
+    //子类继承父类，可以不写constructor,一旦谢了，则在constructor的第一句话必须填写super()
+    constructor(y){
+        super(200);//=>A.call(this,200)
+        this.y=y;
+    }
+    getY(){
+        console.log(this.y)
+    }
+}
+let b1=new B(200);
+console.log(b1);
+```
 
 ## 构造函数
 
@@ -2356,6 +2476,10 @@ console.log(person instanceof Human)//true;
 > + 基于字面量方式创建出来的值是基本数据类型
 > + 基于构造函数创建出来的值时引用类型
 
+**作用域** 
+
+> JS中的函数作用域被称为词法作用域，又叫静态作用域 ，是在函数定义的时候就产生了
+
 **普通函数及构造函数的运行机制**
 
 >普通函数执行 【fn()】
@@ -2389,6 +2513,8 @@ function Fn(){
 }
 var f=new Fn();
 ```
+
+****
 
 
 
@@ -2718,4 +2844,112 @@ function createPerson(name,age){
 var p1=createPerson("xxx",25);
 var p2=createPerson("cccc",30);
 ```
+
+# JS综合面试题
+
+**问**：call和apply的区别，哪一个性能更好？
+
+**答**：call和apply都是Function原型上的方法，都可以改变this的指向，call和apply传参的形式不一样，apply是以数组的方式传参，而call是展开的形式传递。bind也可以用来改变this的指向，但是需要调用执行，而call，和apply是直接执行的。call的性能要比apply好一些，尤其是传递给函数的参数超过三个的时候。从性能角度来说我们日常项目应用多用call，而且基于ES6的扩展运算符，我们可以完全用call代替apply。
+
+```javascript
+//=>自己实现性能测试（只供参考）：任何代码性能测试都是和测试环境有关系的，例如CPU、内存、GPU等电脑当前性能不会有相同的情况，不同浏览器也会导致性能上的不同。
+//console.time可以测试出一段程序执行的时间
+//console.profile()在火狐浏览器中安装fireBug,可以更精准的获取到当前程序每一个步骤消耗的时间
+console.time("A");
+for(let i=0;i<1000;i++){
+    
+}
+console.timeEnd("A");
+```
+
+**问**：实现(5).add(3).minus(2)，使其输出结果为6?
+
+**答**：
+
+```javascript
+~(function(){
+    //每一个方法执行完，都要返回Number这个类的实例，这样才能继续调用Number原型中的方法（链式写法）
+    function check(n){
+        n=Number(n);
+        return isNaN(n)?0:n;
+    }
+    function add(n){
+        n=check(n);
+        return this+n;
+    }
+    function minus(n){
+        n=check(n);
+        return this-n;
+    }
+    ["add","minus"].forEach(item=>{
+        Number.prototype[item]=eval(item);
+    })
+})()
+console.log((5).add(3).minus(2));//6
+```
+
+**问** ：箭头函数和普通函数的区别，构造函数可以使用new生成实例，那么箭头函数可以吗？为什么？
+
+**答**：区别：箭头函数语法上比普通函数更加简洁，ES6中每一种函数都可以使用形参赋值默认值和剩余运算符。
+
+​				   箭头函数中没有this，它里面出现的this是继承函数所处上下文中的this,使用call/apply等任何方式都无法改变this的指向
+
+​					箭头函数没有arguments（类数组），只能基于...args获取传递的参数集合（数组）
+
+​					箭头函数不能被new执行（原因：箭头函数中没有this，也没有prototype）
+
+```javascript
+document.body.onclick=function(){
+    //this:window 不是BODY
+}
+document.body.onclick=function(){
+    //this:BODY
+    arr.sort(function(a,b){
+        //=>this：window 回调函数中的this一般都是window
+        return a-b
+    })
+}
+//=>回调函数：把一个函数B作为实参传递给另外一个函数A，函数A在执行的时候，可以把传递进来的函数B去执行（执行N次，可传值，）
+function each(arr,callback){
+    for(let i=0;i<arr.length;i++){
+        let flag=callback(arr,arr[i],i);
+        if(flag===false){
+            break;
+        }
+    }
+}
+each([10,20,30,40],function(item,index){
+    return false;
+})
+```
+
+```javascript
+/* 思考题 */
+//each
+let arr=[10,20,30,"AA",40],
+    obj={};
+arr=arr.each(function(item,index){
+    //=>this:obj (each第二个参数不穿，this是winodw即可)
+    is(isNaN(item)){
+        return false;//=>如果return 是false，则结束当前数组的循环
+    }
+    return item*10;//=>返回的结果是啥，就把数组中当前项替换成啥
+},obj)
+arr=[100,200,300,"AA",40]
+
+//replace
+let str="candy2019candy2029";
+str=str.replace(/zhufeng/g,function(...arg){
+    //arg中存储了每一次大正则匹配的信息和小分组匹配的信息
+    return '@';//=>返回的是啥把当前正则匹配的内容替换成啥
+})
+```
+
+
+
+
+
+
+
+
 
