@@ -2847,6 +2847,10 @@ var p2=createPerson("cccc",30);
 
 # JS综合面试题
 
+**问**：谈谈对面向对象的理解？
+
+**答** ：面向对象是一种编程思想，JS本身就是基于面向对象这种思想构建出来的。js中有很多的内置类，比如说Promise就是ES6中新增的内置类，我们可以基于new Promise来创建实例管理异步编程，我在项目中promise也经常应用，并且研究过他的源码。我们平时用的vue、react、jquery也是基于面向对象构建出来的，它们都是类，平时开发的时候都是创建他们的实例来操作的，当然我自己在真实的项目中也封装过一些插件，也是面向对象开发的。这样可以创造不同的实例来管理私有的属性和公有的方法，很方便。js中的面向对象和其他编程语言是略有不同的，JS中类和实例是基于原型和原型链机制来处理的。而且JS中关于类的重载，重写，继承也和其他语言不一样。
+
 **问**：call和apply的区别，哪一个性能更好？
 
 **答**：call和apply都是Function原型上的方法，都可以改变this的指向，call和apply传参的形式不一样，apply是以数组的方式传参，而call是展开的形式传递。bind也可以用来改变this的指向，但是需要调用执行，而call，和apply是直接执行的。call的性能要比apply好一些，尤其是传递给函数的参数超过三个的时候。从性能角度来说我们日常项目应用多用call，而且基于ES6的扩展运算符，我们可以完全用call代替apply。
@@ -2923,12 +2927,217 @@ each([10,20,30,40],function(item,index){
 })
 ```
 
+**问** ：如何把一个字符串的大写取反（大写变小写，小写变大写），例如“AbC”变成“aBc”?“
+
+**答**：
+
+```javascript
+let str="Hello,I'm Candy!This is my Note";
+str=str.replace(/[a-zA-Z]/g,content=>{
+    //content:每一次正则匹配的结果
+    /*
+     * 验证是否为大写字母的两种方法：
+     *  把字母转换为大写后看和之前是否一致，如果一致，曾为大写的
+     *  在ASCII表中找到呆鹅字母的取值范围进行判断chartCodeAt（65-90）
+     */
+    return content.toUpperCase()===content?content.toLowerCase():content.toUpperCase();
+})
+console.log(str);
+```
+
+**问**：实现一个字符串匹配的算法，从字符串s中，查找是否存在字符串T，若存在返回所在位置，不存在返回-1！（如果不能基于indexOf/includes等内置的方法，你会如何处理？）
+
+**答** ：
+
+```javascript
+let str="Hello,I'm Ccndy Candy!This is my Note";
+let t="Candy";
+~function(){
+    function myIndexOf(t){
+        let lenT=t.length,
+            lenS=this.length;
+        if(lenT>lenS) return -1;
+        for(let i=0;i<=lenS-lenT;i++){
+            if(this.substr(i,lenT)===t){
+                return i;
+            }
+        }
+        return -1;
+    }
+    String.prototype.myIndexOf=myIndexOf;
+}();
+//第二种方法
+~function(){
+    function myIndexOf(t){
+        let reg=new RegExp(t),
+        	res=reg.exec(this);
+        return res?res.index:-1;
+    }
+    String.prototype.myIndexOf=myIndexOf;
+}();
+let a=str.myIndexOf(t);
+console.log(a);
+```
+
+**问**：输出下面代码的运行结果?
+
+```javascript
+//example1
+var a={},b="123",c=123;
+a[b]="b",
+a[c]="c";
+console.log(a[b]);//=>"c"=>数字属性名和字符串数字的属性名是一样的
+
+//example2
+var a={},b=Symbol("123"),c=Symbol("123");
+a[b]="b",
+a[c]="c";
+console.log(a[b]);//=>"b"=>Symbol()创建的是Symbol数据类型的唯一值
+
+//example3        
+var a={},b={key:'123'},c={key:'456'};
+a[b]="b",
+a[c]="c";
+console.log(a[b]);//=>"c"=>属性名不能是对象，使用对象作为属性名时先要toString()
+//对象.toString()=>"[object Object]"
+
+```
+
+**问** : 在输入框中如何判断输入的是一个正确的网址，例如：用户输入一个字符串，验证是否符合URL网站的格式？
+
+**答**：
+
+```javascript
+/***
+	URL格式 :
+		1 协议://  http/https/ftp
+		2 域名 www.xxx.cn xxx.cn xxx.xxx.com.cn 
+		3 路径 /index.html xxx/index.html /xxx/
+		4 问号传参  ?xxx=xxx&xxx=xxx
+		5 哈希值 #xxx
+***/
+let str="http://www.candy.com.cn/index.html?name=candy#text"
+let reg=/^(?:(http|https|ftp):\/\/)?((?:[\w-]+\.)+[a-z0-9]+)((?:\/[^/?#]*)+)?(\?[^#]+)?(#.+)?$/i;
+console.log(reg.exec(str));
+```
+
+**问**：
+
+```javascript
+function Foo(){
+    Foo.a=function(){
+        console.log(1)
+    }
+    this.a=function(){
+        console.log(2)
+    }
+}
+//=>把Foo当作类，在原型上设置实例公有的属性方法=>实例.a();
+Foo.prototype.a=function(){
+    console.log(3);
+}
+//=>把Foo当作普通对象设置私有的属性方法=>Foo.a();
+Foo.a=function(){
+    console.log(4);
+}
+Foo.a();//=>4
+let obj=new Foo();//=>obj可以调取原型上的方法 Foo.a:f=>1 obj.a:f=>2
+obj.a();//=>2
+Foo.a();//=>1
+```
+
+**问** ：为什么要编写代码实现图片的懒加载
+
+**答** ：图片懒加载是前端性能优化的重要方案：通过图片或者数据的延迟加载，我们可以加快页面渲染速度，让第一次打开页面的速度变快；只有滑动到某个区域，我们才加载真实图片，这样也可以节省加载的流量
+
+```html
+<!--
+	处理方案：
+		1 把所有需要延迟加载的图片用一个盒子包起来，设置宽高和默认占位图
+		2 开始让所有的IMG的SRC为空，把真实图片的地址放到IMG的自定义属性上，让IMG隐藏
+		3 等到所有其他资源都加载完成后，我们开始加载图片
+		4 对于很多图片，需要当页面滚动的时候，当前图片区域完全显示后，再加载真实图片
+-->
+<!--单张图片实例-->
+<style>
+    .imgBox{width:200px;height:200px;background:#ccc}
+    .imgBox img{width:100%;height:100%;display:none;}
+</style>
+<div class="imgBox">
+    <img src="" alt="" data-img="实际图片地址"/>
+</div>
+<script src="http://jquery/jquery-1.7.1.js"></script>
+<script>
+//=>JQ中的事件绑定支持多种绑定：window.onload & window.onscroll 两个事件触发的时候执行相同的事情
+let $imgBox=$(".imgBox"),
+    $img=$imgBox.children("img"),
+    $window=$(window);
+$(window).on("load scroll",function(){
+    if($img.attr("isLoad")==="true"){
+        //=》之前加载过不会重新加载
+        return;
+    }
+    let $A=$imgBox.outerHeight()+$imgBox.offset().top,
+        $B=$winodw.outerHeight()+$.window.scrollTop();
+    if($A<=$B){
+        //加载真实图片
+        $img.attr("src",$img.attr("data-img"));
+        $img.on("load",function(){
+            //=>加载成功
+            //$img.css("display","block");
+            $img.stop().fadeIn();
+        });
+        $img.attr("isLoad","true");//=>attr存储的自定义属性值都是字符串格式。
+    }
+})
+</script>
+```
+
+```html
+<!--多张图片-->
+<div class="container">
+</div>
+<script>
+//=>造假数据 new Array(20).fill(null)创建长度为20的数组，每一项用null填充
+let $container=$(".container"),
+    $imgBoxs=null,
+    $window=$(window);
+let str="";
+new Array(20).fill(null).forEach(item=>{
+    str+=`<div class="imgBox">
+            <img src="" alt="" data-img="实际图片地址"/>
+        </div>`;
+})
+$container.html(str);
+$imgBoxs=$container.children(".imgBox");
+$window.on("load scroll",function(){
+    let $B=$window.outerHeight()+$window.scrollTop();
+    //循环每一个图片区域，根据自己区域距离body的距离，计算出里面图片是否加载
+    $imgBoxs.each((index,item)=>{
+        let $item=$(item);
+        	$itemA=$item.outerHeight()+$item.offset().top;
+        	isLoad=$item.attr("isLoad");
+        if($itemA<=$B && isLoad !=="true"){
+            $item.attr("isLoad","true");
+            let $img=$item.childrent("img");
+            $img.attr("src",$img.attr("data-img"));
+            $img.on("load",()=>$img.stop().fadeIn(););
+        }
+    })
+})
+</script>
+```
+
+
+
+
+
 ```javascript
 /* 思考题 */
 //each
 let arr=[10,20,30,"AA",40],
     obj={};
-arr=arr.each(function(item,index){
+arr=obj.each(function(item,index){
     //=>this:obj (each第二个参数不穿，this是winodw即可)
     is(isNaN(item)){
         return false;//=>如果return 是false，则结束当前数组的循环
@@ -2944,6 +3153,12 @@ str=str.replace(/zhufeng/g,function(...arg){
     return '@';//=>返回的是啥把当前正则匹配的内容替换成啥
 })
 ```
+
+
+
+
+
+
 
 
 

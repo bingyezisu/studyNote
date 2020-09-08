@@ -439,14 +439,50 @@
         console.log(o1);
         console.log(o2);
         console.log(o3); */
-        const o1 = { a: 1, b: 1, c: 1 };
+        /* const o1 = { a: 1, b: 1, c: 1 };
         const o2 = { b: 2, c: 2 };
         const o3 = { c: 3 };
 
         const obj = Object.assign({}, o1, o2, o3);
         console.log(obj)
-        console.log(o1)
+        console.log(o1) */
+          /* var a={},b="123",c=123;
+        a[b]="b",
+        a[c]="c";
+        console.log(a[b]);
+
+     var a={},b=Symbol("123"),c=Symbol("123");
+        a[b]="b",
+        a[c]="c";
+        console.log(a[b]);*/
         
+        /* var a={},b={key:'123'},c={key:'456'};
+        a[b]="b",
+        a[c]="c";
+        console.log(a[b]);  */
+        /* let str="http://www.candy.com.cn/index.html?name=candy#text"
+        let reg=/^(?:(http|https|ftp):\/\/)?((?:[\w-]+\.)+[a-z0-9]+)((?:\/[^/?#]*)+)?(\?[^#]+)?(#.+)?$/i;
+        console.log(reg.exec(str)); */
+
+        function Foo(){
+            Foo.a=function(){
+                console.log(1)
+            }
+            this.a=function(){
+                console.log(2)
+            }
+        }
+        Foo.prototype.a=function(){
+            console.log(3);
+        }
+        Foo.a=function(){
+            console.log(4);
+        }
+        Foo.a();//=>4
+        let obj=new Foo();
+        obj.a();//=>2
+        Foo.a();//=>1
     </script> 
+   
 </body>
 </html>

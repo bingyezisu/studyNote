@@ -1,4 +1,30 @@
-<!-- <link rel="stylesheet" href="//css.gomein.net.cn/eccms/css/topics_css/temporary/1414010471.css">
+<style>
+@charset "utf-8";
+.bombBox_four{width:1000px;overflow:hidden;}
+.bombBox_four li{width:240px;background-color:#fff;margin:5px 10px 5px 0;float:left;}
+.bombBox_four li h3,.bombBox_four li h4{width:90%;font:14px/25px "微软雅黑";height:50px;color:#000;overflow:hidden;margin:0 auto;}
+.bombBox_four li h4{font-size:13px;color:#000;font-weight:bold;height:75px;}
+.bombBox_four li span{color:#F30157;font:16px/25px "微软雅黑";}
+.bombBox_four li font{font-size:20px;font-family:arial;}
+.bombBox_four li p{width:150px;height:25px;border:1px solid #F30157;font:15px/25px "微软雅黑";margin:0 auto;background-color:#F30157;color:#fff;text-align:center;}
+.bombBox_four li:hover{-webkit-animation: moveY linear .5s ; -moz-animation: moveY linear .5s ; animation: moveY linear .5s ;}
+.bombBox_four li:hover p{color:#ff0;}
+@-webkit-keyframes moveY{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-2px);}
+  100%{ transform: translateY(0); }
+}
+@-moz-keyframes moveY{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-2px);}
+  100%{ transform: translateY(0); }
+}
+@keyframes moveY{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-2px);}
+  100%{ transform: translateY(0); }
+}
+</style>
 <script type="text/javascript" src="//js.gomein.net.cn/eccms/js/topics_js/temporary/1071641992.js"></script>
 <script id="variable" type="text/javascript">
     var novar='nouser'#foreach($pKey in ${templateInfo.vmStyleMap.keySet()}),$!{pKey}='${templateInfo.vmStyleMap.get($pKey)}'#end;
@@ -10,12 +36,12 @@
     <li>
       <a href="$!{skuElement.picHref}" target="_blank" title="$!{skuElement.skuName}">
         <img src="$!{skuElement.skuPic}_800.jpg" alt="$!{skuElement.skuName}" width="210" height="210">
+      </a>
         <h3>$!{skuElement.skuName}</h3>
         <h4>#if(${skuElement.description} != '""')$!{skuElement.description}#end</h4>
         <span>￥<font id="zdy_rp_$!{skuElement.skuId}"></font></span>
-        <p>购买</p>
+       <a href="$!{skuElement.picHref}" target="_blank" title="$!{skuElement.skuName}"><p>立即购买</p></a> 
       </a>
-      <span></span>
     </li>
   #end
   </ul>
@@ -28,25 +54,16 @@
     });
 </script>
 
- -->
 
- <style type="text/css">
-    .wrapper {position: relative;}
-    #input {position: absolute;top: 0;left: 0;opacity: 0;z-index: -10;}
-   </style>
-    
-   <div class="wrapper">
-    <p id="text">我把你当兄弟你却想着复制我？</p>
-    <textarea id="input">这是幕后黑手</textarea>
-    <button onclick="copyText()">copy</button>
-   </div>
-   <script type="text/javascript">
-    function copyText() {
-     var text = document.getElementById("text").innerText;
-     var input = document.getElementById("input");
-     input.value = text; // 修改文本框的内容
-     input.select(); // 选中文本
-     document.execCommand("copy"); // 执行浏览器复制命令
-     alert("复制成功");
-    }
-    </script>
+<div> 
+    <script type="text/javascript">
+             $(".bombBox_four li").each(function(e){
+                 $(this).click(function(e){
+                     $(this).find("p").css("backgroundColor","#ccc")
+                 })
+                 $(this).find("img").mousedown(function(){
+                     $(this).parents("li").find("p").css("backgroundColor","#ccc")
+                 })
+             })
+    </script> 
+</div>
