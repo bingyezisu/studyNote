@@ -464,7 +464,7 @@
         let reg=/^(?:(http|https|ftp):\/\/)?((?:[\w-]+\.)+[a-z0-9]+)((?:\/[^/?#]*)+)?(\?[^#]+)?(#.+)?$/i;
         console.log(reg.exec(str)); */
 
-        function Foo(){
+        /* function Foo(){
             Foo.a=function(){
                 console.log(1)
             }
@@ -481,8 +481,76 @@
         Foo.a();//=>4
         let obj=new Foo();
         obj.a();//=>2
-        Foo.a();//=>1
+        Foo.a();//=>1 */
+
+        /* let str="good good study , day day up!";
+        //=>学正则式就是用来制定规则(是否包含数字)
+        let reg=/\d+/;
+        reg.test(str);//=>false
+
+        str="2020-09-08" */
+        /* let reg=/^\D/;
+        console.log(reg.test("candy2019"));
+        console.log(reg.test("candy"));
+        console.log(reg.test("2020candy")); */
+        /* let type="candy";
+        let reg=/^@"+type+"@$/;
+        reg=new RegExp("^@"+type+"@$");
+        console.log(reg.test("@candy@"));//=>true
+        reg="/^@"+type+"@$/";
+        console.log(eval(reg).test("@candy@"));//=>true */
+
+        let str="goodgoodstudy,daydayupoh!";
+        /* let obj={};
+        [].forEach.call(str,(item)=>{
+            if(typeof obj[item]!=="undefined"){
+                obj[item]++;
+                return;
+            }
+            obj[item]=1;
+        })
+        /* let max=1;
+        for(let key in obj){
+            let item=obj[key];
+            item>max?max=item:null;
+        }
+
+        let max=Math.max(...Object.values(obj));
+        let res=[];
+        for(let key in obj){
+            if(max==obj[key]){
+                res.push(key);
+            }
+        };  */
+  
+        /* //字符串排序
+        str=str.split("").sort((a,b)=>a.localeCompare(b)).join("");
+        let reg=/([a-zA-Z])\1+/g;// \1表示重复正则第一个圆括号内匹配到的内容
+        let ary=str.match(reg).sort((a,b)=>b.length-a.length);
+        let max=ary[0].length,
+            res=[ary[0].substr(0,1)];
+        for(let i=1;i<ary.length;i++){
+            if(ary[i].length<max){
+                break;
+            }
+            res.push(ary[i].substr(0,1));
+        } */
+        //=>第三种方法：
+        let  max=0,
+        res=[];
+        while(str){
+            let oldStrLen=str.length;
+            let letter=str.substr(0,1);
+            let reg=new RegExp(letter,"g");
+            str=str.replace(reg,"");
+            let newStrLen=str.length;
+            let count=oldStrLen-newStrLen;
+            if(max<count){
+                max=count;
+                res.push(letter);
+            }
+        }
+        console.log(`出现的次数最多的字母是${res}，出现了${max}次。`)
     </script> 
-   
 </body>
 </html>
