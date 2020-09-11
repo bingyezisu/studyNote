@@ -37,12 +37,12 @@
             //获取日期字符串中的数字信息
             let matchAry=this.match(/\d+/g);
             //模板和数据的渲染（引擎机制）
-            template=template.replace(/\{(\d+)}/g,(x,y)=>{
+            return template.replace(/\{(\d+)}/g,(x,y)=>{
                 let val=matchAry[y]||"00";
                 val.length<2?val="0"+val:null;
                 return val;
             })
-            return template;
+            
         }
         console.log(time.formatTime("{0}年{1}月{2}日 {3}时{4}分{5}秒"));
     </script>

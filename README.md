@@ -1,3 +1,5 @@
+
+
 # 初识JS
 
 ## JS中的变量 variable
@@ -2331,8 +2333,8 @@ x|y  x或者y中的一个字符串
 [^a-z] 上一个的取反“非”
 ()  正则中的分组符号
 (?:) 只匹配不捕获
-(?=) 正向预查
-(?<) 负向预查
+(?=) 正向肯定预查
+(?!) 正向否定预查
 
 //=>3.普通元字符：代表本身含义的
 /candy/  此正则匹配的是它本身
@@ -2705,17 +2707,75 @@ let time="2019-8-13 16:51:3";
 //"08月13日 16时51分"
 //"2019年08月13日"
 ~function(){
+    /***
+	formatTime:时间字符串格式化处理
+		@parmas:
+			templete:[string] 我们最后期望获取的日期格式模板
+			模板规则{0}->年 {1~5}月日时分秒
+		@return
+			格式化后的字符串
+	***/
     function formatTime(template="{0}年{1}月{2}日 {3}时{4}分{5}秒"){
-        let ary=this.match(/(\d+)/g);
-        template=template.replace(/\{(\d+)}/g,(content,i)=>{
-           	let val=ary[i]||"00";
-            val.length<2?val="0"+val:null;
-            return val;
+        let ary=this.match(/\d+/g);
+        return template.replace(/\{(\d+)}/g,(...[,$1])=>{
+           	let val=ary[$1]||"00";
+            return val.length<2?"0"+val:val;
        }) 
-       return template;
     }
-    String.prototype.formatTime=formatTime;
+    //批量扩展到内置类String.prototype
+    ["formatTime"].forEach(item=>{
+        String.prototype[item]=eval(item);
+    })
+    //String.prototype.formatTime=formatTime;
 }()
+time.formatTime("{1}月{2}日 {3}时{4}分{5}秒")
+```
+
+获取URL地址问号和后面的参数信息
+
+```javascript
+~function(){
+    /***
+	queryURLParams:获取URL地址问号和后面的参数信息（可能也包含hash）
+		@params:
+		@return:
+			[object]把所有问号后参数信息以键值对的方式存储起来并且返回
+	***/
+    function queryURLParmas(){
+        let obj={};
+        this.replace(/([^?=&#]+)=([^?=&#]+)/g,(...[,$1,$2])=>obj[$1]=$2)
+        this.replace(/#([^?=&#]+)/g,(...[,$1])=>obj["HASH"]=$1);
+        return obj
+    }
+    ["queryURLParmas"].forEach(item=>{
+        String.prototype[item]=eval(item);
+    })
+}()
+let url="http://www.baidu.com/?name=candy&password=123456#img"
+console.log(url.queryURLParmas());
+```
+
+千分符
+
+```javascript
+~function(){
+   /***
+	millimeter:获取URL地址问号和后面的参数信息（可能也包含hash）
+		@params:
+		@return:
+			[object]把所有问好参数信息以键值对的方式存储起来并且返回
+	***/
+   function millimeter(){
+      return this.replace(/\d{1,3}(?=(\d{3})+$)/g,(content)=>{
+          return content+",";
+      })
+   } 
+   ["millimeter"].forEach(item=>{
+        String.prototype[item]=eval(item);
+   })
+}()
+let num="12345678909876544";
+console.log(num.millimeter());
 ```
 
 单词首字母大写
@@ -3414,6 +3474,14 @@ var p2=createPerson("cccc",30);
 ```
 
 # JS综合面试题
+
+**问**： 从用户在浏览器地址栏输入网址，到看到整个页面，中间都发生了哪些事情？
+
+**答**：
+
++ HTTP请求阶段
++ HTTP响应阶段
++ 浏览器渲染阶段
 
 **问**：谈谈对面向对象的理解？
 
