@@ -170,6 +170,9 @@ console.log("10px"-10);//=>NaN
 
 let a=10+null+true+[]+undefined+"candy"+null+[]+10+false;
 console.log(a);//=>"11undefinedcandynull10false"
+
+{}+1=>1
+[]+{}=>0
 /***
 10+0->10+0->10
 10+true->10+11->11
@@ -1115,6 +1118,12 @@ if(ary.includes("candy")){
 }
 ```
 
+`includes`
+
+```javascript
+[1,2,3].includes(3)=>true;
+```
+
 #### 数组的排序或者排列
 
 `reverse`
@@ -1186,6 +1195,130 @@ ary.forEach((item,index)=>{
      console.log("索引："：+index+",内容："+item )
 })
 //不兼容IE6~8
+```
+
+`reduce`
+
+```javascript
+/***
+	reduce()
+	遍历数组中的每一项内容 执行某种操作
+	@params 
+		回调函数
+	@return 对各项执行回调函数后得到的结果
+***/
+[1,2,3,4,5].reduce((prev,next,currIndex,ary)=>{
+    return prev+next;
+})//=>15
+[[1,2,3],[4,5,6]].reduce((prev,next,currIndex,ary)=>{
+    return [...prev,...next];
+})
+Array.prototype.myReduce=function(fn,prev){
+    for(let i=0;i<this.length;i++){
+        if(typeof prev==="undefined"){
+            prev=fn(this[i],this[i+1],i+1,this);
+            ++i;
+        }else{
+            prev=fn(prev,this[i],i,this);
+        }
+    }
+}
+
+```
+
+`map`
+
+```javascript
+/***
+	map()
+	遍历数组中的每一项内容 执行某种操作
+	@params 
+		回调函数
+	@return 返回新数组
+***/
+[1,2,3,4].map(item=>{
+    return item*2;
+})//=>[2,3,4,8]
+```
+
+`filter`
+
+```javascript
+/***
+	filter()
+	过滤 如果返回true表示留下 返回false表示删除
+	@params 
+		回调函数
+	@return 返回新数组
+***/
+[1,2,3,4].map(item=>{
+    return item>2
+})//=>[3,4]
+```
+
+`find`
+
+```javascript
+/***
+	find()
+		查找 
+	@params 
+		回调函数
+	@return 
+		它会返回查找到那一项，没有返回undefined 找到后就不会继续查找了
+***/
+[1,2,3,4].find(item=>{
+    return item>2
+})//=>3
+```
+
+`some`
+
+```javascript
+/***
+	some()
+		检测数组中的元素是否满足指定条件 
+	@params 
+		回调函数
+	@return 
+		true/false 有一个元素满足条件就为true
+***/
+[1,2,3,4].some(item=>{
+    return item>2
+})//=>ture
+```
+
+`every`
+
+```javascript
+/***
+	every()
+		检测数组中的元素是否满足指定条件 
+	@params 
+		回调函数
+	@return 
+		true/false 有一个元素不满足条件就为false
+***/
+[1,2,3,4].some(item=>{
+    return item>2
+})//=>ture
+```
+
+`Array.from()`
+
+```javascript
+//将类数组转换为数组
+function add(){
+    console.log(eval(Array.from(arguments).join("+")))
+}
+add(1,2,3);
+```
+
+`of()`
+
+```javascript
+let ary=Array.of(3);
+console.log(ary);//=>[3]
 ```
 
 **数组去重**
@@ -2253,6 +2386,71 @@ let res=`你好，今天是${year}年${month}月${day}日，今天是一年一�
 console.log(res);
 
 ```
+
+## Promise
+
+> promise 是一种异步流程的控制手段
+>
+> 1.回调地狱，代码难以维护 第一个的结果时第二个的输入
+>
+> promise链式回调
+>
+> 2.promise可以支持多个并发的请求，获取并发请求中的数据
+>
+> 3.这个promise可以解决异步的问题，本身不能说promise时异步的
+
+promise(承诺) 关键字 resolve(成功)   reject(失败)   pending等待
+
+如果一但promise成功了就不能失败，相反也是一样的
+
+只有状态是等待的状态时 才可以转化状态
+
+每一个promise的实例上都有一个then方法，then方法中有两个参数，一个参数叫成功的函数，一个是失败的函数
+
+promise中发生错误，就会执行失败状态
+
+//=>事件环
+
+promise只有一个参数 叫excutor执行器，默认new时就会调用
+
+```javascript
+let p=new Promise((resolve,reject)=>{
+    //默认promise中的executor是同步执行的
+    resolve("买")
+})
+p.then((value)=>{//value成功的原因
+    console.log('value',value);
+},(err)=>{//err失败的原因
+     console.log('err',err);
+})
+console.log(2);
+```
+
+Promise.all 方法调用后返回一个新的promise
+
+```javascript
+//并发的
+Promise.all([read("1.txt"),read("2.txt")]).then((data)=>{
+    console.log(data);
+},err=>{
+    console.log(err)
+})
+//race赛跑，处理多请求支取最快的
+Promise.race([read("1.txt"),read("2.txt")]).then((data)=>{
+    console.log(data);
+},err=>{
+    console.log(err)
+})
+
+Promise.resolve();
+Promise.reject();
+```
+
+
+
+
+
+
 
 # 正则表达式
 
@@ -3327,6 +3525,100 @@ deepClone(obj)
 
 
 
+## 跨域解决方案
+
+### 跨域（非同源策略请求）
+
+- 同源策略请求  ajax / fetch  https://www.jianshu.com/p/7762515f8d1a
+- 跨域传输
+
+>部署到web服务器上：同源策略
+>
+>- xampp 修改本地的host文件
+>
+>服务器拆分：
+>
+>+ web服务器：静态资源
+>
+>+ data服务器：业务逻辑和数据分析
+>
+>+ 图片服务器: 
+
+三者都一样就是同源，只要又一个不同就是跨域
+
+- 协议
+- 域名
+- 端口号
+
+#### JSONP
+
+> script img link iframe ...=>不存在跨域请求的限制
+>
+> 问题：JSONP只能处理GET请求
+
+#### CORS跨域资源共享
+
+- 客户端（发送ajax/fetch请求）
+
+```javascript
+axios.defaults.baseURL="http://127.0.0.01:8888";
+//=>*（就不能允许携带cookie） 具体地址
+axios.defaultes.WithCredentials=true;
+axios.defaults.headers['Content-Type']="application/X-WWW-form-urlendcoded";
+axios.defaults.transformRequest=function(data){
+	if(!data) return data;
+	let result=``;
+	for(let arr in data){
+		if(!data.hasOwnProperty(attr)) break;
+		result+=`&$(attr)=${data[attr]}`;
+	}
+	return result.substring(1);
+}
+axios.interceptors.response.use(function onFulfilled(response){
+	return response.data;
+},function onRejected(reason){
+	return Promise.reject(reason);
+});
+axios.defaults.validateStatus=function(status){
+	return /^(2|3)\d{2}$/.test(status);
+}
+```
+
+
+
+- 服务器端设置相关的头信息（需要处理options试探性请求）
+
+```javascript
+app.use((req,res,next)=>{
+    res.header("Access-Control-Allow-Origin","http://localhost:8088");
+    res.header("Access-Control-Allow-Credentials",true);
+    res.header("Access-Control-Allow-Headers","Content-Type,Content-Length,Authorization,Accept,X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,HEAD,OPTIONS");
+    if(req.method==="OPTIONS"){
+        res.send("OK!");
+        return;
+    }
+    next();
+```
+
+#### http proxy
+
+=>webpack webpack-dev-server
+
+#### nginx反向代理
+
+=>不需要前端干预，服务器部署
+
+#### postMessage
+
+#### scoket.io
+
+#### document.domain+iframe
+
+=>只能实现同一个主域，不同子域之间的操作
+
+#### window.name+iframe
+
 ## 设计模式
 
 ### 单例设计模 （Singleton Pattern）
@@ -3482,6 +3774,16 @@ var p2=createPerson("cccc",30);
 + HTTP请求阶段
 + HTTP响应阶段
 + 浏览器渲染阶段
+
+>浏览器渲染页面的机制和原理
+>
+>  	进程（process）线程（thread）栈内存（stack）
+>
+>​	  DOM的重绘和回流 Repaint & Reflow
+>
+>​		
+>
+>
 
 **问**：谈谈对面向对象的理解？
 
