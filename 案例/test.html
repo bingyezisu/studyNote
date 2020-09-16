@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    <!-- <script src="http://html2canvas.hertzen.com/dist/html2canvas.js"></script> -->
     <script>
         /* 
             number   普通数字 NaN  isNaN(0)=>false 
@@ -553,7 +554,7 @@
         console.log(`出现的次数最多的字母是${res}，出现了${max}次。`) */
 
         //千分符
-        ~function(){
+       /*  ~function(){ */
             /* function millimeter(){
                 let ary=this.split("").reverse();
                 for(let i=3;i<ary.length;i+=4){
@@ -573,7 +574,7 @@
                 let newS=this.replace(reg,"$1,").replace(/(\d{3})/g,"$1,")
                 return newS.substr(0,newS.length-1)
             } */
-            function millimeter(){
+            /* function millimeter(){
                 let reg=/\d{1,3}(?=(\d{3})+$)/g;
                 return this.replace(/\d{1,3}(?=(\d{3})+$)/g,(content)=>{
                     return content+","
@@ -582,7 +583,176 @@
             String.prototype.millimeter=millimeter;
         }()
         let num="12345678909876544";
-        console.log(num.millimeter());
+        console.log(num.millimeter()); */
+        /* let str="no作no死，你能你can,不能no哔哔！",
+            reg=/\b[a-z]+\b/ig;
+        str=str.replace(reg,content=>{
+            return " "+content+" ";
+        }).trim();
+        console.log(str); */
+        // let arr=[[1,2,2],[3,4,5,5],[6,7,8,9,[11,12,[12,13,[14]]]],10];
+        // str=arr+",";//=>"1,2,2,3,4,5,5,6,7,8,9,11,12,12,13,14,10"
+        // let reg=/(\d+,)\1*/g;
+        // let arr1=[];
+        // str.replace(reg,(content,$1)=>{
+        //     $1=Number($1.slice(0,$1.length-1));
+        //     arr1.push($1);
+        // })
+        // arr1.sort((a,b)=>{
+        //     return a-b;
+        // })
+        /* while(arr.some(item=>Array.isArray(item))){
+            arr=[].concat(...arr);
+        }
+        console.log(arr); */
+
+        /* ~function(){
+            function myFlat(){
+                let result=[],
+                    _this=this;
+                let fn=(arr)=>{
+                    for(let i=0;i<arr.length;i++){
+                        let item=arr[i];
+                        if(Array.isArray(item)){
+                            fn(item);
+                            continue;
+                        }
+                        result.push(item);
+                    }
+                }
+                fn(_this);
+                return result;
+            }
+            Array.prototype.myFlat=myFlat;
+        }();
+        console.log(arr.myFlat()); */
+    /* let arr1=["D1","D2","A1","A2","B1","B2","C1","C2"];
+    let arr2=["A","B","C","D"];
+    let str1=arr1.toString()+",";
+    arr2.forEach(item=>{
+        let reg=new RegExp("("+item+"\\d,)+","g");
+        str1=str1.replace(reg,x=>{
+            console.log(x);
+            return x+item+",";
+        });
+    })
+    arr=str1.split(",");
+    arr.length--;
+    console.log(arr); */
+    /* for(var i=0;i<10;i++){
+        var fn=(i)=>{
+            console.log(i);
+        };
+        setTimeout(fn.bind(null,i),5000);
+    } */
+    /* Object.defineProperty(window,"a",{
+        get:function(){
+            this.value?this.value++:this.value=1;
+            return this.value;
+        }
+    })
+    if(a==1 && a==2 && a==3){
+        console.log("ok");
+    } */
+    /* let obj={
+        2:3,
+        3:4,
+        length:2,
+        push:Array.prototype.push
+    }
+    console.log(obj.push(1));//obj.myPush(1)=>obj[2]=1=>obj.length=3;
+    obj.push(2);//obj.myPush(2)=>obj[3]=2=>obj.length=4
+    console.log(obj); //=>{2:1,3:2,length:4,push:fun} */
+
+   /*  Array.prototype.push=function myPush(val){
+        this[this.length]=val;
+        return this.length;
+    }
+    [12,23].push(100); */
+/*     let ary=[12,8,23,16,1];
+    
+    function bubble(ary){
+        for(var i=0;i<ary.length-1;i++){
+            for(var j=0;j<ary.length-1-i;j++){
+                if(ary[j]>ary[j+1]){
+                    let cur=ary[j];
+                    ary[j]=ary[j+1];
+                    ary[j+1]=cur;
+                }
+            }
+        }
+        return ary;
+    }
+    function insert(ary){
+        let newAry=ary.splice(0,1);
+        for(var i=0;i<ary.length;i++){
+            for(j=newAry.length-1;j>=0;j--){
+                let cur=ary[i];
+                if(cur>newAry[j]){
+                    newAry.splice(j+1,0,cur);
+                    break;
+                }
+                if(j===0){
+                    newAry.unshift(cur);
+                }
+            }
+        }
+        return newAry;
+    }
+    function quick(ary){
+        if(ary.length<=1){
+            return ary;
+        }
+        let curIn=Math.floor(ary.length/2);
+        let middleVal=ary.splice(curIn,1)[0];
+        let leftAry=[];
+        let rightAry=[];
+        for(var i=0;i<ary.length;i++){
+            let cur=ary[i];
+            cur>middleVal?rightAry.push(cur):leftAry.push(cur);
+        }
+        return quick(leftAry).concat(middleVal,quick(rightAry));
+    } */
+    /* let obj={
+        1:222,
+        2:123,
+        5:888
+    } */
+    /* let ary=[];
+    for(var i=1;i<=12;i++){
+        ary[i]=obj[i]?obj[i]:null;
+    }
+    ary.shift(); */
+    /* let ary=new Array(12).fill(null).map((item,index)=>{
+        return obj[index+1] || null;
+    }) */
+    /* obj.length=13;
+    let ary=Array.from(obj).slice(1).map(item=>{
+        return typeof item === "undefined" ? null :item;
+    });
+    delete obj.length;
+    console.log(ary); */
+    let arr1=[1,2,2,1,2];
+    let arr2=[2,2];
+    let arr=[];
+    arr1.forEach((item,index)=>{
+        if(arr2.includes(item)){
+            let n=arr2.indexOf(item);
+            arr2.splice(n,1);
+            arr.push(item);
+        }
+    });
+    /* for(var i=0;i<arr1.length;i++){
+        for(var j=0;j<arr2.length;j++){
+            if(arr1[i]==arr2[j]){
+                arr.push(arr2[j]);
+                arr2.splice(j,1);
+                break;
+            }
+        }
+    } */
+
+    console.log(arr);
     </script> 
 </body>
 </html>

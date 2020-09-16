@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="AA" class="box clearfix"></div>
+    <div myIn="1"></div>
+    <div class="content box"></div>
+    <div name="BB"></div>
+    <div></div>
+    <div id="AA"></div>
+    <div myIn="1" class="clearfix"></div>
+    <div class="box"></div>
+    <div myIn="2"></div>
+    <div name="BB"></div>
+    <script>
+        ~function(){
+            function $attr(name,value){
+                let elements=document.getElementsByTagName("*"),
+                    ary=[];
+                //elements=Array.form(elements);把非数组转换为数组
+                [].forEach.call(elements,item=>{
+                    let itemVal=item.getAttribute(name);
+                    if(name==="class"){
+                        //=>样式类属性名需要特殊处理
+                       new RegExp("\\b"+value+"\\b","g").test(itemVal)?ary.push(item):null;
+                        return;
+                    }
+                    itemVal===value?ary.push(item):null;
+                })
+                return ary;
+            }
+            return window.$attr=$attr;
+        }()
+        let ary=$attr("class","box");//=>获取页面中所有class为box的元素
+    </script>
+</body>
+</html>

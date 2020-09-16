@@ -146,6 +146,20 @@ parseFloat("12.5.5");//=>12.5
 转换为数字的方法，对于字符串来说，它是从左到右依次查找有效数字字符，直到遇到非有效数字字符,停止查找（不管后面是否还有数字，都不在找了），把找到的当做数字返回
 ```
 
+```text
+==进行比较时,如果左右两边数据类型不一样，则先转换为相同的数据类型，然后再进行比较
+1.{}=={} 两个对象进行比较，比较的时堆内存的地址
+2.null==undefined 相等 / null===undefined 不相等
+3.NaN==NaN 不成立 NaN和谁都不相等
+4.[12]=="12" 对象和字符串比较，是把对象toString()转化为字符串后在进行比较的
+5.剩余所有情况再进行比较的时候，都是转换为数字（前提数据类型不一样）
+	对象转数字：先转换为字符串，然后再转换为数字
+	字符串转数字：只要出现一个非数字字符，结果就是NaN
+	布尔转数字：ture->1 false->0
+	null转换为数字0
+	undefined转换数字NaN
+```
+
 ### String
 
 > 所有用'',"",``(ES6模板字符串)包起来的都是字符串
@@ -565,8 +579,8 @@ console.log(_type.isNumberic(1));
 
 ## JS中的类型转换
 
-+ null和undefined和其他类型惊醒比较返回的都是false
-+ 对象和对象比较都是false，因为对象指向的是引用空间
++ null和undefined和其他类型进行比较返回的都是false    null==undefined  null!==unde
++ 对象和对象比较都是false，因为对象指向的是引用空间 {}!={}
 + NaN和任何类型比较都不相等
 + 对象和字符串 数字 symbol比较的时候，会把对象转换成原始数据类型
 
@@ -1304,6 +1318,38 @@ Array.prototype.myReduce=function(fn,prev){
 })//=>ture
 ```
 
+**数组扁平化**
+
+`flat`
+
+```javascript
+/***
+	flat([depth])
+		按照参数指定数组展开的层级，返回展开后的新数组
+	@params 
+		[num] 默认值为1 Infinity：最大层级全展开
+	@return 
+		[Array]返回一个新数组
+***/
+[1,2,3,4,[6,7,8,[9,10]]].flat(2);
+```
+
+**填充数组**
+
+`fill`
+
+```javascript
+/***
+	fill([val])
+		使用固定参数填充数组每一项
+	@params 
+		任意值
+	@return 
+		[Array]返回填充后的数组
+***/
+let arr=new Array(3).fill("candy");//=>["candy","candy","candy"]
+```
+
 `Array.from()`
 
 ```javascript
@@ -1314,12 +1360,20 @@ function add(){
 add(1,2,3);
 ```
 
-`of()`
+`Array.of()`
 
 ```javascript
 let ary=Array.of(3);
 console.log(ary);//=>[3]
 ```
+
+`Array.isArray()`
+
+```javascript
+Array.isArray([1,2,3])=>true;
+```
+
+
 
 **数组去重**
 
@@ -1457,7 +1511,7 @@ let res=unique([12,23,32,43,46,32,17,12,23,34,48]);
 
 ```javascript
 //方法4：基于正则匹配方法实现的数组去重
-let ary=[1,2,3,1,2,1,2,3,1,1,2,3];
+let ary=[1,2,3,1,2,1,2,3,1,1,2,3,4];
 ary.sort((a,b)=>a-b);
 let  str=ary.join('@')+'@';
 let reg=/(\d+@)\1*/g;
@@ -2387,6 +2441,32 @@ console.log(res);
 
 ```
 
+## 新增的一些方法
+
+String.formCharCode()
+
+Array.from()
+
+Array.isArray()
+
+Object.create()
+
+Object.defineProperty()
+
+```javascript
+let obj={name:"candy"};
+Object.defineProperty(obj,"name",{
+    get:function(){
+        return this.name;
+    },
+    set:function(){
+        this.name="hehe"
+    }
+})
+```
+
+
+
 ## Promise
 
 > promise 是一种异步流程的控制手段
@@ -2445,12 +2525,6 @@ Promise.race([read("1.txt"),read("2.txt")]).then((data)=>{
 Promise.resolve();
 Promise.reject();
 ```
-
-
-
-
-
-
 
 # 正则表达式
 
@@ -2531,8 +2605,8 @@ x|y  x或者y中的一个字符串
 [^a-z] 上一个的取反“非”
 ()  正则中的分组符号
 (?:) 只匹配不捕获
-(?=) 正向肯定预查
-(?!) 正向否定预查
+(?=) 正向肯定预查 (必须符合这个条件)
+(?!) 正向否定预查 (必须不符合这个条件)
 
 //=>3.普通元字符：代表本身含义的
 /candy/  此正则匹配的是它本身
@@ -2867,9 +2941,9 @@ str=str.replace("candy","candygo").replace("candy","candygo");//=>"candygogo@201
 str=str.replace(/candy/g,"candygo");//=>"candygo@2019|candygo@2020"
 ```
 
-案例：
+### 正则案例
 
-把时间字符串进行处理
+**把时间字符串进行处理**
 
 ```javascript
 let time="2020-08-13";
@@ -2929,7 +3003,7 @@ let time="2019-8-13 16:51:3";
 time.formatTime("{1}月{2}日 {3}时{4}分{5}秒")
 ```
 
-获取URL地址问号和后面的参数信息
+**获取URL地址问号和后面的参数信息**
 
 ```javascript
 ~function(){
@@ -2953,7 +3027,7 @@ let url="http://www.baidu.com/?name=candy&password=123456#img"
 console.log(url.queryURLParmas());
 ```
 
-千分符
+**千分符**
 
 ```javascript
 ~function(){
@@ -2976,7 +3050,7 @@ let num="12345678909876544";
 console.log(num.millimeter());
 ```
 
-单词首字母大写
+**单词首字母大写**
 
 ```javascript
 let str="good good study,day day up!"
@@ -2992,7 +3066,7 @@ str=str.replace(reg,(...arg)=>{
 console.log(str);
 ```
 
-验证一个字符串中哪个字母出现的次数最多，出现了多少次?
+*验证一个字符串中哪个字母出现的次数最多，出现了多少次?*
 
 ```javascript
 //=>第一种方法：
@@ -3078,7 +3152,22 @@ while(str){
 console.log(`出现的次数最多的字母是${res}，出现了${max}次。`)
 ```
 
+**一个6~16位的字符串，必须同时包含大小写字母和数字**
 
+```javascript
+let reg=/(?!^[a-zA-Z]+$)(?!^[a-z0-9]+$)(?!^[A-Z0-9]+$)^[a-zA-Z0-9]{6,16}$/;
+```
+
+**英文字母汉字组成的字符串，用正则给英文单词前后加空格**
+
+```javascript
+let str="no作no死，你能你can,不能no哔哔！",
+    reg=/\b[a-z]+\b/ig;
+str=str.replace(reg,content=>{
+      return " "+content+" ";
+}).trim();
+console.log(str);
+```
 
 # 深入JS
 
@@ -3340,29 +3429,33 @@ function Fn(){
 var f=new Fn();
 ```
 
-****
-
-
-
 ### 模拟new
 
 ```javascript
-function Animal(type){
-	this.type=type;
+function cat(name){
+    this.name=name;
 }
-Animal.prototype.say=function(){
-    console.log("say");
+Dog.prototype.bark=function(){
+    console.log("miaomiao")
 }
-function mockNew(){
-	let Constructor=[].shift.call(arguments);
-    let obj={};
-    obj.__proto__=Constructor.prototype;
-    let r=Constructor.apply(obj,arguments);
-    return r instanceof Object ? r:obj
+Dog.prototype.sayName=function(){
+    console.log("this cat's name is"+this.name)
 }
-//let animal=new Animal("哺乳类");
-let animal=mockNew(Animal,"哺乳类")
-console.log(animal);
+// let sanmao=new Cat("Tiger");
+function _new(Fn,...arg){
+    //=>创建一个空对象，让他的原型执行Fn.prototype(作为Fn的一个实例)
+    /* let obj={};
+    obj.__proto__=Fn.prototype; */
+    //=>Object.creat([AA]对象)创建一个空对象，并且让空对象作为AA对象所属的构造函数的实例(obj.__proto__=AA)
+    let obj=Object.create(Fn.prototype);
+    Fn.call(obj,...arg);
+    return obj;
+}
+let tiger=_new(Cat,"Tiger");
+tiger.bark();
+tiger.sayName(); 
+tiger.log(tiger instanceof cat);
+console.dir(tiger);
 ```
 
 ## 原型和原型链
@@ -3767,31 +3860,32 @@ var p2=createPerson("cccc",30);
 
 # JS综合面试题
 
-**问**： 从用户在浏览器地址栏输入网址，到看到整个页面，中间都发生了哪些事情？
+**从用户在浏览器地址栏输入网址，到看到整个页面，中间都发生了哪些事情?**
 
-**答**：
-
+```text
 + HTTP请求阶段
 + HTTP响应阶段
 + 浏览器渲染阶段
 
->浏览器渲染页面的机制和原理
->
->  	进程（process）线程（thread）栈内存（stack）
->
->​	  DOM的重绘和回流 Repaint & Reflow
->
->​		
->
->
+浏览器渲染页面的机制和原理
+	进程（process）
+	线程（thread）
+	栈内存（stack）
+DOM的重绘和回流 Repaint & Reflow
 
-**问**：谈谈对面向对象的理解？
+```
 
-**答** ：面向对象是一种编程思想，JS本身就是基于面向对象这种思想构建出来的。js中有很多的内置类，比如说Promise就是ES6中新增的内置类，我们可以基于new Promise来创建实例管理异步编程，我在项目中promise也经常应用，并且研究过他的源码。我们平时用的vue、react、jquery也是基于面向对象构建出来的，它们都是类，平时开发的时候都是创建他们的实例来操作的，当然我自己在真实的项目中也封装过一些插件，也是面向对象开发的。这样可以创造不同的实例来管理私有的属性和公有的方法，很方便。js中的面向对象和其他编程语言是略有不同的，JS中类和实例是基于原型和原型链机制来处理的。而且JS中关于类的重载，重写，继承也和其他语言不一样。
+**谈谈对面向对象的理解？**
 
-**问**：call和apply的区别，哪一个性能更好？
+```txt
+面向对象是一种编程思想，JS本身就是基于面向对象这种思想构建出来的。js中有很多的内置类，比如说Promise就是ES6中新增的内置类，我们可以基于new Promise来创建实例管理异步编程，我在项目中promise也经常应用，并且研究过他的源码。我们平时用的vue、react、jquery也是基于面向对象构建出来的，它们都是类，平时开发的时候都是创建他们的实例来操作的，当然我自己在真实的项目中也封装过一些插件，也是面向对象开发的。这样可以创造不同的实例来管理私有的属性和公有的方法，很方便。js中的面向对象和其他编程语言是略有不同的，JS中类和实例是基于原型和原型链机制来处理的。而且JS中关于类的重载，重写，继承也和其他语言不一样。
+```
 
-**答**：call和apply都是Function原型上的方法，都可以改变this的指向，call和apply传参的形式不一样，apply是以数组的方式传参，而call是展开的形式传递。bind也可以用来改变this的指向，但是需要调用执行，而call，和apply是直接执行的。call的性能要比apply好一些，尤其是传递给函数的参数超过三个的时候。从性能角度来说我们日常项目应用多用call，而且基于ES6的扩展运算符，我们可以完全用call代替apply。
+**call和apply的区别，哪一个性能更好？**
+
+```text
+call和apply都是Function原型上的方法，都可以改变this的指向，call和apply传参的形式不一样，apply是以数组的方式传参，而call是展开的形式传递。bind也可以用来改变this的指向，但是需要调用执行，而call，和apply是直接执行的。call的性能要比apply好一些，尤其是传递给函数的参数超过三个的时候。从性能角度来说我们日常项目应用多用call，而且基于ES6的扩展运算符，我们可以完全用call代替apply。
+```
 
 ```javascript
 //=>自己实现性能测试（只供参考）：任何代码性能测试都是和测试环境有关系的，例如CPU、内存、GPU等电脑当前性能不会有相同的情况，不同浏览器也会导致性能上的不同。
@@ -3804,9 +3898,7 @@ for(let i=0;i<1000;i++){
 console.timeEnd("A");
 ```
 
-**问**：实现(5).add(3).minus(2)，使其输出结果为6?
-
-**答**：
+**实现(5).add(3).minus(2)，使其输出结果为6?**
 
 ```javascript
 ~(function(){
@@ -3830,15 +3922,15 @@ console.timeEnd("A");
 console.log((5).add(3).minus(2));//6
 ```
 
-**问** ：箭头函数和普通函数的区别，构造函数可以使用new生成实例，那么箭头函数可以吗？为什么？
+**箭头函数和普通函数的区别，构造函数可以使用new生成实例，那么箭头函数可以吗？为什么？** 
 
-**答**：区别：箭头函数语法上比普通函数更加简洁，ES6中每一种函数都可以使用形参赋值默认值和剩余运算符。
-
-​				   箭头函数中没有this，它里面出现的this是继承函数所处上下文中的this,使用call/apply等任何方式都无法改变this的指向
-
-​					箭头函数没有arguments（类数组），只能基于...args获取传递的参数集合（数组）
-
-​					箭头函数不能被new执行（原因：箭头函数中没有this，也没有prototype）
+```txt
+区别：
+箭头函数语法上比普通函数更加简洁，ES6中每一种函数都可以使用形参赋值默认值和剩余运算符。
+箭头函数中没有this，它里面出现的this是继承函数所处上下文中的this,使用call/apply等任何方式都无法改变this的指向
+箭头函数没有arguments（类数组），只能基于...args获取传递的参数集合（数组）
+箭头函数不能被new执行（原因：箭头函数中没有this，也没有prototype）
+```
 
 ```javascript
 document.body.onclick=function(){
@@ -3865,9 +3957,7 @@ each([10,20,30,40],function(item,index){
 })
 ```
 
-**问** ：如何把一个字符串的大写取反（大写变小写，小写变大写），例如“AbC”变成“aBc”?“
-
-**答**：
+**如何把一个字符串的大写取反（大写变小写，小写变大写），例如“AbC”变成“aBc”?“** 
 
 ```javascript
 let str="Hello,I'm Candy!This is my Note";
@@ -3883,9 +3973,7 @@ str=str.replace(/[a-zA-Z]/g,content=>{
 console.log(str);
 ```
 
-**问**：实现一个字符串匹配的算法，从字符串s中，查找是否存在字符串T，若存在返回所在位置，不存在返回-1！（如果不能基于indexOf/includes等内置的方法，你会如何处理？）
-
-**答** ：
+**实现一个字符串匹配的算法，从字符串s中，查找是否存在字符串T，若存在返回所在位置，不存在返回-1！（如果不能基于indexOf/includes等内置的方法，你会如何处理？）**
 
 ```javascript
 let str="Hello,I'm Ccndy Candy!This is my Note";
@@ -3917,7 +4005,7 @@ let a=str.myIndexOf(t);
 console.log(a);
 ```
 
-**问**：输出下面代码的运行结果?
+**输出下面代码的运行结果**
 
 ```javascript
 //example1
@@ -3938,12 +4026,9 @@ a[b]="b",
 a[c]="c";
 console.log(a[b]);//=>"c"=>属性名不能是对象，使用对象作为属性名时先要toString()
 //对象.toString()=>"[object Object]"
-
 ```
 
-**问** : 在输入框中如何判断输入的是一个正确的网址，例如：用户输入一个字符串，验证是否符合URL网站的格式？
-
-**答**：
+**在输入框中如何判断输入的是一个正确的网址，例如：用户输入一个字符串，验证是否符合URL网站的格式？** 
 
 ```javascript
 /***
@@ -3984,9 +4069,11 @@ obj.a();//=>2
 Foo.a();//=>1
 ```
 
-**问** ：为什么要编写代码实现图片的懒加载
+**为什么要编写代码实现图片的懒加载?**
 
-**答** ：图片懒加载是前端性能优化的重要方案：通过图片或者数据的延迟加载，我们可以加快页面渲染速度，让第一次打开页面的速度变快；只有滑动到某个区域，我们才加载真实图片，这样也可以节省加载的流量
+```txt
+图片懒加载是前端性能优化的重要方案：通过图片或者数据的延迟加载，我们可以加快页面渲染速度，让第一次打开页面的速度变快；只有滑动到某个区域，我们才加载真实图片，这样也可以节省加载的流量
+```
 
 ```html
 <!--
@@ -4066,7 +4153,149 @@ $window.on("load scroll",function(){
 </script>
 ```
 
+**编写一个程序，将数组扁平化，并去除其中重复部分的数组，最终得到一个升序切不重复的数组**
 
+```javascript
+let arr=[[1,2,2],[3,4,5,5],[6,7,8,9,[11,12,[12,13,[14]]]],10];
+//=>使用ES6中提供的Array.prototype.flat处理
+arr=arr.flat(Infinity);
+//=>基于ES6中的new Set()去重数组
+//[...new Set(arr)]
+//Array.from(new Set(arr))
+arr=Array.from(new Set(arr)).sort((a,b)=>a-b);
+
+//=>合并成一句
+arr=Array.from(new Set(arr.flat(Infinity))).sort((a,b)=>a-b);
+
+/***
+	扁平化数组
+		1.arr.flat(Infinity)
+		2.arr.toString()
+		3.JSON.stringify(arr)
+		4.arr.some(item=>Array.isArray(item))
+		5.递归
+***/
+//3.JSON.stringify也可以扁平化数组
+arr=JSON.stringify(arr).replace(/(\[|\])/g,"").split(",").map(item=>number(item));
+//4.arr.some()验证数组每一项是否符合指定条件，有一项满足条件即返回ture，都不符合才返回false（类似逻辑或）
+while(arr.some(item=>Array.isArray(item))){
+    arr=[].concat(...arr);
+}
+```
+
+**问**
+
+```javascript
+var b=10;
+(function b(){
+ 	b=20;
+ 	console.log(b);//=>function b(){}
+})()
+console.log(b);//=>20
+
+//=>原理：
+let fn=function A(){}
+//A();//=>A is not defined
+//1.本应匿名的函数如果设置了函数名，在外面还是无法调用，但是在函数里面是可以使用的
+//2.而且类似于创建变量一样，这个名字存储的值不能再被修改（非严格模式下不报错，但是不会有任何的效果，严格模式下直接报错，我们可以把A理解为用const创建出来的）
+fn();
+```
+
+**a为多少的时候满足一下条件判断？**
+
+```javascript
+if(a==1 && a==2 && a==3){
+    console.log("ok");
+}
+
+//=>方法一
+var a={
+    n:0,
+    toString:function(){
+        return ++this.n;
+    }
+}
+//=>方法二
+let a=[1,2,3];
+a.toString=a.shift();
+
+//=>方法三
+Object.defineProperty(window,"a",{
+    get:function(){
+        this.value?this.value++:1;
+        return this.value;
+    }
+})
+if(a==1 && a==2 && a==3){
+    console.log("ok");
+}
+```
+
+**问**
+
+```javascript
+let obj={
+    2:3,
+    3:4,
+    length:2,
+    push:Array.prototype.push
+}
+Obj.push(1); //reutrn 3
+obj.push(2); //return 4
+console.log(obj);//=>{2:1,3:2,length:4,push:fun..}
+
+Array.prototype.myPus=function(val){
+    this[this.length]=val;
+    //=>this.length自动加1
+    return this.length;
+}
+```
+
+**问**
+
+```javascript
+let obj={
+    1:222,
+    2:123,
+    5:888
+}
+//=>[222,123,null,null,888,null,null,null,null,null,null,null]
+
+//方法一：
+let ary=[];
+for(var i=1;i<=12;i++){
+    ary[i]=obj[i]?obj[i]:null;
+}
+ary.shift();
+//方法二：
+let ary=new Array(12).fill(null).map((item,index)=>{
+    return obj[index+1]||null;
+})
+//方法三：
+obj.length=13;
+let ary=Array.from(obj).slice(1).map(item=>{
+   return typeof item === "undefined" ? null :item;
+});
+delete obj.length;
+//方法四：
+//=>Object.keys(obj):获取obj中所有的属性名，以数组的方式返回=>[1,2,5]
+let ary=new Array(12).fill(null);
+Object.keys(obj).forEach((item,index)=>{
+    ary[item-1]=obj[item];
+})
+
+```
+
+**给定一个两个数组，写一个方法来计算他们的交集  延申：交差并补** 
+
+```javascript
+let arr1=[1,2,2,1];
+let arr2=[2,2];
+let arr=[];
+//交集：
+arr1.forEach(item=>arr2.includes(item)?arr.push(item):null);
+//差集:
+```
 
 
 
