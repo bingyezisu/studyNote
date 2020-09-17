@@ -3569,6 +3569,62 @@ let bindFn1=fn.myBind(obj,"cat");
 let instance=new bindFn1(9)
 ```
 
+### 函数柯里化
+
+> 预先处理的思想（利用闭包的机制）
+
+```javascript
+~function(){
+    //this:要改变this指向的函数
+    //context:需要改变this指向
+    //outArg:其余需要传递给函数的实参信息
+    function myBind(context=window,...outArg){
+        let _this=this;
+        return function(...innerArg){
+            _this.call(context,...innerArg.concat(innerArg));
+        }
+    }
+    Function.prototype.myBind=myBind;
+}()A
+let obj={
+    name:"OBJ"
+}
+function fn(...arg){
+    console.log(this,arg);
+}
+//=>点击的时候fn中的this=>obj, arg=>[100,200,事件对象]
+//document.body.onclick=fn.bind(obj,100,200);
+/*
+//=>bind实现原理：执行bind方法，会返回一个匿名函数，当事件触发，匿名函数执行，我们在处理fn即可
+document.body.onclick=function(ev){
+    fn.call(obj,100,200,ev)
+}
+*/
+document.body.onclick=fn;//=>this:BODY
+document.body.onclick=function(ev){
+    //=>ev事件对象：给元素的某个事件绑方法，当事件触发会执行这个方法，并且会把当前事件的相关信息传递给这个函数“事件对象”
+}
+//=>柯里化
+function fn(x){
+    return function(y){
+       return x+y;
+    }
+}
+```
+
+**请实现一个add函数，满足一下功能**
+
+```javascript
+
+add(1);//1
+add(1)(2);//3
+add(1)(2)(3);//6
+add(1)(2)(3)(4);//10
+add(1)(2,3);//6
+add(1,2)(3);//6
+add(1,2,3);//6
+```
+
 ## 深拷贝及浅拷贝
 
 > 深拷贝 拷贝后的结果更改是不会影响拷贝前的 拷贝前后没有关系的
@@ -4293,9 +4349,46 @@ let arr1=[1,2,2,1];
 let arr2=[2,2];
 let arr=[];
 //交集：
-arr1.forEach(item=>arr2.includes(item)?arr.push(item):null);
+arr1.forEach((item,index)=>{
+	if(arr2.includes(item)){
+		let n=arr2.indexOf(item);
+        arr2.splice(n,1);
+        arr.push(item);
+   	}
+});
 //差集:
 ```
+
+**旋转数组**
+
+```javascript
+//向右旋转3步
+let arr=[1,2,3,4,5,6,7];//=>(k=3)=>[5,6,7,1,2,3,4]
+~function(){
+	function rotate(k){
+        if(k<0||k===0||k===this.length) return this;
+        if(k>this.length) k=k%this.length;
+        //=>第一种方法：
+        //return  this.slice(-k).concat(this.slice(0,this.length-k));
+        //=>第二种方法：
+        //return this.splice(-k).concat(this);
+        //=>第三种方法：
+        //return [...this.splice(-k),...this]
+        /* =>第四种方法：
+        for(let i=0;i<k;i++){
+        	this.unshift(this.pop());
+        }
+        return this; 
+        */
+        //=>第五种方法：
+        new Array(k).fill(null).forEach(()=> this.unshift(this.pop()))
+        return this;
+    }
+	Array.prototype.rotate=rotate;
+}()
+console.log(arr.rotate(3).rotate(3))
+```
+
 
 
 

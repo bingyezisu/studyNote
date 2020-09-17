@@ -732,7 +732,7 @@
     });
     delete obj.length;
     console.log(ary); */
-    let arr1=[1,2,2,1,2];
+    /* let arr1=[1,2,2,1,2];
     let arr2=[2,2];
     let arr=[];
     arr1.forEach((item,index)=>{
@@ -741,7 +741,7 @@
             arr2.splice(n,1);
             arr.push(item);
         }
-    });
+    }); */
     /* for(var i=0;i<arr1.length;i++){
         for(var j=0;j<arr2.length;j++){
             if(arr1[i]==arr2[j]){
@@ -751,8 +751,40 @@
             }
         }
     } */
-
-    console.log(arr);
+    /* let arr=[1,2,3,4,5,6,7];//=>(k=3)=>[5,6,7,1,2,3,4]
+    ~function(){
+        function rotate(k){
+            if(k<0||k===0||k===this.length) return this;
+            if(k>this.length) k=k%this.length;
+            //return  this.slice(-k).concat(this.slice(0,this.length-k));
+            //return this.splice(-k).concat(this);
+            //return [...this.splice(-k),...this]
+            /* for(let i=0;i<k;i++){
+                this.unshift(this.pop());
+            }
+            return this; */
+           /*  new Array(k).fill(null).forEach(()=> this.unshift(this.pop()))
+            return this;
+        }
+        Array.prototype.rotate=rotate;
+    }()
+    console.log(arr.rotate(3).rotate(3)) */ 
+    ~function(){
+        function myBind(context=window,...arg){
+            let _this=this;
+            return function(){
+                _this.apply(context,arg);
+            }
+        }
+        Function.prototype.myBind=myBind;
+    }()
+    let obj={
+        name:"OBJ"
+    }
+    function fn(...arg){
+        console.log(this,arg);
+    }
+    fn.bind(obj,100,200)();
     </script> 
 </body>
 </html>
