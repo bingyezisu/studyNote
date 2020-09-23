@@ -769,7 +769,7 @@
         Array.prototype.rotate=rotate;
     }()
     console.log(arr.rotate(3).rotate(3)) */ 
-    ~function(){
+  /*   ~function(){
         function myBind(context=window,...arg){
             let _this=this;
             return function(){
@@ -784,7 +784,22 @@
     function fn(...arg){
         console.log(this,arg);
     }
-    fn.bind(obj,100,200)();
+    fn.bind(obj,100,200)(); */
+~function(){
+    function add(...arg){
+        if(arg.length>1){
+            return arg.reduce((prev,next)=>prev+next);
+        }
+       return function(...arg2){
+            return add.bind(...arg.concat(arg2));
+       }
+    }
+    return window.add=add;
+}()
+
+add(1)(2);
+add(1)(2)(3);
+add(1)(2)(3)(4);//10
     </script> 
 </body>
 </html>

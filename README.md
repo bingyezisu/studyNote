@@ -71,6 +71,8 @@ info(信息)
     + *布尔boolean* ：true/false
     + *空对象指针null*
     + *未定义undefined*
+    + symbol
+    + BigInt
 - 引用数据类型
     + *对象数据类型object*
 
@@ -125,7 +127,8 @@ Number({});//=>NaN
 Number([]);//=>"0"
 Number([12]);//=>"12"
 Number([12,23]);//=>NaN
-
+{}+[];//=>0
+[]+{};//=>"[object Object]"
 ```
 `parseInt/parseFloat([val],[进制])`
 
@@ -148,7 +151,7 @@ parseFloat("12.5.5");//=>12.5
 
 ```text
 ==进行比较时,如果左右两边数据类型不一样，则先转换为相同的数据类型，然后再进行比较
-1.{}=={} 两个对象进行比较，比较的时堆内存的地址
+1.{}=={} 两个对象进行比较，比较的是堆内存的地址 不相等
 2.null==undefined 相等 / null===undefined 不相等
 3.NaN==NaN 不成立 NaN和谁都不相等
 4.[12]=="12" 对象和字符串比较，是把对象toString()转化为字符串后在进行比较的
@@ -184,14 +187,14 @@ console.log("10px"-10);//=>NaN
 
 let a=10+null+true+[]+undefined+"candy"+null+[]+10+false;
 console.log(a);//=>"11undefinedcandynull10false"
-
-{}+1=>1
-[]+{}=>0
 /***
 10+0->10+0->10
 10+true->10+11->11
 11+[]->11+""->"11" 空数组变为数字，先要经历变为空字符串，遇到字符串啥也别想了，直接变为字符串拼接
 ***/
+{}+1=>1
+[]+{}=>"[object Object]"
+{}+[]=>0
 ```
 ### Boolean
 
@@ -3585,7 +3588,7 @@ let instance=new bindFn1(9)
         }
     }
     Function.prototype.myBind=myBind;
-}()A
+}()
 let obj={
     name:"OBJ"
 }
