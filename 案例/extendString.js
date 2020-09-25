@@ -10,14 +10,15 @@
      *      @return:
      *          [string] 格式化后的字符串
      ***/
-    function formatTime(template="{0}年{1}月{2}日 {3}时{4}分{5}秒"){
-        let ary=this.match(/\d+/g);
-        let s=""
-        return template.replace(/\{(\d)}/g,(x,y)=>{
-            let val=ary[y]||"00";
-            return val.length>=2?val:"0"+val;
-        });
-    }
+    function formatTime(template="{0}年{1}月{2}日 {3}时{4}分{5}秒 星期{6}"){
+		let str="日一二三四五六",
+			ary=this.match(/\d+/g);
+		ary.push(str[new Date(this).getDay()]);
+		return template.replace(/\{(\d+)\}/g,(conent,$1)=>{
+			let val=ary[$1]||"00";
+			return val.length<2 && $1!=6?"0"+val:val;
+		})
+	}
 
     /***
      * queryURLParams:获取url地址的参数信息
