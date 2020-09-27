@@ -46,7 +46,20 @@
         let reg=/(\d{1,3})(?=(\d{3})+$)/g;
         return this.replace(/(\d{1,3})(?=(\d{3})+$)/g,(x)=>x+str);
     }
-    ["formatTime","queryURLParmas","millimeter"].forEach(item=>{
+    /***
+     * myIndexOf:查找字符串
+     *      @params
+     *          str [string] 需要插值的字符串
+     *      @return:
+     *          num [Number] 找到是当前字符串第一个字母出现位置的索引
+     *                       没找到-1
+     ***/
+    function myIndexOf(t){
+        let reg=new RegExp("t"),
+            res=this.exec(reg);
+        return res?res.index:-1;
+    }
+    ["formatTime","queryURLParmas","millimeter","myIndexOf"].forEach(item=>{
         String.prototype[item]=eval(item);
     })
 }()
@@ -57,3 +70,5 @@ let url="http://www.baidu.com/?name=candy&password=123456#img"
 console.log(url.queryURLParmas());
 let num="12345678909876544";
 console.log(num.millimeter(" "));
+let str="1asfaljfdajfcandyddd";
+console.log(str.myIndexOf("candy"));

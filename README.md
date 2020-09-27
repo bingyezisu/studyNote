@@ -2080,7 +2080,7 @@ console.log([element].style.xxx);//=>获取的是当前元素写在行内上的�
 > + scoll
 >   	
 >   	+ width/height
->   	
+>   
 >   	+ top/left
 >
 > 方法： 
@@ -2493,23 +2493,27 @@ Array.from() 将类数组转换成数组
 
 Array.isArray() 判断是不是数组
 
-Object.create()
+Object.create() 创捷新对象，新对象的原型链指向传进来的参数对象
 
 Object.defineProperty()
 
 ```javascript
-let obj={name:"candy"};
-Object.defineProperty(obj,"name",{
+let Person={};
+let temp=null;
+Object.defineProperty(Person,'name',{
     get:function(){
-        return this.name;
+        return temp;
     },
-    set:function(){
-        this.name="hehe"
+    set:function(val){
+        temp=val;
     }
 })
+Person.name="jack";
+console.log(Person.name);//=>"jack"
+console.log(temp);//=>"jack"
+temp="candy"
+console.log(Person.name);//=>"candy";
 ```
-
-
 
 ## Promise
 
@@ -3098,7 +3102,7 @@ console.log(num.millimeter());
 
 ```javascript
 let str="good good study,day day up!"
-let reg=/\b([a-zA-z])([a-zA-z])*\b/g;
+let reg=/\b([a-zA-z])([a-zA-Z])*\b/g;
 //=>函数被执行了六次，每一次把正则匹配信息传递给函数
 //=>每一次arg:["good","g"] ["good","g"] ["study",”s“]
 str=str.replace(reg,(...arg)=>{
@@ -3287,7 +3291,6 @@ B.prototype.getY=function(){
 let b1=new B(100);
 b1.y;
 b1.getX()
-
 ```
 
 ```javascript
@@ -3367,7 +3370,7 @@ class A{
 }
 //ES6中的继承 class Child extends Parent{}=>B.prototype.__proto__=A.prototype
 class B extends A{
-    //子类继承父类，可以不写constructor,一旦谢了，则在constructor的第一句话必须填写super()
+    //子类继承父类，可以不写constructor,一旦写了，则在constructor的第一句话必须填写super()
     constructor(y){
         super(200);//=>A.call(this,200)
         this.y=y;
@@ -3433,7 +3436,7 @@ console.log(person instanceof Human)//true;
 > 基本数据类型基于两种不同的模式创建出来的值是不一样的
 >
 > + 基于字面量方式创建出来的值是基本数据类型
-> + 基于构造函数创建出来的值时引用类型
+> + 基于构造函数创建出来的值是引用类型
 
 **作用域** 
 
@@ -3460,9 +3463,9 @@ console.log(person instanceof Human)//true;
 
 ```javascript
 /***
-	构造函数执行，不些return，浏览器会默认返回创建的实例，但是如果写了return？
+	构造函数执行，不写return，浏览器会默认返回创建的实例，但是如果写了return？
 		1.return的是一个基本值，返回的结果依然是类的实例，没有影响
-		2.如果返回的是引用值，则会把默认返回的实例覆盖，此时接受到的结果就不再是当前类的实例了
+		2.如果返回的是引用值，则会把默认返回的实例覆盖，此时接收到的结果就不再是当前类的实例了
 		=>构造函数执行的时候，尽量减少return的使用，防止覆盖实例
 ***/
 function Fn(){
@@ -3479,10 +3482,10 @@ var f=new Fn();
 function cat(name){
     this.name=name;
 }
-Dog.prototype.bark=function(){
+Cat.prototype.bark=function(){
     console.log("miaomiao")
 }
-Dog.prototype.sayName=function(){
+Cat.prototype.sayName=function(){
     console.log("this cat's name is"+this.name)
 }
 // let sanmao=new Cat("Tiger");
@@ -3555,21 +3558,25 @@ function hasPubeProperty(object,attr){
 
 ```javascript
 /***
-	1）可以改变我们档期那函数的this指向
+	1）可以改变我们当前函数的this指向
 	2）还会让当前函数执行
 ***/
-Function.prototype.call=function(context){
-    context=context?Object(context)||window;
+Function.prototype.myCall=function(context){
+    context=context?Object(context):window;
     context.fn=this;
+    /***
     let args=[];
     for(let i=1;i<arguments.length;i++){
         args.push('arguments['+i+']')
     }
     let r=eval('context.fn('+args+')');
+    ***/
+    let args=[...arguments].slice(1);
+	let r=context.fn(...args);
     delete context.fn;
     return r;
 }
-fn.call("hello","1","2");
+fn.myCall("hello","1","2");
 //改变this的指向=>"hello"=>让fn1执行
 ```
 
@@ -3597,15 +3604,13 @@ Function.prototype.myApply=function(context,args){
 Function.prototype.myBind=function(context){
     let that=this;
     let bindArgs=Array.prototype.slice.call(arguments,1);
-    function fn(){
-        
-    }
+    function fn(){}
     function fBound(){
         let args=Array.prototype.slice.call(arguments)
         return that.apply(context,bindArgs.concat(args));
     }
     fn.prototype=this.prototype;
-    fBound.prototype=new Fn();
+    fBound.prototype=new fn();
     return fBound
 }
 let bindFn=fn.bind(obj,"cat");
@@ -3656,19 +3661,6 @@ function fn(x){
 }
 ```
 
-**请实现一个add函数，满足一下功能**
-
-```javascript
-
-add(1);//1
-add(1)(2);//3
-add(1)(2)(3);//6
-add(1)(2)(3)(4);//10
-add(1)(2,3);//6
-add(1,2)(3);//6
-add(1,2,3);//6
-```
-
 ## 深拷贝及浅拷贝
 
 > 深拷贝 拷贝后的结果更改是不会影响拷贝前的 拷贝前后没有关系的
@@ -3712,7 +3704,6 @@ function deepClone(obj,hase=new weakMap()){
     }
     return cloneObj;
 }
-let obj=undefined
 deepClone(obj)
 ```
 
@@ -3814,7 +3805,7 @@ app.use((req,res,next)=>{
 
 ## 设计模式
 
-### 单例设计模 （Singleton Pattern）
+### 单例设计模式 （Singleton Pattern）
 
 >+ 表现形式
 >
@@ -3868,7 +3859,7 @@ var nameSpace=(function(){
 		oBox.onclick=function(){
 			//=>this:box
 		}
-		2.普通函数执行，函数中的this取决于执行的主体，谁执行的，this就是谁（执行主体：方法执行，看方法名卡面是否有“点”，有的话，点前面是谁this就是谁，没有this是window）
+		2.普通函数执行，函数中的this取决于执行的主体，谁执行的，this就是谁（执行主体：方法执行，看方法名前面是否有“点”，有的话，点前面是谁this就是谁，没有this是window）
 		function fn(){
 			console.log(this);
 		}
@@ -3905,7 +3896,7 @@ console.log(n,obj.n);
 
 > + 团队协作开发的时候，会把产品按照功能板块进行划分，每一个功能板块由专人负责开发
 >
-> + 把各个板块之间公用的部门进行提去封装，后期在想实现这些功能的时候,直接的调取引用即可（模块封装）
+> + 把各个板块之间公用的部门进行提出封装，后期在想实现这些功能的时候,直接的调取引用即可（模块封装）
 
 ```javascript
 //项目例子
@@ -4033,7 +4024,7 @@ console.log((5).add(3).minus(2));//6
 ```
 
 ```javascript
-document.body.onclick=function(){
+document.body.onclick=()=>{
     //this:window 不是BODY
 }
 document.body.onclick=function(){

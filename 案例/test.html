@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="log"></div>
     <!-- <script src="http://html2canvas.hertzen.com/dist/html2canvas.js"></script> -->
     <script>
         /* 
@@ -785,7 +786,7 @@
         console.log(this,arg);
     }
     fn.bind(obj,100,200)(); */
-~function(){
+/* ~function(){
     function add(...arg){
         if(arg.length>1){
             return arg.reduce((prev,next)=>prev+next);
@@ -795,11 +796,12 @@
        }
     }
     return window.add=add;
-}()
+}() */
 
-add(1)(2);
+/* add(1)(2);
 add(1)(2)(3);
-add(1)(2)(3)(4);//10
+add(1)(2)(3)(4);//10 */
     </script> 
+    <script src="test.js"></script>
 </body>
 </html>
