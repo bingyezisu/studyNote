@@ -317,11 +317,11 @@ a[123]="c"; */
 // console.log(arr);
 console.log(arr=[].concat(...arr)) */
 //向右旋转3步
-let arr=[1,2,3,4,5,6,7];//=>(k=3)=>[5,6,7,1,2,3,4]
+/* let arr=[1,2,3,4,5,6,7];//=>(k=3)=>[5,6,7,1,2,3,4]
 ~function(){
 	function rotate(k){
         if(k<0||k===0||k===this.length) return this;
-        if(k>this.length) k=k%this.length;
+        if(k>this.length) k=k%this.length; */
         //=>第一种方法：
         //return  this.slice(-k).concat(this.slice(0,this.length-k));
         //=>第二种方法：
@@ -335,9 +335,298 @@ let arr=[1,2,3,4,5,6,7];//=>(k=3)=>[5,6,7,1,2,3,4]
         return this; 
         */
         //=>第五种方法：
-        new Array(k).fill(null).forEach(()=> this.unshift(this.pop()))
+/*         new Array(k).fill(null).forEach(()=> this.unshift(this.pop()))
         return this;
     }
 	Array.prototype.rotate=rotate;
 }()
-console.log(arr.rotate(3))
+console.log(arr.rotate(3)) */
+/* console.log('script start')
+
+async function async1() {
+  await async2()
+  console.log('async1 end')
+}
+async function async2() {
+  console.log('async2 end')
+}
+async1()
+
+setTimeout(function() {
+  console.log('setTimeout')
+}, 0)
+
+new Promise(resolve => {
+  console.log('Promise')
+  resolve()
+})
+  .then(function() {
+    console.log('promise1')
+  })
+  .then(function() {
+    console.log('promise2')
+  })
+
+console.log('script end') */
+/* async function fn1(){
+	return 123
+}
+function fn2(){
+	return 123;
+}
+console.log(fn1());
+console.log(fn2()); */
+/* 
+var fn1=new Promise((resolve,reject)=>{
+	resolve(123)
+}) 
+console.log(fn1) */
+
+/* setTimeout(() => console.log('setTimeout1'), 0); 
+setTimeout(() => {								
+    console.log('setTimeout2');
+    Promise.resolve().then(() => {
+        console.log('promise3');
+        Promise.resolve().then(() => {
+            console.log('promise4');
+        })
+        console.log(5)
+    })
+    setTimeout(() => console.log('setTimeout4'), 0);  
+}, 0);
+setTimeout(() => console.log('setTimeout3'), 0);  
+Promise.resolve().then(() => {
+    console.log('promise1');
+}) */
+
+/* async function async1() {
+    console.log( 'async1 start' )
+    await async2()
+    console.log( 'async1 end' )
+}
+async function async2() {
+    console.log( 'async2' )
+}
+async1()
+console.log( 'script start' ) */
+
+/* new Promsise(()=>{
+	console.log("async1 start");
+	console.log( 'async2' )
+}).then(()=>{
+	console.log( 'async1 end' )
+})
+async1();
+console.log( 'script start' ) */
+
+
+/* async function async1() {
+	console.log( 'async1 start' )
+	await async2()
+	console.log( 'async1 end' )
+}
+async function async2() {
+	console.log( 'async2' )
+}
+console.log( 'script start' ) 
+setTimeout( function () {
+	console.log( 'setTimeout' )
+}, 0 )
+async1();
+new Promise( function ( resolve ) {
+	console.log( 'promise1' )
+	resolve();
+} ).then( function () {
+	console.log( 'promise2' )
+} )
+console.log( 'script end' ) */
+
+/* new Promise( ( resolve, reject ) => {
+	console.log( "promise1" )
+	resolve()
+} )
+.then( () => {
+	console.log( 1 )
+} )
+.then( () => {
+	console.log( 2 )
+} )
+.then( () => {
+	console.log( 3 )
+} )
+
+new Promise( ( resolve, reject ) => {
+	console.log( "promise2" )
+	resolve()
+} )
+.then( () => {
+	console.log( 4 )
+} )
+.then( () => {
+	console.log( 5 )
+} )
+.then( () => {
+	console.log( 6 )
+} )
+ */
+
+/* async function t1 () {
+	console.log(1)
+	console.log(2)
+	await Promise.resolve().then(() => console.log('t1p'))
+	console.log(3)
+	console.log(4)
+  }
+  
+async function t2() {
+	console.log(5)
+	console.log(6)
+	await Promise.resolve().then(() => console.log('t2p'))
+	console.log(7)
+	console.log(8)
+}
+t1()
+t2()
+console.log('end') */
+/* async function t1 () {
+	console.log(1)
+	console.log(2)
+	await new Promise(resolve => {
+	  setTimeout(() => {
+		console.log('t1p')
+		resolve()
+	  }, 1000)
+	})
+	await console.log(3)
+	console.log(4)
+}
+async function t2() {
+	console.log(5)
+	console.log(6)
+	await Promise.resolve().then(() => console.log('t2p'))
+	console.log(7)
+	console.log(8)
+}
+t1()
+t2()
+console.log('end') */
+
+/* 
+new Promise((resolve,reject)=>{
+	console.log(1);
+	console.log(2);
+	new Promise(resolve=>{
+		setTimeout(()=>{
+			console.log("t1p");
+			resolve()
+		},1000)
+	}).then(()=>{
+		console.log(3)
+	}).then(()=>{
+		console.log(4);
+	})
+
+})
+
+new Promise((resolve,reject)=>{
+	console.log(5);
+	console.log(6);
+	Promise.resolve().then(()=>{
+		console.log("t2p")
+	})
+	resolve()
+}).then(()=>{
+	console.log(7);
+	console.log(8);
+})
+console.log('end') */
+
+/* console.log(1);
+
+setTimeout(() => {
+  console.log(2);
+  Promise.resolve().then(() => {
+    console.log(3)
+  });
+});
+
+new Promise((resolve, reject) => {
+  console.log(4)
+  resolve(5)
+}).then((data) => {
+  console.log(data);
+})
+
+setTimeout(() => {
+  console.log(6);
+})
+
+console.log(7);
+
+//=>1 4 7 5 2 3 6 */
+
+/* console.log(1);
+
+setTimeout(() => {
+  console.log(2);
+  Promise.resolve().then(() => {
+    console.log(3)
+  });
+});
+
+new Promise((resolve, reject) => {
+  console.log(4)
+  resolve(5)
+}).then((data) => {
+  console.log(data);
+  Promise.resolve().then(() => {
+    console.log(6)
+  }).then(() => {
+    console.log(7)
+    setTimeout(() => {
+      console.log(8)
+    }, 0);
+  });
+})
+
+setTimeout(() => {
+  console.log(9);
+})
+
+console.log(10); */
+
+//=>1 4 10
+console.log('1');
+setTimeout(function() {
+    console.log('2');
+    process.nextTick(function() {
+        console.log('3');
+    })
+    new Promise(function(resolve) {
+        console.log('4');
+        resolve();
+    }).then(function() {
+        console.log('5')
+    })
+})
+new Promise(function(resolve) {
+    console.log('7');
+    resolve();
+}).then(function() {
+    console.log('8')
+})
+process.nextTick(function() {
+  console.log('6');
+})
+setTimeout(function() { 
+    console.log('9');
+    process.nextTick(function() {
+        console.log('10');
+    })
+    new Promise(function(resolve) {
+        console.log('11');
+        resolve();
+    }).then(function() {
+        console.log('12')
+    })
+})
