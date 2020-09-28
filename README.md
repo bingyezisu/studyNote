@@ -5,7 +5,7 @@
 # 目录
 
 + [初步了解JS](#初步了解js)
-  + [JS中的变量 variable](#js中的变量 variable)
+  + [JS中的变量 variable](#js中的变量-variable)
   + [JS的命名规范](#js的命名规范)
   + [JS中常用的数据类型](#js中常用的数据类型)
   + [JS中的数据类型检测](#js中的数据类型检测)
