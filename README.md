@@ -2672,7 +2672,7 @@ g=>global	  全局匹配
 /A/i.test("candy");//=>true
 ```
 
-[正则表达式元字符及其含义表]: https://www.cnblogs.com/jinhui-li/p/7771276.html
+[正则表达式元字符及其含义表](https://www.cnblogs.com/jinhui-li/p/7771276.html )
 
 ## 元字符详细解析
 
