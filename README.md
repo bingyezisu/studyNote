@@ -34,16 +34,16 @@
 + [深入js](#深入js)
   	
   	+ [面向对象](#面向对象)
-  	
+  
   	+  [构造函数](#构造函数)
-  	
+  
   	+ [原型和原型链](#原型和原型链)
   	+ [call,apply及bind](#call,apply及bind)
   	+ [深拷贝及浅拷贝](#深拷贝及浅拷贝)
-  	
+  
   	+ [跨域解决方案](#跨域解决方案)
   	+ [设计模式](#设计模式)
-  	
+  
 + [JS综合面试题](#JS综合面试题)
 
 # 初步了解JS
@@ -3996,6 +3996,132 @@ function createPerson(name,age){
 var p1=createPerson("xxx",25);
 var p2=createPerson("cccc",30);
 ```
+
+### 发布订阅模式
+
+```javascript
+/***
+	理解技巧：
+		将整个事件理解成发行机构像订阅者投送报刊的状态；
+		假设:这个发行机构旗下有时尚类，财经类多种类型报刊
+***/
+var issuer={};//发行机构
+issuer.registerForm={};//订阅者信息统计表 {时尚类:[订阅者1，订阅者2],艺术类：[订阅者1，订阅者2]}
+issuer.register=function(type,subscriber){  //订阅者进行订阅的方法
+    this.registerForm[type]||(this.registerForm[type]=[]).push(subscriber);
+}
+issuer.publish=function(...arg){//发行机构像订阅者投递的方式（比如邮政派送，或者email）
+    let [type,...informations]=arg;
+    let subscribers=this.registerForm[type];//某个类型的订阅者们
+    if(!subscribers||(subscribers.length===0)){return false;}//没有订阅者不派送
+    subscribers.forEach(subscriber=>{
+        subscriber.apply(this,informations)
+    })
+    
+}
+function subscriber1(magazine){//subscriber1是订阅者， magazine是发行的报刊
+    console.log(magazine +"我可以借鉴杂志图片学习搭配");
+}
+function subscriber2(magazine){
+    console.log(magazine+"艺术绝对是一门学问");
+}
+issuer.register("fashion",subscriber1);//订阅者1号订阅了报刊
+issuer.register("art",subscriber2);//订阅者2号订阅了报刊
+
+issuer.publish("fashion","【Information Fashion】");//将时尚类型的杂志派送
+issuer.publish("art","【Information Art】");//将艺术类型的杂志派送
+```
+
+```javascript
+var issuer={
+    //订阅者列表
+   	registerForm:{},
+    //订阅
+    register(type,subscriber,time="forever"){//默认订阅时间
+        var _this=this;
+        if(time==="forever"){//如果没有指定时间那么长久订阅，将订阅者推送到订阅列表
+            (this.registerForm[type]||(this.registerForm[type]=[])).push(subscriber);
+        }else if(time==="quarter"){//如果指定一个季度，那么季度结束就不再配送
+            function quarter(){
+                _this.cancel(type,quarter)
+               subscriber.apply(_this,arguments);
+           };
+           quarter.name=subscriber; //登记季度订阅者
+           (this.registerForm[type]||(this.registerForm[type]=[])).push(quarter);
+        }
+        return this;
+    },
+    //订阅一个季度
+    registerQuarter(type,subscriber){
+        this.register(type,subscriber,"quarter");
+        return this;
+    },
+    //取消订阅
+    cancel(type,subscriber){
+        let subscribers=this.registerForm[type];
+        if(!subscribers) return false;
+        if(!subscriber){//如果没有传订阅者信息，那么就把对应订阅者的列表清空。
+           subscribers && (subscribers.length=0);
+        }else{//指定订阅者取消订阅
+            subscribers.forEach((item,index,arr)=>{
+                if(item===subscriber||subscriber.name===item){
+                    arr.splice(index,1);
+                }
+            })
+        }
+        return this;
+    },
+    //发行
+    publish(...arg){
+        let [type,...informations]=arg;
+        let subscribers=this.registerForm[type];//某个类型的订阅者们
+        if(!subscribers||(subscribers.length===0)){return false;}//没有订阅者不推送
+        subscribers.forEach(subscriber=>{
+            subscriber.apply(this,informations)
+        })
+        return this;
+    },
+}
+function subscriber1(magazine){
+    console.log("我是订阅者1"+magazine);
+}
+function subscriber2(magazine){
+    console.log("我是订阅者2"+magazine);
+}
+function subscriber3(magazine){
+    console.log("我是订阅者3"+magazine);
+}
+function subscriber4(magazine){
+    console.log("我是订阅者4"+magazine);
+}
+issuer.register("fashion",subscriber1)
+issuer.register("art",subscriber2)
+issuer.register("fashion",subscriber3)
+issuer.registerQuarter("art",subscriber4);
+
+issuer.publish("fashion","时尚头条信息1");
+issuer.publish("art","艺术品展览会信息1");
+issuer.cancel("fashion",subscriber3)
+issuer.publish("fashion","时尚头条信息2");
+issuer.publish("art","艺术品展览会信息2");
+issuer.cancel("fashion");
+issuer.publish("fashion","时尚头条信息3");
+issuer.registerQuarter("fashion",subscriber4);
+issuer.publish("fashion","时尚头条信息4");
+
+/***
+输出：
+我是订阅者1时尚头条信息1
+我是订阅者3时尚头条信息1
+我是订阅者2艺术品展览会信息1
+我是订阅者4艺术品展览会信息1
+我是订阅者1时尚头条信息2
+我是订阅者2艺术品展览会信息2
+我是订阅者4时尚头条信息4
+***/
+```
+
+
 
 # JS综合面试题
 
