@@ -1963,6 +1963,28 @@ let addZero=val=>{
 
 > DOM:document.object.model文档对象模型，提供一些属性和方法，共我们操作页面中的元素
 
+## DOM0和DOM2的区别
+
++ 语法上的区别
+
+  ​	box.onclick=function(){}
+
+  ​	box.addEventListener("click",function(){})
+
++ 底层运行机制上的区别
+
+   	**DOM0**就是给元素的某个属性绑定方法（有效绑定的方法只有一个）
+
+  ​	 **DOM2**是基于事件池机制完成，每增加一个绑定的方法，都会往事件池中存放一个...当事件触发会一次执行事件池中的事情=>发布订阅其实就是模拟的事件池机制（可以给同一个元素的某个事件绑定多个不同的方法）
+
++ **DOM2**中可以给一些特殊的事件类型绑定方法，这些事件类型DOM0不支持绑定，例如：DOMContentLoaded 、transitionend...
+
+## DOM2的是事件池机制
+
++ 基于addEventListener/attachEvent(IE6~8)向事件池中追加方法，新版本浏览器会根据元素和事件类型对新增的方法左重复校验，但是IE6~8不可以
+
++ 当事件行为触发，会把事件池中的方法按照增加的顺序依次执行，但是IE6~8中执行的顺序是不固定的。
+
 ## 获取DOM元素的方法
 
 + document.getElementById(); 指定在文档中，基于元素的ID获取这个元素
@@ -3997,7 +4019,9 @@ var p1=createPerson("xxx",25);
 var p2=createPerson("cccc",30);
 ```
 
-### 发布订阅模式
+### 发布订阅模式(Publish-Subscribe)
+
+
 
 ```javascript
 /***
@@ -4039,15 +4063,21 @@ var issuer={
     //订阅
     register(type,subscriber,time="forever"){//默认订阅时间
         var _this=this;
-        if(time==="forever"){//如果没有指定时间那么长久订阅，将订阅者推送到订阅列表
-            (this.registerForm[type]||(this.registerForm[type]=[])).push(subscriber);
-        }else if(time==="quarter"){//如果指定一个季度，那么季度结束就不再配送
-            function quarter(){
-                _this.cancel(type,quarter)
-               subscriber.apply(_this,arguments);
-           };
-           quarter.name=subscriber; //登记季度订阅者
-           (this.registerForm[type]||(this.registerForm[type]=[])).push(quarter);
+        if(type.split(",").length>1){
+        	type.split(",").forEach(item=>{
+           		_this.register(item,subscriber,time);
+            })
+        }else{
+            if(time==="forever"){//如果没有指定时间那么长久订阅，将订阅者推送到订阅列表
+                (this.registerForm[type]||(this.registerForm[type]=[])).push(subscriber);
+            }else if(time==="quarter"){//如果指定一个季度，那么季度结束就不再配送
+                function quarter(){
+                    _this.cancel(type,quarter)
+                   subscriber.apply(_this,arguments);
+               };
+               quarter.name=subscriber; //登记季度订阅者
+               (this.registerForm[type]||(this.registerForm[type]=[])).push(quarter);
+            }
         }
         return this;
     },
@@ -4094,11 +4124,12 @@ function subscriber3(magazine){
 function subscriber4(magazine){
     console.log("我是订阅者4"+magazine);
 }
-issuer.register("fashion",subscriber1)
+issuer.register("fashion,art",subscriber1)
+console.log(issuer.registerForm);
 issuer.register("art",subscriber2)
 issuer.register("fashion",subscriber3)
 issuer.registerQuarter("art",subscriber4);
-
+console.log(issuer.registerForm);
 issuer.publish("fashion","时尚头条信息1");
 issuer.publish("art","艺术品展览会信息1");
 issuer.cancel("fashion",subscriber3)
@@ -4111,13 +4142,28 @@ issuer.publish("fashion","时尚头条信息4");
 
 /***
 输出：
+{
+  fashion: [ [Function: subscriber1] ],
+  art: [ [Function: subscriber1] ]
+}
+{
+  fashion: [ [Function: subscriber1], [Function: subscriber3] ],
+  art: [
+    [Function: subscriber1],
+    [Function: subscriber2],
+    [Function: quarter]
+  ]
+}
 我是订阅者1时尚头条信息1
 我是订阅者3时尚头条信息1
+我是订阅者1艺术品展览会信息1
 我是订阅者2艺术品展览会信息1
 我是订阅者4艺术品展览会信息1
 我是订阅者1时尚头条信息2
+我是订阅者1艺术品展览会信息2
 我是订阅者2艺术品展览会信息2
 我是订阅者4时尚头条信息4
+
 ***/
 ```
 

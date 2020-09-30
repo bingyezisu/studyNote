@@ -1,63 +1,39 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-	<title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
 <body>
-    <style type="text/css">
+    <button class="submit">click me</button>
+    <script src="subscribe.js"></script>
+    <script>
+        //=>创建一个事件池 $.Callbacks()
+        let pond=_subscribe();
+        document.querySelector(".submit").onclick=function(ev){
+            pond.fire(ev);
+        }
+        let fn1=function(){
+            console.log(1)
+            pond.remove(fn1);
+        };
+        let fn2=function(){
+            console.log(2);
+        };
+        pond.add(fn1);
+        pond.add(fn2);
+        pond.add(fn1);
+        let fn3=function(){
+            console.log(3)
+        };
+        let fn4=function(){
+            console.log(4);
+        };
+        //=>把需要做的事情陆续添加到事件池中 pond.add(func)/pond.remove(func)
+        pond.add(fn3);
+        pond.add(fn4);
 
-        .a, .b, .c {
-        
-        box-sizing: border-box;
-        
-        border: 1px solid;
-        
-        }.wrap {
-        
-        width: 250px;
-        
-        }
-        
-        .a {
-        
-        width: 100px;
-        
-        height: 100px;
-        
-        float: left;
-        
-        }
-        
-        .b {
-        
-        width: 100px;
-        
-        height: 50px;float: left;
-        
-        }
-        
-        .c {
-        
-        width: 100px;
-        
-        height: 100px;
-        
-        display: inline-block;
-        
-        }</style><span style="color: rgb(51,51,51);">
-        
-        </span><span style="color: rgb(51,51,51);"> </
-        
-        span><div class="wrap">
-        
-        <div class="a">a</div>
-        
-        <div class="b">b</div>
-        
-        <div class="c">c</div></div>
- 
+    </script>
 </body>
 </html>
